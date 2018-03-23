@@ -29,8 +29,10 @@
     "jstimezonedetect": "^1.0.6",
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
+    "mysql2": "^1.5.3",
     "nodemailer": "^4.6.3",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "sequelize": "^4.37.4"
   }
 }
