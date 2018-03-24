@@ -17,9 +17,26 @@
     "nodemon": "^1.11.0"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^5.0.1",
     "eslint": "^4.19.0",
     "express": "^4.15.4",
+<<<<<<< HEAD
     "mysql2": "^1.5.3",
+=======
+    "express-rate-limit": "^2.11.0",
+    "express-session": "^1.15.6",
+    "jstimezonedetect": "^1.0.6",
+    "moment": "^2.21.0",
+    "moment-timezone": "^0.5.14",
+    "mysql2": "^1.5.3",
+    "nodemailer": "^4.6.3",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+>>>>>>> 9d0ea2ed28b8dce0a0fd706648aec6622ac44860
     "sequelize": "^4.37.4"
   }
 }
