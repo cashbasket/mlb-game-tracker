@@ -1,6 +1,7 @@
 module.exports = function(sequelize, DataTypes) {
   const Post = sequelize.define('post', {
-    postText: DataTypes.TEXT
+    postText: { type: DataTypes.TEXT, allowNull: false},
+    postDate: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
   },
   {
     timestamps: false
