@@ -1,15 +1,23 @@
 module.exports = function(sequelize, DataTypes) {
   const Team = sequelize.define('team', {
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false
     },
+    abbr: DataTypes.STRING,
     url: DataTypes.STRING,
-    logoUrl: DataTypes.STRING,
+    logo: DataTypes.STRING,
     league: DataTypes.STRING,
     division: DataTypes.STRING,
     manager: DataTypes.STRING,
     established: DataTypes.INTEGER
+  },
+  {
+    timestamps: false
   });
 
   Team.associate = function(models) {    
@@ -27,10 +35,10 @@ module.exports = function(sequelize, DataTypes) {
       foreignKey: 'homeTeamId',
       as: 'Home'
     });
-    Team.hasMany(models.game, {
-      foreignKey: 'winningTeamId',
-      as: 'Winner'
-    });
+    // Team.hasMany(models.game, {
+    //   foreignKey: 'winningTeamId',
+    //   as: 'Winner'
+    // });
     Team.hasMany(models.user);
   };
 

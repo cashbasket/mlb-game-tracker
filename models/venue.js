@@ -11,7 +11,11 @@ module.exports = function(sequelize, DataTypes) {
     zip: DataTypes.STRING,
     country: DataTypes.STRING,
     stadiumType: DataTypes.STRING,
-    surface: DataTypes.STRING
+    surface: DataTypes.STRING,
+    dimensions: DataTypes.STRING
+  },
+  {
+    timestamps: false
   });
 
   Venue.associate = function(models) {    

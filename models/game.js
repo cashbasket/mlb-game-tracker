@@ -1,11 +1,19 @@
 module.exports = function(sequelize, DataTypes) {
   const Game = sequelize.define('game', {
-    gameDate: { type: DataTypes.DATE,
+    season: { type: DataTypes.STRING,
       allowNull: false
     },
-    gameTime: { type: DataTypes.DATE,
+    gameDate: { type: DataTypes.DATEONLY,
       allowNull: false
-    }
+    },
+    gameTime: { type: DataTypes.TIME,
+      allowNull: false
+    },
+    awayTeamScore: DataTypes.INTEGER,
+    homeTeamScore: DataTypes.INTEGER
+  },
+  {
+    timestamps: false
   });
 
   Game.associate = function(models) {    
@@ -28,14 +36,14 @@ module.exports = function(sequelize, DataTypes) {
       onDelete: 'CASCADE'
     });
 
-    Game.belongsTo(models.team, {
-      as: 'Winner',
-      foreignKey: {
-        name: 'winningTeamId',
-        allowNull: true
-      },
-      onDelete: 'SET NULL'
-    });
+    // Game.belongsTo(models.team, {
+    //   as: 'Winner',
+    //   foreignKey: {
+    //     name: 'winningTeamId',
+    //     allowNull: true
+    //   },
+    //   onDelete: 'SET NULL'
+    // });
 
     Game.belongsTo(models.venue, {
       foreignKey: {

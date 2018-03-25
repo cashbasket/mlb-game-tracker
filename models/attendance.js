@@ -1,6 +1,10 @@
 module.exports = function(sequelize, DataTypes) {
-  const Attendance = sequelize.define('attendance', { /* bla */ }, {
-    freezeTableName: true
+  const Attendance = sequelize.define('attendance', { 
+    seat: DataTypes.STRING,
+    url: DataTypes.STRING
+  }, {
+    freezeTableName: true,
+    timestamps: false
   });
 
   Attendance.associate = function(models) {

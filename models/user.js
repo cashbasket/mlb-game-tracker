@@ -14,6 +14,9 @@ module.exports = function(sequelize, DataTypes) {
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
     url: DataTypes.STRING
+  },
+  {
+    timestamps: false
   });
 
   User.associate = function(models) {

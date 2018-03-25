@@ -1,6 +1,9 @@
 module.exports = function(sequelize, DataTypes) {
   const Post = sequelize.define('post', {
     postText: DataTypes.TEXT
+  },
+  {
+    timestamps: false
   });
 
   Post.associate = function(models) {
