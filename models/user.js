@@ -28,6 +28,7 @@ module.exports = function(sequelize, DataTypes) {
     });
     
     User.hasMany(models.post);
+    User.hasMany(models.attendance);
   };
 
   return User;

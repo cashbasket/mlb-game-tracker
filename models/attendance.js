@@ -1,5 +1,15 @@
 module.exports = function(sequelize, DataTypes) {
   const Attendance = sequelize.define('attendance', { 
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'userIdGameId'
+    },
+    gameId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'userIdGameId'
+    },
     seat: DataTypes.STRING,
     url: DataTypes.STRING
   }, {
