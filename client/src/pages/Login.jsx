@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import Snackbar from 'material-ui/Snackbar';
 
 const styles = theme => ({
   root: {
@@ -31,7 +32,9 @@ class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      redirectToReferrer: false
+      redirectToReferrer: false,
+      snackbarOpen: false,
+      snackbarMessage: ''
     };
   }
 
@@ -42,7 +45,9 @@ class Login extends React.Component {
   login = (data) => {
     API.login(data)
       .then((response) => {
-        if (response.status === 200) {
+        if(response.data.message) {
+          this.setState({snackbarMessage: response.data.message, snackbarOpen: true});
+        } else {
           this.props.authenticate(() => {
             this.setState({ redirectToReferrer: true });
           });
@@ -52,6 +57,10 @@ class Login extends React.Component {
         console.log('Error logging in.', err);
       });
   }
+
+  handleSnackbarClose = () => {
+    this.setState({ snackbarOpen: false });
+  };
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
@@ -66,6 +75,14 @@ class Login extends React.Component {
     
     return (
       <Grid container justify="center">
+        <Snackbar
+          open={this.state.snackbarOpen}
+          onClose={this.handleSnackbarClose}
+          SnackbarContentProps={{
+            'aria-describedby': 'registerInfo',
+          }}
+          message={<span id="registerInfo">{this.state.snackbarMessage}</span>}
+        />
         <Grid item md={6} sm={10} xs={10}> 
           <Paper className={classes.control}>
             <Typography variant="title" gutterBottom align="center">
