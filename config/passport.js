@@ -60,7 +60,7 @@ function(email, password, done) {
     }
   }).then(function(user){
     if(!user || user && !user.validPassword(password)) {
-      return done(null, false, { message: 'Invalid email address or password' });
+      return done(null, false, { message: 'Invalid email address or password.' });
     }
     return done(null, user);
   }); 

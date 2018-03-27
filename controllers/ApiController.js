@@ -51,7 +51,9 @@ router.post('/register', createAccountLimiter, function(req, res, next) {
 router.post('/login', loginLimiter, function(req, res, next) {
   passport.authenticate('local-login', function(err, user, info) {
     if (err) { return next(err); }
-    if (!user) { return res.status(500).json({ error: 'User not found.' }); }
+    if (!user) { 
+      return res.json(info);
+    }
 
     req.login(user, function(err){
       if(err){
