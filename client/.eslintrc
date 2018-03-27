@@ -19,7 +19,7 @@
       "no-unused-vars": "warn",
       "no-console": 1,
       "no-unexpected-multiline": "warn",
-      "react/jsx-filename-extension": 0,
+      "react/jsx-filename-extension": 1,
       "react/prop-types": 0,
       "max-len": 0,
       "jsx-a11y/href-no-hash": "off",
