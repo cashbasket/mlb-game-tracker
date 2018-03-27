@@ -1,17 +1,31 @@
-const express = require('express');
-const bodyParser = require("body-parser");
-const routes = require("./routes");
+require('dotenv').config();
 const path = require('path');
-const PORT = process.env.PORT || 3001;
+const express = require('express');
+const bodyParser = require('body-parser');
+const routes = require("./routes");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const app = express();
+const PORT = process.env.PORT || 3001;
 
 // Requiring our models for syncing
 const db = require('./models');
 
-// Serve up static assets (usually on heroku)
+app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, for instance)
+
+app.use(cookieParser());
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 }
+const ApiController = require('./controllers/ApiController');
+app.use('/api', ApiController);
 
 // Configure body parser for AJAX requests
 app.use(bodyParser.urlencoded({ extended: true }));
