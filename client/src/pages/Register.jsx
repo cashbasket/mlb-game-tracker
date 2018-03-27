@@ -51,6 +51,7 @@ class Register extends React.Component {
       usernameErrorText: usernameHelper,
       passwordErrorText: passwordHelper,
       favoriteTeamErrorText: favoriteTeamHelper,
+      snackbarMessage: '',
       snackbarOpen: false,
       registered: false
     };
