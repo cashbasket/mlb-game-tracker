@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
   Redirect
 } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
@@ -11,7 +10,9 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import { withUser, update } from './services/withUser';
 
+// Eefines the colors Material-UI will use as the theme.
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -46,7 +47,7 @@ const PropsRoute = ({ component, ...rest }) => {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    rest.loggedIn ? (
+    rest.user ? (
       <Component {...props}/>
     ) : (
       <Redirect to={{
@@ -60,24 +61,20 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      isLoggedIn: false
-    };
     this.logOut = this.logOut.bind(this);
     this.authenticate = this.authenticate.bind(this);
   }
 
   authenticate = (fn) => {
     API.authenticate().then((res) => {
-      console.log(res.data);
       if (res.data.authenticated) {
-        console.log('authenticated');
-        this.setState({ isLoggedIn: true });
+        update(res.data.user);
         if (typeof fn === 'function') {
           fn();
         }
       }
     }).catch((err) => {
+      update(null);
       console.log('Error fetching authorized user.');
     });
   }
@@ -86,7 +83,7 @@ class App extends Component {
     API.logout()
       .then((res) => {
         if (res.status === 200) {
-          this.setState({ isLoggedIn: false });
+          update(null);
           if (typeof fn === 'function') {
             fn();
           }
@@ -95,19 +92,20 @@ class App extends Component {
         console.log('Error logging out user.');
       });
   }
-  
+
   componentDidMount = () => {
     this.authenticate();
   }
 
   render() {
+    const { user } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
         <Grid container spacing={0} justify="center" alignItems="center">
           <Grid item md={9} sm={12} xs={12}>
             <Router>
               <div>
-                <Navbar loggedIn={this.state.isLoggedIn} logOut={this.logOut} />
+                <Navbar logOut={this.logOut} />
                 <main>
                   {/* <ul>
                     <li><Link to="/public">Public Page</Link></li>
@@ -117,10 +115,10 @@ class App extends Component {
                   </ul> */}
                   <Route exact path="/public" component={Public}/>
                   {/* <Route path="/users/:username" component={Profile}/> */}
-                  <PropsRoute exact path="/login" component={Login} authenticate={this.authenticate}/>
-                  <PropsRoute exact path="/register" component={Register} authenticate={this.authenticate}/>
-                  <PrivateRoute exact path="/protected" component={Protected} loggedIn={this.state.isLoggedIn}/>
-                  <PrivateRoute exact path="/more-protected" component={MoreProtected} loggedIn={this.state.isLoggedIn}/>
+                  <PropsRoute exact path="/login" component={Login} authenticate={this.authenticate} />
+                  <PropsRoute exact path="/register" component={Register} authenticate={this.authenticate} />
+                  <PrivateRoute exact path="/protected" component={Protected} user={user}/>
+                  <PrivateRoute exact path="/more-protected" component={MoreProtected} user={user}/>
                 </main>
               </div>
             </Router>
@@ -135,4 +133,4 @@ const Public = () => <h3>Public</h3>;
 const Protected = () => <h3>Protected</h3>;
 const MoreProtected = () => <h3>More Protected</h3>;
 
-export default App;
+export default withUser(App);
