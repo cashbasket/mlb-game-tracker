@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const scheduleController = require('../../controllers/scheduleController');
 
-// Matches with "/api/schedule/upcoming/:id"
-router.route('/upcoming/:id')
+// Matches with "/api/schedule/:id"
+router.route('/:id')
   .get(scheduleController.findAll);
 //.post(scheduleController.create);
 

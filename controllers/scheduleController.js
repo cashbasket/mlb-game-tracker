@@ -1,16 +1,23 @@
 const db = require('../models');
 const Op = db.Sequelize.Op;
+const moment = require('moment');
 
 // Defining methods for the scheduleController
 module.exports = {
   findAll: function(req, res) {
+    const startDate = (req.query.start) ? req.query.start : moment().format('YYYYMMDD');
+    const endDate = (req.query.end) ? req.query.end : moment().add(1, 'years').format('YYYYMMDD');
     db.game.findAll({
       where: {
         [Op.and]: [{
           [Op.or]: [{awayTeamId: req.params.id}, {homeTeamId: req.params.id}]
         }, {
           gameDate: {
-            [Op.gt]: '20180120'
+            [Op.gte]: startDate
+          }
+        }, {
+          gameDate: {
+            [Op.lte]: endDate
           }
         }]
       },
