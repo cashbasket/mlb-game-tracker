@@ -2,9 +2,41 @@ const db = require('../models');
 const Op = db.Sequelize.Op;
 const moment = require('moment');
 
-// Defining methods for the scheduleController
+// Defining methods for the teamController
 module.exports = {
-  findAll: function(req, res) {
+  // Return data for single team
+  team: function(req, res) {
+    db.team.findOne({
+      where: {
+        id: req.params.id
+      },
+      include: [{
+        model: db.venue,
+        required: true
+      }]
+    })
+      .then(dbTeam => res.json({
+        team: dbTeam
+      }))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // Return list of teams
+  teams: function(req, res) {
+    db.team.findAll({
+      order: [
+        [ 'city', 'ASC' ],
+        [ 'name', 'ASC' ]
+      ]
+    })
+      .then(dbTeam => res.json({
+        teams: dbTeam
+      }))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // Return team schedule
+  teamSchedule: function(req, res) {
     const startDate = (req.query.start) ? req.query.start : moment().format('YYYYMMDD');
     const endDate = (req.query.end) ? req.query.end : moment().add(1, 'years').format('YYYYMMDD');
     db.game.findAll({
@@ -45,7 +77,9 @@ module.exports = {
         ['gameTime', 'ASC'],
       ]
     })
-      .then(dbGame => res.json(dbGame))
+      .then(dbGame => res.json({
+        games: dbGame
+      }))
       .catch(err => res.status(400).json(err));
   }
 };

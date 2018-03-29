@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const scheduleRoutes = require('./schedule');
+const teamRoutes = require('./team');
+const gameRoutes = require('./game');
 
 // mlb schedule routes
-router.use('/schedule', scheduleRoutes);
+router.use('/', teamRoutes);
+router.use('/', gameRoutes);
 
 module.exports = router;
