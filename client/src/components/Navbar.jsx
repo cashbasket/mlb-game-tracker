@@ -10,6 +10,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import Grid from 'material-ui/Grid';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import { withUser } from '../services/withUser';
 
 const styles = {
   root: {
@@ -28,7 +29,7 @@ class Navbar extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      anchorEl: null,
+      anchorEl: null
     };
   }
 
@@ -48,7 +49,7 @@ class Navbar extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, user } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -64,7 +65,7 @@ class Navbar extends React.Component {
                 <Typography variant="title" color="inherit" className={classes.flex}>
               MLB Game Tracker
                 </Typography>
-                {this.props.loggedIn && (
+                {user && (
                   <div>
                     <IconButton
                       aria-owns={open ? 'menu-appbar' : null}
@@ -107,4 +108,4 @@ Navbar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withRouter(withStyles(styles)(Navbar));
+export default withUser(withRouter(withStyles(styles)(Navbar)));
