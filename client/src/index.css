@@ -16,8 +16,11 @@ main {
   margin-top: 90px !important;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 768px) {
   #menuButton {
     display: none;
+  }
+  #userMenu {
+    display: block;
   }
 }
