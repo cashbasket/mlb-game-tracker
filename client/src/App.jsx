@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
@@ -12,7 +8,7 @@ import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
 
-// Eefines the colors Material-UI will use as the theme.
+// Defines the colors Material-UI will use as the theme.
 const theme = createMuiTheme({
   palette: {
     primary: {
