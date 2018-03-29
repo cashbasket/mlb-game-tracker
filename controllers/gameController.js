@@ -4,6 +4,7 @@ const db = require('../models');
 module.exports = {
   // Return data for single team
   game: function(req, res) {
+
     db.game.findOne({
       where: {
         id: req.params.id
