@@ -6,8 +6,8 @@ import {
 } from 'react-router-dom';
 import Grid from 'material-ui/Grid';
 import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -115,8 +115,8 @@ class App extends Component {
                   </ul> */}
                   <Route exact path="/public" component={Public}/>
                   {/* <Route path="/users/:username" component={Profile}/> */}
-                  <PropsRoute exact path="/login" component={Login} authenticate={this.authenticate} />
-                  <PropsRoute exact path="/register" component={Register} authenticate={this.authenticate} />
+                  <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
+                  <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
                   <PrivateRoute exact path="/protected" component={Protected} user={user}/>
                   <PrivateRoute exact path="/more-protected" component={MoreProtected} user={user}/>
                 </main>
