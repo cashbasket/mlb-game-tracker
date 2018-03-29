@@ -13,7 +13,7 @@ import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withUser } from '../services/withUser';
 import Drawer from 'material-ui/Drawer';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import List, { ListItem, ListItemText } from 'material-ui/List';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 
 const styles = {
@@ -25,7 +25,7 @@ const styles = {
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20,
+    marginRight: 10,
   },
   list: {
     width: 250,

@@ -8,7 +8,7 @@ import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
 
-// Defines the colors Material-UI will use as the theme.
+// Defines the colors, fonts, etc. that the app will use.
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -24,6 +24,14 @@ const theme = createMuiTheme({
       contrastText: '#000',
     },
   },
+  typography: {
+    fontFamily: '\'Roboto\', sans-serif',
+    title: {
+      fontFamily: '\'Abril Fatface\', cursive',
+      fontSize: 30,
+      fontWeight: 700
+    }
+  }
 });
 
 const renderMergedProps = (component, ...rest) => {
