@@ -2,6 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
+const routes = require("./routes");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -25,6 +26,13 @@ if (process.env.NODE_ENV === 'production') {
 }
 const ApiController = require('./controllers/ApiController');
 app.use('/api', ApiController);
+
+// Configure body parser for AJAX requests
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Add routes
+app.use(routes);
 
 // Send every request to the React app
 // Define any API routes before this runs

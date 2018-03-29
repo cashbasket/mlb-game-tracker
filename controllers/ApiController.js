@@ -79,21 +79,4 @@ router.post('/logout', (req, res, next) => {
   });
 });
 
-router.get('/teams', (req, res) => {
-  models.team.findAll({
-    order: [
-      [ 'city', 'ASC' ],
-      [ 'name', 'ASC' ]
-    ]
-  })
-    .then((results) => {
-      const teamsObj = {
-        teams: results
-      };
-      return res.json(teamsObj);
-    })
-    .catch((err) => {
-      res.json(err);
-    });
-});
 module.exports = router;

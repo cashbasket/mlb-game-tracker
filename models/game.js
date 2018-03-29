@@ -51,6 +51,8 @@ module.exports = function(sequelize, DataTypes) {
       },
       onDelete: 'CASCADE'
     });
+
+    Game.hasMany(models.attendance);
   };
 
   return Game;

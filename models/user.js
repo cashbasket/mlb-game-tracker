@@ -53,6 +53,7 @@ module.exports = function(sequelize, DataTypes) {
     });
     
     User.hasMany(models.post);
+    User.hasMany(models.attendance);
   };
 
   User.prototype.toJSON =  function () {
