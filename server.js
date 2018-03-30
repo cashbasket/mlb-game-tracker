@@ -1,5 +1,4 @@
 require('dotenv').config();
-const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
@@ -29,14 +28,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+require('./config/passport')(app);
+
 // Add routes
 app.use(routes);
-
-// Send every request to the React app
-// Define any API routes before this runs
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, './client/build/index.html'));
-});
 
 db.sequelize.sync().then(function() {
   app.listen(PORT, function() {
