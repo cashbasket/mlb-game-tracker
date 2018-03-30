@@ -4,7 +4,7 @@ const db = require('../models');
 module.exports = {
   // Return data for single team
   game: function(req, res) {
-
+    const userId = req.user ? req.user.id: null;
     db.game.findOne({
       where: {
         id: req.params.id
@@ -26,7 +26,7 @@ module.exports = {
       {
         model: db.attendance,
         required: false,
-        where: { userId: req.query.user }
+        where: { userId: userId }
       }]
     })
       .then(dbGame => res.json({

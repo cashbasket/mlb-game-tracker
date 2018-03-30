@@ -7,6 +7,7 @@ module.exports = {
   
   // Return team schedule
   schedule: function(req, res) {
+    const userId = req.user ? req.user.id: null;
     const startDate = (req.query.start) ? req.query.start : moment().format('YYYYMMDD');
     const endDate = (req.query.end) ? req.query.end : moment().add(1, 'years').format('YYYYMMDD');
     db.game.findAll({
@@ -40,7 +41,7 @@ module.exports = {
       {
         model: db.attendance,
         required: false,
-        where: { userId: req.query.user }
+        where: { userId: userId }
       }],
       order: [
         ['gameDate', 'ASC'],
