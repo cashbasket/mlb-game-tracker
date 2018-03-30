@@ -1,4 +1,4 @@
-var passport = require('../config/passport');
+const passport = require('passport');
 
 module.exports = {
   // Return data for single team

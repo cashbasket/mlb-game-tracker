@@ -1,11 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const RateLimit = require('express-rate-limit');
-const passport = require('../../config/passport');
 const authController = require('../../controllers/authController');
-
-router.use(passport.initialize());
-router.use(passport.session());
 
 const loginLimiter = new RateLimit({
   windowMs: 15*60*1000, // 15 minutes
