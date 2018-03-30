@@ -15,6 +15,9 @@ import { withUser } from '../services/withUser';
 import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import TeamMenu from '../components/TeamMenu';
+import Divider from 'material-ui/Divider';
+import TeamList from '../components/TeamList';
 
 const styles = {
   root: {
@@ -34,6 +37,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    marginTop: 25,
+    marginBottom: 10,
     padding: '0 8px',
   },
   userMenu: {
@@ -88,8 +93,10 @@ class Navbar extends React.Component {
                 <Typography variant="title" color="inherit" className={classes.flex}>
               MLB Game Tracker
                 </Typography>
+                <TeamMenu/>
                 {user && (
                   <div id="userMenu" className={classes.userMenu}>
+                    
                     <IconButton
                       aria-owns={open ? 'menu-appbar' : null}
                       aria-haspopup="true"
@@ -159,6 +166,8 @@ class Navbar extends React.Component {
                   </div>
                 )}
               </List>
+              <Divider/>
+              <TeamList/>
             </div>
           </div>
         </Drawer>
