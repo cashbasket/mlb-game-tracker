@@ -2,7 +2,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const routes = require("./routes");
+const routes = require('./routes');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -24,8 +24,6 @@ app.use(bodyParser.json());
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 }
-const ApiController = require('./controllers/ApiController');
-app.use('/api', ApiController);
 
 // Configure body parser for AJAX requests
 app.use(bodyParser.urlencoded({ extended: true }));
