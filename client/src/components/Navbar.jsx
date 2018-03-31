@@ -8,16 +8,18 @@ import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
 import { withRouter } from 'react-router-dom';
 import MenuIcon from 'material-ui-icons/Menu';
+import Button from 'material-ui/Button';
 import Grid from 'material-ui/Grid';
 import AccountCircle from 'material-ui-icons/AccountCircle';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import { withUser } from '../services/withUser';
+import { withUser, update } from '../services/withUser';
 import Drawer from 'material-ui/Drawer';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
 import TeamMenu from '../components/TeamMenu';
 import Divider from 'material-ui/Divider';
 import TeamList from '../components/TeamList';
+import API from '../utils/api';
 
 const styles = {
   root: {
@@ -65,8 +67,9 @@ class Navbar extends React.Component {
 
   handleLogout = () => {
     this.handleClose();
-    this.props.logOut(() => {
-      this.props.history.push('/');
+    this.logOut(() => {
+      window.location.href.indexOf('/team/') < 0 ?
+        this.props.history.push('/') : null;
     });
   };
 
@@ -75,6 +78,20 @@ class Navbar extends React.Component {
       drawerOpen: open,
     });
   };
+
+  logOut = (fn) => {
+    API.logout()
+      .then((res) => {
+        if (res.status === 200) {
+          update(null);
+          if (typeof fn === 'function') {
+            fn();
+          }
+        }
+      }).catch((err) => {
+        console.log('Error logging out user.');
+      });
+  }
 
   render() {
     const { classes, user } = this.props;
@@ -93,8 +110,8 @@ class Navbar extends React.Component {
                 <Typography variant="title" color="inherit" className={classes.flex}>
               MLB Game Tracker
                 </Typography>
-                <TeamMenu/>
-                {user && (
+                <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
+                {user ? (
                   <div id="userMenu" className={classes.userMenu}>
                     
                     <IconButton
@@ -123,6 +140,10 @@ class Navbar extends React.Component {
                       <MenuItem onClick={this.handleClose}>My Account</MenuItem>
                       <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
                     </Menu>
+                  </div>
+                ) : (
+                  <div id="userMenu">
+                    <Button component="a" href="/login" style={{color: '#FFF'}}>Log In</Button>
                   </div>
                 )}
               </Toolbar>
