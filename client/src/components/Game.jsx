@@ -98,7 +98,7 @@ class Game extends React.Component {
                   <Info className={classes.leftIcon}/>
                   View Game Page
                 </Button>
-                {user && <Button size="small" color="primary" onClick={() => !this.state.isAttending ? this.addAttendance(user.id, this.props.details.id) : this.deleteAttendance(this.props.details.attendances[0].id)}>
+                {user && <Button size="small" color="primary" onClick={() => !this.state.isAttending ? this.addAttendance(user.id, this.props.details.id) : this.deleteAttendance(this.props.details.id, user.id)}>
                   {this.state.isAttending ? (
                     <CheckBox className={classes.leftIcon}/>
                   ) : (
