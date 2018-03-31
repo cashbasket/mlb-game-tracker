@@ -4,6 +4,6 @@ const authCheck = require('../../lib/passportAuth');
 
 // Matches with "/api/schedule/:id"
 router.route('/:id')
-  .get(authCheck(), scheduleController.schedule);
+  .get(scheduleController.schedule);
 
 module.exports = router;

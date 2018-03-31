@@ -15,7 +15,35 @@ main {
   margin-top: 90px !important;
 }
 
-@media (min-width: 768px) {
+.bold {
+  font-weight: bold !important;
+}
+
+#teamInfo {
+  position: relative;
+}
+
+main a,
+main a:focus {
+  color: #455a64;
+  text-decoration: none;
+  border-bottom: 1px solid #455a64;
+}
+
+@media screen and (min-width: 1040px) and (min-height: 731px) {
+  #teamInfo {
+    position: fixed;
+    width: 225px;
+  }
+}
+
+@media screen and (min-width: 1040px) and (max-height: 730px) {
+  #teamInfo {
+    position: static;
+  }
+}
+
+@media screen and (min-width: 768px) {
   #menuButton {
     display: none;
   }

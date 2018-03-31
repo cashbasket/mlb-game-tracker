@@ -4,9 +4,12 @@ import Grid from 'material-ui/Grid';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import TeamPage from './pages/TeamPage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
+import MomentUtils from 'material-ui-pickers/utils/moment-utils';
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
 
 // Defines the colors, fonts, etc. that the app will use.
 const theme = createMuiTheme({
@@ -65,7 +68,6 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 class App extends Component {
   constructor() {
     super();
-    this.logOut = this.logOut.bind(this);
     this.authenticate = this.authenticate.bind(this);
   }
 
@@ -83,20 +85,6 @@ class App extends Component {
     });
   }
 
-  logOut = (fn) => {
-    API.logout()
-      .then((res) => {
-        if (res.status === 200) {
-          update(null);
-          if (typeof fn === 'function') {
-            fn();
-          }
-        }
-      }).catch((err) => {
-        console.log('Error logging out user.');
-      });
-  }
-
   componentDidMount = () => {
     this.authenticate();
   }
@@ -104,31 +92,33 @@ class App extends Component {
   render() {
     const { user } = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
-        <Grid container spacing={0} justify="center" alignItems="center">
-          <Grid item md={9} sm={12} xs={12}>
-            <Router>
-              <div>
-                <Navbar logOut={this.logOut} />
-                <main>
-                  {/* <ul>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <MuiThemeProvider theme={theme}>
+          <Grid container spacing={0} justify="center" alignItems="center" style={{paddingLeft: 15, paddingRight: 15}}>
+            <Grid item md={9} sm={12} xs={12}>
+              <Router>
+                <div>
+                  {window.location.href.indexOf('/team/') < 0 && <Navbar/>}
+                  <main>
+                    {/* <ul>
                     <li><Link to="/public">Public Page</Link></li>
                     <li><Link to="/protected">Protected Page</Link></li>
                     <li><Link to="/more-protected">Another Protected Page</Link></li>
                     <li><Link to="/register">Register a New User</Link></li>
                   </ul> */}
-                  <Route exact path="/public" component={Public}/>
-                  {/* <Route path="/users/:username" component={Profile}/> */}
-                  <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
-                  <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                  <PrivateRoute exact path="/protected" component={Protected} user={user}/>
-                  <PrivateRoute exact path="/more-protected" component={MoreProtected} user={user}/>
-                </main>
-              </div>
-            </Router>
+                    <Route exact path="/public" component={Public}/>
+                    <Route path="/team/:teamId" component={TeamPage} />
+                    <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
+                    <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
+                    <PrivateRoute exact path="/protected" component={Protected} user={user}/>
+                    <PrivateRoute exact path="/more-protected" component={MoreProtected} user={user}/>
+                  </main>
+                </div>
+              </Router>
+            </Grid>
           </Grid>
-        </Grid>
-      </MuiThemeProvider>
+        </MuiThemeProvider>
+      </MuiPickersUtilsProvider>
     );
   }
 }

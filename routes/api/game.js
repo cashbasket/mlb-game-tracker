@@ -11,6 +11,6 @@ router.route('/attendance')
 
 // Matches with "/api/game/attendance/:id"
 router.route('/attendance/:id')
-  .delete(gameController.create);
+  .delete(gameController.delete);
 
 module.exports = router;

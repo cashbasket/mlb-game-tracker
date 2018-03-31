@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export default {
+  // Auth API calls
   authenticate: function() {
     return axios.get('/api/auth/authenticate', {
       withCredentials: true
@@ -17,7 +18,28 @@ export default {
       withCredentials: true
     });
   },
+  // Team API calls
   getAllTeams: () => {
     return axios.get('/api/teams');
+  },
+  getTeamInfo: teamId => {
+    return axios.get(`/api/teams/${teamId}`);
+  },
+  // Schedule API calls
+  getTeamSchedule: (teamId, startDate, endDate) => {
+    return axios.get(`/api/schedule/${teamId}?start=${startDate}&end=${endDate}`);
+  },
+  // Game API calls
+  getGameInfo: gameId => {
+    return axios.get(`/api/game/${gameId}`);
+  },
+  addAttendance: (userId, gameId) => {
+    return axios.post('/api/game/attendance', {
+      userId: userId,
+      gameId: gameId
+    });
+  },
+  deleteAttendance: (id) => {
+    return axios.delete(`/api/game/attendance/${id}`);
   }
 };

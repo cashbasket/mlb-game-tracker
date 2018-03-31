@@ -67,9 +67,20 @@ class TeamMenu extends React.Component {
           }}
         >
           {this.state.mlbTeams.map(team => (
-            <MenuItem key={team.id} value={team.id} component={Link} to={`/team/${team.id}`}>
-              {team.name}
-            </MenuItem>
+            <div>
+              {this.props.handleTeamChange ? (
+                <MenuItem key={team.id} value={team.id} onClick={() => {
+                  this.props.handleTeamChange(team.id);
+                  this.handleClose();
+                }}>
+                  {team.name}
+                </MenuItem>
+              ) : (
+                <MenuItem key={team.id} value={team.id} component={Link} to={`/team/${team.id}`} onClick={() => this.handleClose()}>
+                  {team.name}
+                </MenuItem>
+              )}
+            </div>
           ))}
         </Menu>
       </div>
