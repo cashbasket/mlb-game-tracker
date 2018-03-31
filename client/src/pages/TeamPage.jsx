@@ -125,7 +125,7 @@ class TeamPage extends React.Component {
                   <DatePicker
                     disablePast={user ? false : true}
                     name="startDate"
-                    format="MM/DD/YYYY"
+                    format="M/D/YYYY"
                     value={startDate}
                     onChange={this.handleStartChange}
                   />
@@ -135,7 +135,7 @@ class TeamPage extends React.Component {
                   <DatePicker
                     disablePast={true}
                     name="endDate"
-                    format="MM/DD/YYYY"
+                    format="M/D/YYYY"
                     value={endDate}
                     onChange={this.handleEndChange}
                   />

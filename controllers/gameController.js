@@ -47,7 +47,8 @@ module.exports = {
   delete: function(req, res) {
     db.attendance.destroy({
       where: {
-        id: req.params.id
+        userId: req.user.id,
+        gameId: req.params.id
       }
     })
       .then(dbAttendance => res.json(dbAttendance))
