@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const gameController = require('../../controllers/gameController');
+const authCheck = require('../../lib/passportAuth');
 
 // Matches with "/api/game/:id"
 router.route('/:id')
@@ -7,10 +8,10 @@ router.route('/:id')
 
 // Matches with "/api/game/attendance"
 router.route('/attendance')
-  .post(gameController.create);
+  .post(authCheck(), gameController.create);
 
 // Matches with "/api/game/attendance/:id"
 router.route('/attendance/:id')
-  .delete(gameController.delete);
+  .delete(authCheck(), gameController.delete);
 
 module.exports = router;
