@@ -188,7 +188,7 @@ class Navbar extends React.Component {
                 )}
               </List>
               <Divider/>
-              <TeamList/>
+              <TeamList handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
             </div>
           </div>
         </Drawer>

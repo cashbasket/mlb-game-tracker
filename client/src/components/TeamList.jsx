@@ -50,9 +50,19 @@ class TeamList extends React.Component {
         <Typography variant="subheading" className={classes.teamsHead}>Choose a team:</Typography>
         <List>
           {this.state.mlbTeams.map(team => (
-            <ListItem button key={team.id} component={Link} to={`/team/${team.id}`}> 
-              <ListItemText primary={team.name} />
-            </ListItem>
+            <div>
+              {this.props.handleTeamChange ? (
+                <ListItem button key={team.id} onClick={() => {
+                  this.props.handleTeamChange(team.id);
+                }}>
+                  <ListItemText primary={team.name} />
+                </ListItem>
+              ) : (
+                <ListItem button key={team.id} component={Link} to={`/team/${team.id}`}> 
+                  <ListItemText primary={team.name} />
+                </ListItem>
+              )}
+            </div>
           ))}
         </List>
       </div>
