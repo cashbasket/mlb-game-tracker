@@ -3,12 +3,12 @@ module.exports = function(sequelize, DataTypes) {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: 'userIdGameId'
+      primaryKey: true
     },
     gameId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: 'userIdGameId'
+      primaryKey: true
     },
     seat: DataTypes.STRING,
     url: DataTypes.STRING
