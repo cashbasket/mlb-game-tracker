@@ -19,13 +19,13 @@ const styles = theme => ({
     display: 'flex'
   },
   teamName: {
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 700,
     marginBottom: 15,
     textAlign: 'center'
   },
   infoDiv: {
-    marginBottom: 30,
+    marginBottom: 24,
     textAlign: 'center'
   },
   bold: {
