@@ -85,7 +85,8 @@ module.exports = {
   deletePost: function(req, res) {
     db.post.destroy({
       where: {
-        id: req.params.id
+        id: req.params.id,
+        userId: req.user.id
       }
     })
       .then(dbPost => res.json(dbPost))
