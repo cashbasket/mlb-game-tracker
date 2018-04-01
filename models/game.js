@@ -36,14 +36,23 @@ module.exports = function(sequelize, DataTypes) {
       onDelete: 'CASCADE'
     });
 
-    // Game.belongsTo(models.team, {
-    //   as: 'Winner',
-    //   foreignKey: {
-    //     name: 'winningTeamId',
-    //     allowNull: true
-    //   },
-    //   onDelete: 'SET NULL'
-    // });
+    Game.belongsTo(models.team, {
+      as: 'Winner',
+      foreignKey: {
+        name: 'winningTeamId',
+        allowNull: true
+      },
+      onDelete: 'SET NULL'
+    });
+
+    Game.belongsTo(models.team, {
+      as: 'Loser',
+      foreignKey: {
+        name: 'losingTeamId',
+        allowNull: true
+      },
+      onDelete: 'SET NULL'
+    });
 
     Game.belongsTo(models.venue, {
       foreignKey: {
