@@ -32,6 +32,6 @@ router.route('/upcoming')
 
 // Matches with "/api/dashboard/recentposts"
 router.route('/recentposts')
-  .get(authCheck(), dashboardController.recentPosts);
+  .get(dashboardController.recentPosts);
 
 module.exports = router;
