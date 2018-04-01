@@ -172,7 +172,7 @@ module.exports = {
       },{
         model: db.user,
         required: true,
-        attributes: { exclude: ['password', 'token', 'tokenExpires'] }
+        attributes: { exclude: ['email', 'password', 'token', 'tokenExpires'] }
       }],
       order: [
         ['postDate', 'DESC']

@@ -36,7 +36,7 @@ module.exports = {
   },
 
   // create an attendance record
-  create: function(req, res) {
+  createAtt: function(req, res) {
     db.attendance
       .create(req.body)
       .then(dbAttendance => res.json(dbAttendance))
@@ -44,7 +44,7 @@ module.exports = {
   },
 
   // delete route for deleting attendance records
-  delete: function(req, res) {
+  deleteAtt: function(req, res) {
     db.attendance.destroy({
       where: {
         userId: req.user.id,
@@ -52,6 +52,43 @@ module.exports = {
       }
     })
       .then(dbAttendance => res.json(dbAttendance))
+      .catch(err => res.status(400).json(err));
+  },
+
+  posts: function(req, res) {
+    db.post.findAll({
+      include: [{
+        model: db.user,
+        required: true,
+        attributes: { exclude: ['email', 'password', 'token', 'tokenExpires'] }
+      }],
+      where: { gameId: req.params.id },
+      order: [
+        ['postDate', 'DESC']
+      ]
+    })
+      .then(dbPost => res.json({
+        posts: dbPost
+      }))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // create a post record
+  createPost: function(req, res) {
+    db.post
+      .create(req.body)
+      .then(dbPost => res.json(dbPost))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // delete route for deleting posts
+  deletePost: function(req, res) {
+    db.post.destroy({
+      where: {
+        id: req.params.id
+      }
+    })
+      .then(dbPost => res.json(dbPost))
       .catch(err => res.status(400).json(err));
   }
 };

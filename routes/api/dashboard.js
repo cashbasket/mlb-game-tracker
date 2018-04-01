@@ -4,34 +4,34 @@ const authCheck = require('../../lib/passportAuth');
 
 // Matches with "/api/dashboard/gamesattended"
 router.route('/gamesattended')
-  .get(dashboardController.gamesAttended);
+  .get(authCheck(), dashboardController.gamesAttended);
 
 // Matches with "/api/dashboard/postscount"
 router.route('/postscount')
-  .get(dashboardController.postsCount);
+  .get(authCheck(), dashboardController.postsCount);
 
 // Matches with "/api/dashboard/ballparkcount"
 router.route('/ballparkcount')
-  .get(dashboardController.ballparkCount);
+  .get(authCheck(), dashboardController.ballparkCount);
 
 // Matches with "/api/dashboard/wins"
 router.route('/wins')
-  .get(dashboardController.wins);
+  .get(authCheck(), dashboardController.wins);
 
 // Matches with "/api/dashboard/losses"
 router.route('/losses')
-  .get(dashboardController.losses);
+  .get(authCheck(), dashboardController.losses);
   
 // Matches with "/api/dashboard/last"
 router.route('/last')
-  .get(dashboardController.last);
+  .get(authCheck(), dashboardController.last);
   
 // Matches with "/api/dashboard/upcoming"
 router.route('/upcoming')
-  .get(dashboardController.upcoming);
+  .get(authCheck(), dashboardController.upcoming);
 
 // Matches with "/api/dashboard/recentposts"
 router.route('/recentposts')
-  .get(dashboardController.recentPosts);
+  .get(authCheck(), dashboardController.recentPosts);
 
 module.exports = router;
