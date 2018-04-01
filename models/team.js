@@ -35,10 +35,14 @@ module.exports = function(sequelize, DataTypes) {
       foreignKey: 'homeTeamId',
       as: 'Home'
     });
-    // Team.hasMany(models.game, {
-    //   foreignKey: 'winningTeamId',
-    //   as: 'Winner'
-    // });
+    Team.hasMany(models.game, {
+      foreignKey: 'winningTeamId',
+      as: 'Winner'
+    });
+    Team.hasMany(models.game, {
+      foreignKey: 'losingTeamId',
+      as: 'Loser'
+    });
     Team.hasMany(models.user);
   };
 
