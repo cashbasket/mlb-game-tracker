@@ -8,10 +8,22 @@ router.route('/:id')
 
 // Matches with "/api/game/attendance"
 router.route('/attendance')
-  .post(authCheck(), gameController.create);
+  .post(authCheck(), gameController.createAtt);
 
 // Matches with "/api/game/attendance/:id"
 router.route('/attendance/:id')
-  .delete(authCheck(), gameController.delete);
+  .delete(authCheck(), gameController.deleteAtt);
+
+// Matches with "/api/game/posts/:id"
+router.route('/posts/:id')
+  .get(gameController.posts);
+  
+// Matches with "/api/game/posts/:id"
+router.route('/posts')
+  .post(authCheck(), gameController.createPost);
+
+// Matches with "/api/game/posts/:id"
+router.route('/posts/:id')
+  .delete(authCheck(), gameController.deletePost);  
 
 module.exports = router;
