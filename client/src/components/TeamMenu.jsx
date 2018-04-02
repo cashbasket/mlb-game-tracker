@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import Button from 'material-ui/Button';
 import { Link } from 'react-router-dom';
 import Menu, { MenuItem } from 'material-ui/Menu';
@@ -67,20 +67,20 @@ class TeamMenu extends React.Component {
           }}
         >
           {this.state.mlbTeams.map(team => (
-            <div>
+            <Fragment key={team.id}>
               {this.props.handleTeamChange ? (
-                <MenuItem key={team.id} value={team.id} onClick={() => {
+                <MenuItem value={team.id} onClick={() => {
                   this.props.handleTeamChange(team.id);
                   this.handleClose();
                 }}>
                   {team.name}
                 </MenuItem>
               ) : (
-                <MenuItem key={team.id} value={team.id} component={Link} to={`/team/${team.id}`} onClick={() => this.handleClose()}>
+                <MenuItem value={team.id} component={Link} to={`/team/${team.id}`} onClick={() => this.handleClose()}>
                   {team.name}
                 </MenuItem>
               )}
-            </div>
+            </Fragment>
           ))}
         </Menu>
       </div>
