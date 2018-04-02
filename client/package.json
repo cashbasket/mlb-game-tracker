@@ -11,7 +11,9 @@
     "material-ui-pickers": "^1.0.0-rc.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-flexbox-grid": "^2.0.0",
     "react-router-dom": "^4.2.2",
+    "react-rte": "^0.16.1",
     "react-scripts": "1.0.14"
   },
   "scripts": {
