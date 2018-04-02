@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import Grid from 'material-ui/Grid';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import Navbar from './components/Navbar';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
+import GamePage from './pages/GamePage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -29,13 +30,19 @@ const theme = createMuiTheme({
   },
   typography: {
     fontFamily: '\'Roboto\', sans-serif',
+    fontSize: 14,
     title: {
       fontFamily: '\'Abril Fatface\', cursive',
       fontSize: 30,
       fontWeight: 700
+    },
+    headline: {
+      marginBottom: 10
     }
   }
 });
+
+let user;
 
 const renderMergedProps = (component, ...rest) => {
   const finalProps = Object.assign({}, ...rest);
@@ -54,7 +61,7 @@ const PropsRoute = ({ component, ...rest }) => {
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={props => (
-    rest.user ? (
+    user ? (
       <Component {...props}/>
     ) : (
       <Redirect to={{
@@ -90,32 +97,29 @@ class App extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    user = this.props.user;
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={theme}>
-          <Grid container spacing={0} justify="center" alignItems="center" style={{paddingLeft: 15, paddingRight: 15}}>
-            <Grid item md={9} sm={12} xs={12}>
-              <Router>
-                <div>
-                  {window.location.href.indexOf('/team/') < 0 && <Navbar/>}
-                  <main>
-                    {/* <ul>
-                    <li><Link to="/public">Public Page</Link></li>
-                    <li><Link to="/protected">Protected Page</Link></li>
-                    <li><Link to="/more-protected">Another Protected Page</Link></li>
-                    <li><Link to="/register">Register a New User</Link></li>
-                  </ul> */}
-                    <Route exact path="/public" component={Public}/>
-                    <Route path="/team/:teamId" component={TeamPage} />
-                    <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
-                    <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                    <PrivateRoute exact path="/protected" component={Protected} user={user}/>
-                    <PrivateRoute exact path="/more-protected" component={MoreProtected} user={user}/>
-                  </main>
-                </div>
-              </Router>
-            </Grid>
+          <Grid>
+            <Row style={{paddingLeft: 15, paddingRight: 15}}>
+              <Col sm={12}>
+                <Router>
+                  <div>
+                    <Navbar/>
+                    <main>
+                      <Route exact path="/public" component={Public}/>
+                      <Route path="/team/:teamId" component={TeamPage} />
+                      <PrivateRoute path="/game/:gameId" component={GamePage} />
+                      <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
+                      <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
+                      <PrivateRoute exact path="/protected" component={Protected}/>
+                      <PrivateRoute exact path="/more-protected" component={MoreProtected}/>
+                    </main>
+                  </div>
+                </Router>
+              </Col>
+            </Row>
           </Grid>
         </MuiThemeProvider>
       </MuiPickersUtilsProvider>

@@ -9,8 +9,9 @@ import IconButton from 'material-ui/IconButton';
 import { withRouter } from 'react-router-dom';
 import MenuIcon from 'material-ui-icons/Menu';
 import Button from 'material-ui/Button';
-import Grid from 'material-ui/Grid';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 import AccountCircle from 'material-ui-icons/AccountCircle';
+import Avatar from 'material-ui/Avatar';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withUser, update } from '../services/withUser';
 import Drawer from 'material-ui/Drawer';
@@ -68,8 +69,7 @@ class Navbar extends React.Component {
   handleLogout = () => {
     this.handleClose();
     this.logOut(() => {
-      window.location.href.indexOf('/team/') < 0 ?
-        this.props.history.push('/') : null;
+      this.props.history.push('/');
     });
   };
 
@@ -99,99 +99,110 @@ class Navbar extends React.Component {
     const open = Boolean(anchorEl);
 
     return (
-      <div className={classes.root}>
-        <AppBar position="fixed">
-          <Grid container spacing={0} justify="center">
-            <Grid item md={9} sm={12} xs={12}>
-              <Toolbar>
-                <IconButton id="menuButton" className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
-                  <MenuIcon />
+      <div>
+        {console.log(this.props.location.pathname.indexOf('/team/'))}
+        {(this.props.location.pathname.indexOf('/team/') < 0 || this.props.forceDisplay) && (
+          <div className={classes.root}>
+            <AppBar position="fixed">
+              <Grid>
+                <Row>
+                  <Col md={12}>
+                    <Toolbar>
+                      <IconButton id="menuButton" className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
+                        <MenuIcon />
+                      </IconButton>
+                      <Typography variant="title" color="inherit" className={classes.flex}>
+                MLB Game Tracker
+                      </Typography>
+                      <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
+                      {user ? (
+                        <div id="userMenu" className={classes.userMenu}>
+                      
+                          <IconButton
+                            aria-owns={open ? 'menu-appbar' : null}
+                            aria-haspopup="true"
+                            onClick={this.handleMenu}
+                            color="inherit"
+                          >
+                            <Avatar
+                              alt={this.props.user.username}
+                              src={this.props.user.gravatar}
+                            />
+                          </IconButton>
+                          <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                            open={open}
+                            onClose={this.handleClose}
+                          >
+                            <MenuItem onClick={this.handleClose}>My Profile</MenuItem>
+                            <MenuItem onClick={this.handleClose}>My Account</MenuItem>
+                            <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
+                          </Menu>
+                        </div>
+                      ) : (
+                        <div id="userMenu">
+                          <Button component="a" href="/register" style={{color: '#FFF'}}>Sign Up</Button>
+                          <Button component="a" href="/login" style={{color: '#FFF'}}>Log In</Button>
+                        </div>
+                      )}
+                    </Toolbar>
+                  </Col>
+                </Row>
+              </Grid>
+            </AppBar>
+            <Drawer open={this.state.drawerOpen} onClose={this.toggleDrawer(false)}>
+              <div className={classes.drawerHeader}>
+                <IconButton onClick={this.toggleDrawer(false)}>
+                  <ChevronLeftIcon />
                 </IconButton>
-                <Typography variant="title" color="inherit" className={classes.flex}>
-              MLB Game Tracker
-                </Typography>
-                <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
-                {user ? (
-                  <div id="userMenu" className={classes.userMenu}>
-                    
-                    <IconButton
-                      aria-owns={open ? 'menu-appbar' : null}
-                      aria-haspopup="true"
-                      onClick={this.handleMenu}
-                      color="inherit"
-                    >
-                      <AccountCircle />
-                    </IconButton>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorEl}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                      open={open}
-                      onClose={this.handleClose}
-                    >
-                      <MenuItem onClick={this.handleClose}>My Profile</MenuItem>
-                      <MenuItem onClick={this.handleClose}>My Account</MenuItem>
-                      <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
-                    </Menu>
-                  </div>
-                ) : (
-                  <div id="userMenu">
-                    <Button component="a" href="/login" style={{color: '#FFF'}}>Log In</Button>
-                  </div>
-                )}
-              </Toolbar>
-            </Grid>
-          </Grid>
-        </AppBar>
-        <Drawer open={this.state.drawerOpen} onClose={this.toggleDrawer(false)}>
-          <div className={classes.drawerHeader}>
-            <IconButton onClick={this.toggleDrawer(false)}>
-              <ChevronLeftIcon />
-            </IconButton>
+              </div>
+              <div
+                tabIndex={0}
+                role="button"
+                onClick={this.toggleDrawer(false)}
+                onKeyDown={this.toggleDrawer(false)}
+              >
+                <div className={classes.list}>
+                  <List component="nav">
+                    {user ? (
+                      <div>
+                        <ListItem button component={Link} to={`/user/${user.username}`}> 
+                          <ListItemText primary="My Profile" />
+                        </ListItem>
+                        <ListItem button component={Link} to={`/user/${user.username}/account`}>
+                          <ListItemText primary="My Account" />
+                        </ListItem>
+                        <ListItem button onClick={this.handleLogout}>
+                          <ListItemText primary="Log Out" />
+                        </ListItem>
+                      </div>
+                    ) : ( 
+                      <div>
+                        <ListItem button component={Link} to="/login">
+                          <ListItemText primary="Log In" />
+                        </ListItem>
+                        <ListItem button component={Link} to="/register">
+                          <ListItemText primary="Register" />
+                        </ListItem>
+                      </div>
+                    )}
+                  </List>
+                  <Divider/>
+                  <TeamList handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
+                </div>
+              </div>
+            </Drawer>
           </div>
-          <div
-            tabIndex={0}
-            role="button"
-            onClick={this.toggleDrawer(false)}
-            onKeyDown={this.toggleDrawer(false)}
-          >
-            <div className={classes.list}>
-              <List component="nav">
-                {user ? (
-                  <div>
-                    <ListItem button component={Link} to={`/user/${user.username}`}> 
-                      <ListItemText primary="My Profile" />
-                    </ListItem>
-                    <ListItem button component={Link} to={`/user/${user.username}/account`}>
-                      <ListItemText primary="My Account" />
-                    </ListItem>
-                    <ListItem button onClick={this.handleLogout}>
-                      <ListItemText primary="Log Out" />
-                    </ListItem>
-                  </div>
-                ) : ( 
-                  <div>
-                    <ListItem button component={Link} to="/login">
-                      <ListItemText primary="Log In" />
-                    </ListItem>
-                    <ListItem button component={Link} to="/register">
-                      <ListItemText primary="Register" />
-                    </ListItem>
-                  </div>
-                )}
-              </List>
-              <Divider/>
-              <TeamList handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
-            </div>
-          </div>
-        </Drawer>
+        )}
       </div>
     );
   }
