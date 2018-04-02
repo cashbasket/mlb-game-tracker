@@ -10,8 +10,7 @@ import { withUser } from '../services/withUser';
 import moment from 'moment';
 import Button from 'material-ui/Button';
 import Info from 'material-ui-icons/Info';
-import CheckBox from 'material-ui-icons/CheckBox';
-import CheckBoxOutline from 'material-ui-icons/CheckBoxOutlineBlank';
+import AttendButton from './AttendButton';
 import API from '../utils/api';
 
 const styles = theme => ({
@@ -50,6 +49,8 @@ class Game extends React.Component {
     this.state = {
       isAttending: false
     };
+    this.addAttendance = this.addAttendance.bind(this);
+    this.deleteAttendance = this.deleteAttendance.bind(this);
   }
 
   componentDidMount = () => {
@@ -71,7 +72,9 @@ class Game extends React.Component {
   }
 
   render() {
-    const { classes, theme, details, user } = this.props;
+    const { classes } = this.props;
+    const { id, Away, Home, gameDate, gameTime } = this.props.details;
+    const { isAttending } = this.state;
     return (
       <li>
         <div>
@@ -79,34 +82,33 @@ class Game extends React.Component {
             <div>
               <CardContent className={classes.content}>
                 <Typography variant="headline">
-                  {this.props.teamId == this.props.details.Away.id ? (
+                  {this.props.teamId == Away.id ? (
                     <div>
-                      {this.props.details.Away.city} {this.props.details.Away.name} <small>at</small> <Link to={`/team/${this.props.details.Home.id}`} onClick={() => this.props.handleTeamChange(this.props.details.Home.id)}>{this.props.details.Home.city} {this.props.details.Home.name}</Link>
+                      {Away.city} {Away.name} <small>at</small> <Link to={`/team/${Home.id}`} onClick={() => this.props.handleTeamChange(Home.id)}>{Home.city} {Home.name}</Link>
                     </div>
                   ) : (
                     <div>
-                      <Link to={`/team/${this.props.details.Away.id}`} onClick={() => this.props.handleTeamChange(this.props.details.Away.id)}>{this.props.details.Away.city} {this.props.details.Away.name}</Link> <small>at</small> {this.props.details.Home.city} {this.props.details.Home.name}
+                      <Link to={`/team/${Away.id}`} onClick={() => this.props.handleTeamChange(Away.id)}>{Away.city} {Away.name}</Link> <small>at</small> {Home.city} {Home.name}
                     </div>
                   )}
                 </Typography>
                 <Typography variant="subheading" color="textSecondary">
-                  {moment(this.props.details.gameDate).format('M/D/YYYY')} at {moment(this.props.details.gameTime, 'HH:mm:ss').format('h:mm A')} (EST)
+                  {moment(gameDate).format('M/D/YYYY')} at {moment(gameTime, 'HH:mm:ss').format('h:mm A')}
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small" color="primary" component={Link} to={`/game/${this.props.details.id}`}>
+                <Button size="small" color="primary" component={Link} to={`/game/${id}`}>
                   <Info className={classes.leftIcon}/>
                   View Game Page
                 </Button>
-                {user && <Button size="small" color="primary" onClick={() => !this.state.isAttending ? this.addAttendance(user.id, this.props.details.id) : this.deleteAttendance(this.props.details.id, user.id)}>
-                  {this.state.isAttending ? (
-                    <CheckBox className={classes.leftIcon}/>
-                  ) : (
-                    <CheckBoxOutline className={classes.leftIcon}/>
-                  )}
-                  {moment(this.props.details.gameDate) >= moment(new Date()) ? 'I\'m Going' : 'I Went'} to this game
-                </Button>
-                }
+                <AttendButton 
+                  gameId={id} 
+                  gameDate={gameDate} 
+                  gameTime={gameTime} 
+                  addAttendance={this.addAttendance} 
+                  deleteAttendance={this.deleteAttendance} 
+                  isAttending={isAttending}
+                />
               </CardActions>
             </div>
           </Card>
