@@ -1,5 +1,6 @@
 import React from 'react';
-import Grid from 'material-ui/Grid';
+import { Row, Col } from 'react-flexbox-grid';
+import { withRouter } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import DatePicker from 'material-ui-pickers/DatePicker';
@@ -14,10 +15,10 @@ import Navbar from '../components/Navbar';
 
 const styles = theme => ({
   upcoming: {
-    marginBottom: 15
+    marginBottom: theme.spacing.unit * 2
   },
   dateFilter: {
-    marginBottom: 20
+    marginBottom: theme.spacing.unit * 2
   },
   bold: {
     fontWeight: 700
@@ -32,13 +33,14 @@ class TeamPage extends React.Component {
       startDate: new Date(),
       endDate: new Date(new Date().getFullYear(), 11, 31),
       displayedGames: [],
-      teamName: '',
-      teamLogo: '',
+      city: '',
+      name: '',
+      logo: '',
       teamVenueName: '',
-      teamEstablished: '',
-      teamLeague: '',
-      teamDivision: '',
-      teamManager: '',
+      established: '',
+      league: '',
+      division: '',
+      manager: '',
       modalOpen: false
     };
   }
@@ -53,21 +55,23 @@ class TeamPage extends React.Component {
         API.getTeamInfo(this.state.teamId)
           .then((res) => {
             infoObj = { 
-              teamCity: res.data.team.city,
-              teamName: res.data.team.name, 
-              teamLogo: res.data.team.logo,
+              city: res.data.team.city,
+              name: res.data.team.name, 
+              logo: res.data.team.logo,
               teamVenueName: res.data.team.venue.name,
-              teamEstablished: res.data.team.established,
-              teamLeague: res.data.team.league,
-              teamDivision: res.data.team.division,
-              teamManager: res.data.team.manager 
+              established: res.data.team.established,
+              league: res.data.team.league,
+              division: res.data.team.division,
+              manager: res.data.team.manager 
             };
             return API.getTeamSchedule(this.state.teamId, moment(this.state.startDate).format('YYYYMMDD'), moment(this.state.endDate).format('YYYYMMDD'));
           })
           .then((res) => {
             infoObj.displayedGames = res.data.games;
             infoObj.modalOpen = false;
-            this.setState(infoObj);
+            this.setState(infoObj, () => {
+              document.getElementById('page-content').classList.remove('hidden');
+            });
           });
       });
   }
@@ -82,13 +86,14 @@ class TeamPage extends React.Component {
   getTeamInfo = () => {
     API.getTeamInfo(this.state.teamId)
       .then((res) => {
-        this.setState({ teamName: `${res.data.team.city} ${res.data.team.name}`, 
-          teamLogo: res.data.team.logo,
+        this.setState({ name: res.data.team.name,
+          city: res.data.team.city,
+          logo: res.data.team.logo,
           teamVenueName: res.data.team.venue.name,
-          teamEstablished: res.data.team.established,
-          teamLeague: res.data.team.league,
-          teamDivision: res.data.team.division,
-          teamManager: res.data.team.manager });
+          established: res.data.team.established,
+          league: res.data.team.league,
+          division: res.data.team.division,
+          manager: res.data.team.manager });
       });
   };
 
@@ -103,24 +108,20 @@ class TeamPage extends React.Component {
   }
 
   render() {
-    const { startDate, endDate, displayedGames, teamId, teamName } = this.state;
+    const { startDate, endDate, displayedGames, teamId, name, city } = this.state;
     const { classes, user } = this.props;
     return (
       <div>
-        <Navbar handleTeamChange={this.handleTeamChange}/>
-        <Grid container spacing={24}>
-          <Grid item lg={3} md={4} sm={12} xs={12}>
-            <Grid container justify="center">
-              <Grid item xs={12}>
-                <TeamInfo teamId={teamId} state={this.state} getTeamInfo={this.getTeamInfo}/>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item lg={9} md={8} sm={12} xs={12}>
-            <Typography variant="display1" className={classes.upcoming}>{user ? 'All' : 'Upcoming'} {teamName} Games</Typography>
+        <Navbar forceDisplay={true} handleTeamChange={this.handleTeamChange}/>
+        <Row id="page-content" className="hidden">
+          <Col md={3}>
+            <TeamInfo data={this.state}/>
+          </Col>
+          <Col md={9}>
+            <Typography variant="display1" className={classes.upcoming}>{user ? 'All' : 'Upcoming'} {city} {name} Games</Typography>
             <div className={classes.dateFilter}>
-              <Grid container>
-                <Grid item md={4} sm={6} xs={12}>
+              <Row>
+                <Col lg={4} md={5} sm={6}>
                   <Typography variant="subheading" className={classes.bold}>From:</Typography>
                   <DatePicker
                     disablePast={user ? false : true}
@@ -129,8 +130,8 @@ class TeamPage extends React.Component {
                     value={startDate}
                     onChange={this.handleStartChange}
                   />
-                </Grid>
-                <Grid item md={8} sm={6} xs={12}>
+                </Col>
+                <Col lg={8} md={7} sm={6}>
                   <Typography variant="subheading" className={classes.bold}>To:</Typography>
                   <DatePicker
                     disablePast={true}
@@ -139,27 +140,29 @@ class TeamPage extends React.Component {
                     value={endDate}
                     onChange={this.handleEndChange}
                   />
-                </Grid>
-              </Grid>
-            </div>
-            <Grid item md={12}>
-              {this.state.displayedGames.length ? ( <Typography className={classes.bold} variant="subheading">{this.state.displayedGames.length} games found.</Typography>)
-                :
-                (<Typography variant="subheading" className={classes.bold}>
+                </Col>
+              </Row>
+            </div>          
+            <Row>
+              <Col md={12}>
+                {displayedGames.length ? ( <Typography className={classes.bold} variant="subheading">{displayedGames.length} games found.</Typography>)
+                  :
+                  (<Typography variant="subheading" className={classes.bold}>
                     There are no upcoming games in this date range.
-                </Typography>)}
-              <GameList>
-                { this.state.displayedGames.map(game => (
-                  <Game key={game.id} details={game} handleTeamChange={this.handleTeamChange} teamId={this.state.teamId} />
-                ))}
-              </GameList>
-            </Grid>
-          </Grid>
-        </Grid>
+                  </Typography>)}
+                <GameList>
+                  { displayedGames.map(game => (
+                    <Game key={game.id} details={game} handleTeamChange={this.handleTeamChange} teamId={teamId} />
+                  ))}
+                </GameList>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <LoadingModal open={this.state.modalOpen} />
       </div>
     );
   }
 }
 
-export default withUser(withStyles(styles)(TeamPage));
+export default withUser(withRouter(withStyles(styles)(TeamPage)));

@@ -4,7 +4,6 @@ var	passport = require('passport'),
   gravatar = require('gravatar'),
   models = require('../models');
 
-
 module.exports = (app) => {
   passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -40,7 +39,7 @@ module.exports = (app) => {
         email: req.body.email,
         username: req.body.username,
         password: bcrypt.hashSync(password, bcrypt.genSaltSync(8), null, true),
-        gravatar: gravatar.url(email, {s: '200', r: 'pg', d: '404'}, true),
+        gravatar: gravatar.url(email, {s: '200', r: 'pg', d: 'mm'}, true),
         teamId: req.body.teamId
       }).then(function(newUser, created){
         if(!newUser)

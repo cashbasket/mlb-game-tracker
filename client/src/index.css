@@ -11,8 +11,33 @@ body {
 	flex-direction: column;
 }
 
+.site-content {
+  flex: 1
+}
+
+.container {
+  max-width: 1040px !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
 main {
   margin-top: 90px !important;
+}
+
+.infoSide {
+  background-color: #bfcbd1;
+  border: 1px solid #718792;
+  padding: 10px;
+  margin: 0;
+  max-width: 100%;
+}
+
+.public-DraftEditor-content { 
+  min-height: 110px; 
+  font-family: 'Roboto', sans-serif;
 }
 
 .bold {
@@ -21,6 +46,7 @@ main {
 
 #teamInfo {
   position: relative;
+  margin: 0 !important;
 }
 
 main a,
@@ -30,17 +56,24 @@ main a:focus {
   border-bottom: 1px solid #455a64;
 }
 
-@media screen and (min-width: 1040px) and (min-height: 731px) {
-  #teamInfo {
-    position: fixed;
-    width: 225px;
-  }
+.plainLink,
+.plainLink:hover,
+.plainLink:active,
+.plainLink:focus {
+  border-bottom: none !important;
 }
 
-@media screen and (min-width: 1040px) and (max-height: 730px) {
-  #teamInfo {
-    position: static;
-  }
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.team-info-logo {
+  width: inherit;
 }
 
 @media screen and (min-width: 768px) {
