@@ -1,19 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { withRouter } from 'react-router-dom';
-import Grid from 'material-ui/Grid';
+import { Row, Col } from 'react-flexbox-grid';
 import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import { withUser } from '../services/withUser';
-import API from '../utils/api';
+import Button from 'material-ui/Button';
 
 const styles = theme => ({
   root: {
     backgroundColor: '#bfcbd1',
     border: '1px solid #718792',
-    padding: '0 15px',
+    padding: theme.spacing.unit,
+    margin: 0,
+    maxWidth: '100%'
   },
   heading: {
     display: 'flex'
@@ -25,64 +26,71 @@ const styles = theme => ({
     textAlign: 'center'
   },
   infoDiv: {
-    marginBottom: 24,
+    marginBottom: theme.spacing.unit * 2,
     textAlign: 'center'
   },
   bold: {
     fontWeight: 700
   },
   logo: {
-    height: 200,
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  content: {
-    flex: '1 0 auto',
+    maxWidth: 200
   }
 });
 
-class Game extends React.Component {
-  componentDidMount = () => {
-    this.props.getTeamInfo();
-  };
-
+class TeamInfo extends React.Component {
   render() {
-    const { classes, theme } = this.props;
+    const { classes, data } = this.props;
     return (
       <Paper className={classes.root} id="teamInfo">
-        <Grid container justify="center" direction="column" className={classes.heading}>
-          <img src={`/img/logos/${this.props.state.teamLogo}`} className={classes.logo}/>
-          <Typography variant="display1" className={classes.teamName}>{this.props.state.teamCity} {this.props.state.teamName}</Typography>
-        </Grid>
-        <Grid container direction="column">
-          <Grid item md={12}>
-            <div className={classes.infoDiv}>
-              <Typography variant="subheading" className={classes.bold}>Established:</Typography>
-              <Typography>{this.props.state.teamEstablished}</Typography>
-            </div>
-            <div className={classes.infoDiv}>
-              <Typography variant="subheading" className={classes.bold}>League:</Typography>
-              <Typography>{this.props.state.teamLeague}</Typography>
-            </div>
-            <div className={classes.infoDiv}>
-              <Typography variant="subheading" className={classes.bold}>Division:</Typography>
-              <Typography>{this.props.state.teamDivision}</Typography>
-            </div>
-            <div className={classes.infoDiv}>
-              <Typography variant="subheading" className={classes.bold}>Stadium:</Typography>
-              <Typography>{this.props.state.teamVenueName}</Typography>
-            </div>
-            <div className={classes.infoDiv}>
-              <Typography variant="subheading" className={classes.bold}>Manager:</Typography>
-              <Typography>{this.props.state.teamManager}</Typography>
-            </div>
-          </Grid>
-        </Grid>
+        <Row className={classes.heading}>
+          <Col md={12}>
+            {data.logo && (
+              <div>
+                {data.id ? (
+                  <Link to={`/team/${data.id}`} className="plainLink text-center">
+                    <img src={`/img/logos/${data.logo}`} className="img-fluid team-info-logo"/>
+                  </Link>
+                ) : (
+                  <img src={`/img/logos/${data.logo}`} className="img-fluid team-info-logo"/>
+                )}
+              </div>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            {data.id ? (
+              <div className={classes.infoDiv}>
+                <Button variant="raised" size="small" color="primary" component={Link} to={`/team/${data.id}`} className={classes.button}>
+                View Schedule
+                </Button>
+              </div>
+            ) : (
+              <Fragment>
+                <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>Established:</Typography>
+                  <Typography>{data.established}</Typography>
+                </div>
+                <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>League:</Typography>
+                  <Typography>{data.league}</Typography>
+                </div>
+                <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>Division:</Typography>
+                  <Typography>{data.division}</Typography>
+                </div>
+                <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>Manager:</Typography>
+                  <Typography>{data.manager}</Typography>
+                </div>
+              </Fragment>
+            )}
+          </Col>
+        </Row>
       </Paper>
-    );}
+    );
+  }
 }
 
-export default withUser(withRouter(withStyles(styles)(Game)));
+export default withUser(withRouter(withStyles(styles)(TeamInfo)));
 
