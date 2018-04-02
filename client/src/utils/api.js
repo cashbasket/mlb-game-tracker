@@ -41,5 +41,19 @@ export default {
   },
   deleteAttendance: (gameId) => {
     return axios.delete(`/api/game/attendance/${gameId}`);
+  },
+  // Post API calls
+  getPosts: (gameId) => {
+    return axios.get(`/api/game/posts/${gameId}`);
+  },
+  createPost: (userId, gameId, postText) => {
+    return axios.post('/api/game/posts', {
+      userId: userId,
+      gameId: gameId,
+      postText: postText
+    });
+  },
+  deletePost: (postId) => {
+    return axios.delete(`/api/game/posts/${postId}`);
   }
 };
