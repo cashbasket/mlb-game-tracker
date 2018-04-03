@@ -100,7 +100,6 @@ class Navbar extends React.Component {
 
     return (
       <div>
-        {console.log(this.props.location.pathname.indexOf('/team/'))}
         {(this.props.location.pathname.indexOf('/team/') < 0 || this.props.forceDisplay) && (
           <div className={classes.root}>
             <AppBar position="fixed">
@@ -112,7 +111,7 @@ class Navbar extends React.Component {
                         <MenuIcon />
                       </IconButton>
                       <Typography variant="title" color="inherit" className={classes.flex}>
-                MLB Game Tracker
+                        Went Yard
                       </Typography>
                       <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
                       {user ? (
@@ -143,8 +142,8 @@ class Navbar extends React.Component {
                             open={open}
                             onClose={this.handleClose}
                           >
-                            <MenuItem onClick={this.handleClose}>My Profile</MenuItem>
-                            <MenuItem onClick={this.handleClose}>My Account</MenuItem>
+                            <MenuItem component={Link} to={`/user/${user.username}`} onClick={this.handleClose}>My Profile</MenuItem>
+                            <MenuItem component={Link} to={`/user/${user.username}/account`} onClick={this.handleClose}>My Account</MenuItem>
                             <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
                           </Menu>
                         </div>
@@ -191,7 +190,7 @@ class Navbar extends React.Component {
                           <ListItemText primary="Log In" />
                         </ListItem>
                         <ListItem button component={Link} to="/register">
-                          <ListItemText primary="Register" />
+                          <ListItemText primary="Sign Up" />
                         </ListItem>
                       </div>
                     )}
