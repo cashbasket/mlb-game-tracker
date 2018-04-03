@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
@@ -82,15 +82,23 @@ class Game extends React.Component {
             <div>
               <CardContent className={classes.content}>
                 <Typography variant="headline">
-                  {this.props.teamId == Away.id ? (
-                    <div>
-                      {Away.city} {Away.name} <small>at</small> <Link to={`/team/${Home.id}`} onClick={() => this.props.handleTeamChange(Home.id)}>{Home.city} {Home.name}</Link>
-                    </div>
+                  {this.props.teamId ? (
+                    <Fragment>
+                      {this.props.teamId == Away.id ? (
+                        <div>
+                          {Away.city} {Away.name} <small>at</small> <Link to={`/team/${Home.id}`} onClick={() => this.props.handleTeamChange(Home.id)}>{Home.city} {Home.name}</Link>
+                        </div>
+                      ) : (
+                        <div>
+                          <Link to={`/team/${Away.id}`} onClick={() => this.props.handleTeamChange(Away.id)}>{Away.city} {Away.name}</Link> <small>at</small> {Home.city} {Home.name}
+                        </div>
+                      )}
+                    </Fragment>
                   ) : (
-                    <div>
+                    <Fragment>
                       <Link to={`/team/${Away.id}`} onClick={() => this.props.handleTeamChange(Away.id)}>{Away.city} {Away.name}</Link> <small>at</small> {Home.city} {Home.name}
-                    </div>
-                  )}
+                    </Fragment>
+                  )}         
                 </Typography>
                 <Typography variant="subheading" color="textSecondary">
                   {moment(gameDate).format('M/D/YYYY')} at {moment(gameTime, 'HH:mm:ss').format('h:mm A')}
@@ -101,6 +109,7 @@ class Game extends React.Component {
                   <Info className={classes.leftIcon}/>
                   View Game Page
                 </Button>
+                {(!this.props.userId || ((this.props.userId && this.props.user) && this.props.user.id === this.props.userId)) &&
                 <AttendButton 
                   gameId={id} 
                   gameDate={gameDate} 
@@ -108,7 +117,7 @@ class Game extends React.Component {
                   addAttendance={this.addAttendance} 
                   deleteAttendance={this.deleteAttendance} 
                   isAttending={isAttending}
-                />
+                />}
               </CardActions>
             </div>
           </Card>

@@ -8,6 +8,8 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import Snackbar from 'material-ui/Snackbar';
+import { withUser } from '../services/withUser';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -32,6 +34,7 @@ class Login extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      loggedIn: false,
       redirectToReferrer: false,
       snackbarOpen: false,
       snackbarMessage: ''
@@ -49,7 +52,11 @@ class Login extends React.Component {
           this.setState({snackbarMessage: response.data.message, snackbarOpen: true});
         } else {
           this.props.authenticate(() => {
-            this.setState({ redirectToReferrer: true });
+            if (!this.props.location.state) {
+              this.setState({ loggedIn: true });
+            } else {
+              this.setState({ redirectToReferrer: true });
+            }
           });
         }
       })
@@ -64,9 +71,14 @@ class Login extends React.Component {
 
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    const { redirectToReferrer } = this.state;
+    const { loggedIn, redirectToReferrer } = this.state;
     const { classes } = this.props;
     
+    if (loggedIn) {
+      return (
+        <Redirect to={`/user/${this.props.user.username}`}/>
+      );
+    }
     if (redirectToReferrer) {
       return (
         <Redirect to={from}/>
@@ -145,4 +157,4 @@ class Login extends React.Component {
   }
 }
 
-export default withStyles(styles)(Login);
+export default withUser(withRouter(withStyles(styles)(Login)));

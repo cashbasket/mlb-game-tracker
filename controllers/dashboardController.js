@@ -5,8 +5,18 @@ const Op = db.Sequelize.Op;
 // Defining methods for the dashboardController
 module.exports = {
   // Return data for dashboard 
+  user: function(req, res) {
+    const username = req.params.username;
+    db.user.findOne({
+      where: {
+        username: username
+      }
+    }).then(dbDash => res.json({
+      user: dbDash
+    })).catch(err => res.status(400).json(err));
+  },
   gamesAttended: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.attendance.count({
       where: {
         userId: userId
@@ -27,7 +37,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   postsCount: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.post.count({
       where: {
         userId: userId
@@ -39,7 +49,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   ballparkCount: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.game.count({
       where: {
         gameDate: {
@@ -62,7 +72,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   wins: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.user.count({
       where: {
         id: userId
@@ -88,7 +98,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   losses: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.user.count({
       where: {
         id: userId
@@ -114,7 +124,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   last: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.game.findOne({
       where: { 
         gameDate: {
@@ -122,12 +132,26 @@ module.exports = {
         }
       },
       include: [{
+        model: db.team,
+        as: 'Home',
+        required: true
+      },
+      {
+        model: db.team,
+        as: 'Away',
+        required: true
+      },
+      {
+        model: db.venue,
+        required: true
+      },
+      {
         model: db.attendance,
         required: true,
         where: { 
           userId: userId
         }
-      }],
+      }], 
       order: [
         ['gameDate', 'DESC'],
         ['gameTime', 'DESC'],
@@ -139,7 +163,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   upcoming: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.game.findAll({
       where: { 
         gameDate: {
@@ -147,12 +171,26 @@ module.exports = {
         }
       },
       include: [{
+        model: db.team,
+        as: 'Home',
+        required: true
+      },
+      {
+        model: db.team,
+        as: 'Away',
+        required: true
+      },
+      {
+        model: db.venue,
+        required: true
+      },
+      {
         model: db.attendance,
         required: true,
         where: { 
           userId: userId
         }
-      }],
+      }], 
       order: [
         ['gameDate', 'ASC'],
         ['gameTime', 'ASC'],
@@ -164,7 +202,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
   recentPosts: function(req, res) {
-    const userId = req.user ? req.user.id: null;
+    const userId = req.params.userId;
     db.post.findAll({
       include: [{
         model: db.game,

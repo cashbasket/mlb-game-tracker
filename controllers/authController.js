@@ -43,7 +43,7 @@ module.exports = {
           if (err) {
             return next(err);
           }
-          res.status(200).json({ success: true });
+          res.status(200).json(user);
         });
       });
     })(req, res, next);

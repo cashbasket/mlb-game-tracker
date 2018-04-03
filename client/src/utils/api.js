@@ -55,5 +55,33 @@ export default {
   },
   deletePost: (postId) => {
     return axios.delete(`/api/game/posts/${postId}`);
+  },
+  //Dashboard API calls
+  getUser: (username) => {
+    return axios.get(`/api/dashboard/user/${username}`);
+  },
+  getGamesAttended: (userId) => {
+    return axios.get(`/api/dashboard/gamesattended/${userId}`);
+  },
+  getTotalPosts: (userId) => {
+    return axios.get(`/api/dashboard/postscount/${userId}`);
+  },
+  getTotalBallparks: (userId) => {
+    return axios.get(`/api/dashboard/ballparkcount/${userId}`);
+  },
+  getWins: (userId) => {
+    return axios.get(`/api/dashboard/wins/${userId}`);
+  },
+  getLosses: (userId) => {
+    return axios.get(`/api/dashboard/losses/${userId}`);
+  },
+  getLastGame: (userId) => {
+    return axios.get(`/api/dashboard/last/${userId}`);
+  },
+  getUpcomingGames: (userId) => {
+    return axios.get(`/api/dashboard/upcoming/${userId}`);
+  },
+  getRecentPosts: (userId) => {
+    return axios.get(`/api/dashboard/recentposts/${userId}`);
   }
 };
