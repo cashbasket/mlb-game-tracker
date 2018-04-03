@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
 import GamePage from './pages/GamePage';
+import DashboardPage from './pages/DashboardPage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -37,6 +38,7 @@ const theme = createMuiTheme({
       fontWeight: 700
     },
     headline: {
+      textTransform: 'uppercase',
       marginBottom: 10
     }
   }
@@ -113,8 +115,7 @@ class App extends Component {
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
                       <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                      <PrivateRoute exact path="/protected" component={Protected}/>
-                      <PrivateRoute exact path="/more-protected" component={MoreProtected}/>
+                      <PrivateRoute path="/user/:username" component={DashboardPage} />
                     </main>
                   </div>
                 </Router>
