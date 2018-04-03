@@ -133,7 +133,7 @@ class Register extends React.Component {
     const { registered } = this.state;
     if(registered) {
       return (
-        <Redirect to={`/user/${this.props.user.username}`}/>
+        <Redirect to="dashboard"/>
       );
     }
     return (

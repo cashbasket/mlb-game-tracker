@@ -76,7 +76,7 @@ class Login extends React.Component {
     
     if (loggedIn) {
       return (
-        <Redirect to={`/user/${this.props.user.username}`}/>
+        <Redirect to="/dashboard"/>
       );
     }
     if (redirectToReferrer) {
