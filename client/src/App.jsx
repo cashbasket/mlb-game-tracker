@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
 import GamePage from './pages/GamePage';
 import DashboardPage from './pages/DashboardPage';
+import ProfilePage from './pages/ProfilePage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -110,12 +111,12 @@ class App extends Component {
                   <div>
                     <Navbar/>
                     <main>
-                      <Route exact path="/public" component={Public}/>
                       <Route path="/team/:teamId" component={TeamPage} />
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
                       <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                      <PrivateRoute path="/user/:username" component={DashboardPage} />
+                      <PrivateRoute path="/dashboard" component={DashboardPage} />
+                      <PrivateRoute path="/user/:username" component={ProfilePage} />
                     </main>
                   </div>
                 </Router>
@@ -127,9 +128,5 @@ class App extends Component {
     );
   }
 }
-
-const Public = () => <h3>Public</h3>;
-const Protected = () => <h3>Protected</h3>;
-const MoreProtected = () => <h3>More Protected</h3>;
 
 export default withUser(App);

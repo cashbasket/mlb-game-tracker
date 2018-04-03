@@ -44,10 +44,7 @@ class DashboardPage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      userId: 0,
       username: this.props.match.params.username,
-      name: '',
-      description: '',
       gamesAttended: 0,
       totalPosts: 0,
       wins: 0,
@@ -71,35 +68,29 @@ class DashboardPage extends React.Component {
   }
 
   getDashboardData = (username) => {
-    let userId;
     let dashboardInfo = {};
-    API.getUser(username)
+    API.getGamesAttended()
       .then((res) => {
-        userId = dashboardInfo.userId = res.data.user.id;
-        dashboardInfo.name = res.data.user.name;
-        dashboardInfo.description = res.data.user.descripton;
-        return API.getGamesAttended(userId);
-      }).then((res) => {
         dashboardInfo.totalGames = res.data.count;
-        return API.getTotalPosts(userId);
+        return API.getTotalPosts();
       }).then((res) => {
         dashboardInfo.totalPosts = res.data.count;
-        return API.getTotalBallparks(userId);
+        return API.getTotalBallparks();
       }).then((res) => {
         dashboardInfo.totalBallparks = res.data.count;
-        return API.getWins(userId);
+        return API.getWins();
       }).then((res) => {
         dashboardInfo.wins = res.data.wins;
-        return API.getLosses(userId);
+        return API.getLosses();
       }).then((res) => {
         dashboardInfo.losses = res.data.losses;
-        return API.getLastGame(userId);
+        return API.getLastGame();
       }).then((res) => {
         dashboardInfo.lastGame = res.data.game;
-        return API.getUpcomingGames(userId);
+        return API.getUpcomingGames();
       }).then((res) => {
         dashboardInfo.upcomingGames = res.data.games;
-        return API.getRecentPosts(userId);
+        return API.getRecentPosts();
       }).then((res) => {
         dashboardInfo.recentPosts = res.data.posts;
         dashboardInfo.modalOpen = false;
@@ -111,8 +102,8 @@ class DashboardPage extends React.Component {
       });
   }
 
-  getPosts = (userId) => {
-    API.getRecentPosts(userId)
+  getPosts = () => {
+    API.getRecentPosts()
       .then((res) => {
         this.setState({recentPosts: res.data.posts});
       });
