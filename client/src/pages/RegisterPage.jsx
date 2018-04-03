@@ -9,6 +9,8 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
+import { withUser } from '../services/withUser';
+import { withRouter } from 'react-router-dom';
 
 
 const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
@@ -131,7 +133,7 @@ class Register extends React.Component {
     const { registered } = this.state;
     if(registered) {
       return (
-        <Redirect to="/"/>
+        <Redirect to={`/user/${this.props.user.username}`}/>
       );
     }
     return (
@@ -244,4 +246,4 @@ class Register extends React.Component {
   }
 }
 
-export default withStyles(styles)(Register);
+export default withUser(withRouter(withStyles(styles)(Register)));
