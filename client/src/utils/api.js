@@ -56,32 +56,29 @@ export default {
   deletePost: (postId) => {
     return axios.delete(`/api/game/posts/${postId}`);
   },
-  //Dashboard API calls
-  getUser: (username) => {
-    return axios.get(`/api/dashboard/user/${username}`);
+  //Dashboard API
+  getGamesAttended: () => {
+    return axios.get('/api/dashboard/gamesattended');
   },
-  getGamesAttended: (userId) => {
-    return axios.get(`/api/dashboard/gamesattended/${userId}`);
+  getTotalPosts: () => {
+    return axios.get('/api/dashboard/postscount');
   },
-  getTotalPosts: (userId) => {
-    return axios.get(`/api/dashboard/postscount/${userId}`);
+  getTotalBallparks: () => {
+    return axios.get('/api/dashboard/ballparkcount');
   },
-  getTotalBallparks: (userId) => {
-    return axios.get(`/api/dashboard/ballparkcount/${userId}`);
+  getWins: () => {
+    return axios.get('/api/dashboard/wins');
   },
-  getWins: (userId) => {
-    return axios.get(`/api/dashboard/wins/${userId}`);
+  getLosses: () => {
+    return axios.get('/api/dashboard/losses');
   },
-  getLosses: (userId) => {
-    return axios.get(`/api/dashboard/losses/${userId}`);
+  getLastGame: () => {
+    return axios.get('/api/dashboard/last');
   },
-  getLastGame: (userId) => {
-    return axios.get(`/api/dashboard/last/${userId}`);
+  getUpcomingGames: () => {
+    return axios.get('/api/dashboard/upcoming');
   },
-  getUpcomingGames: (userId) => {
-    return axios.get(`/api/dashboard/upcoming/${userId}`);
-  },
-  getRecentPosts: (userId) => {
-    return axios.get(`/api/dashboard/recentposts/${userId}`);
+  getRecentPosts: () => {
+    return axios.get('/api/dashboard/recentposts');
   }
 };

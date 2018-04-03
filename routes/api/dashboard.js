@@ -3,39 +3,35 @@ const dashboardController = require('../../controllers/dashboardController');
 const authCheck = require('../../lib/passportAuth');
 
 // Matches with "/api/dashboard/gamesattended"
-router.route('/gamesattended/:userId')
+router.route('/gamesattended')
   .get(authCheck(), dashboardController.gamesAttended);
 
 // Matches with "/api/dashboard/postscount"
-router.route('/postscount/:userId')
+router.route('/postscount')
   .get(authCheck(), dashboardController.postsCount);
 
 // Matches with "/api/dashboard/ballparkcount"
-router.route('/ballparkcount/:userId')
+router.route('/ballparkcount')
   .get(authCheck(), dashboardController.ballparkCount);
 
-// Matches with "/api/dashboard/user"
-router.route('/user/:username')
-  .get(authCheck(), dashboardController.user);
-
 // Matches with "/api/dashboard/wins"
-router.route('/wins/:userId')
+router.route('/wins')
   .get(authCheck(), dashboardController.wins);
 
 // Matches with "/api/dashboard/losses"
-router.route('/losses/:userId')
+router.route('/losses')
   .get(authCheck(), dashboardController.losses);
   
 // Matches with "/api/dashboard/last"
-router.route('/last/:userId')
+router.route('/last')
   .get(authCheck(), dashboardController.last);
   
 // Matches with "/api/dashboard/upcoming"
-router.route('/upcoming/:userId')
+router.route('/upcoming')
   .get(authCheck(), dashboardController.upcoming);
 
 // Matches with "/api/dashboard/recentposts"
-router.route('/recentposts/:userId')
+router.route('/recentposts')
   .get(dashboardController.recentPosts);
 
 module.exports = router;
