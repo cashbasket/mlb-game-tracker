@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
 import { withRouter } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
-import moment from 'moment';
-import DatePicker from 'material-ui-pickers/DatePicker';
 import API from '../utils/api';
 import Paper from 'material-ui/Paper';
 import GameList from '../components/GameList';
