@@ -103,7 +103,7 @@ class ProfilePage extends React.Component {
             )}
             <br/>
             <Typography variant="headline">
-           Past Games:
+           Past Games
             </Typography>
             {pastGames.length ? (
               <GameList>
