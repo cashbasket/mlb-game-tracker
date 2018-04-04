@@ -80,5 +80,15 @@ export default {
   },
   getRecentPosts: () => {
     return axios.get('/api/dashboard/recentposts');
+  },
+  //profile API
+  getUser: (username) => {
+    return axios.get(`/api/profile/${username}`);
+  },
+  getUpcomingForProfile: (userId) => {
+    return axios.get(`/api/profile/upcoming/${userId}`);
+  },
+  getPastGames: (userId) => {
+    return axios.get(`/api/profile/past/${userId}`);
   }
 };
