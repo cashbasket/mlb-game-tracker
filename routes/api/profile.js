@@ -3,7 +3,7 @@ const profileController = require('../../controllers/profileController');
 const authCheck = require('../../lib/passportAuth');
 
 // Matches with "/api/profile/:id"
-router.route('/:id')
+router.route('/:username')
   .get(profileController.profile);
 
 // Matches with "/api/profile/:id"
