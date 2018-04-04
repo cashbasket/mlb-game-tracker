@@ -196,7 +196,7 @@ class GamePage extends React.Component {
                   <Col md={6}>
                     <Paper className={classes.details}>
                       <Typography variant="headline" className="text-center bold">Date and Time</Typography>
-                      <Typography variant="headline" className={`${classes.dateTime}`}>
+                      <Typography variant="subheading" className={`${classes.dateTime}`}>
                         {moment(gameDate).format('dddd, MMMM Do, YYYY')}<br/>
                         {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
                       </Typography>
