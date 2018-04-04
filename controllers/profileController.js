@@ -1,4 +1,6 @@
 const db = require('../models');
+const moment = require('moment');
+const Op = db.Sequelize.Op;
 
 // Defining methods for the teamController
 module.exports = {
@@ -6,7 +8,7 @@ module.exports = {
   profile: function(req, res) {
     db.user.findOne({
       where: {
-        id: req.params.id
+        username: req.params.username
       },
       attributes: { 
         exclude: ['email', 'password', 'token', 'tokenExpires']
@@ -21,7 +23,7 @@ module.exports = {
       }]
     })
       .then(dbProfile => res.json({
-        game: dbProfile
+        userInfo: dbProfile
       }))
       .catch(err => res.status(400).json(err));
   },
@@ -47,6 +49,20 @@ module.exports = {
         }
       },
       include: [{
+        model: db.team,
+        as: 'Home',
+        required: true
+      },
+      {
+        model: db.team,
+        as: 'Away',
+        required: true
+      },
+      {
+        model: db.venue,
+        required: true
+      },
+      {
         model: db.attendance,
         required: true,
         where: { 
@@ -59,7 +75,7 @@ module.exports = {
       ]
     })
       .then(dbGames => res.json({
-        game: dbGames
+        pastGames: dbGames
       }))
       .catch(err => res.status(400).json(err));
   },
@@ -72,6 +88,20 @@ module.exports = {
         }
       },
       include: [{
+        model: db.team,
+        as: 'Home',
+        required: true
+      },
+      {
+        model: db.team,
+        as: 'Away',
+        required: true
+      },
+      {
+        model: db.venue,
+        required: true
+      },
+      {
         model: db.attendance,
         required: true,
         where: { 
@@ -84,7 +114,7 @@ module.exports = {
       ]
     })
       .then(dbGames => res.json({
-        games: dbGames
+        upcomingGames: dbGames
       }))
       .catch(err => res.status(400).json(err));
   }
