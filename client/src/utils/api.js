@@ -90,5 +90,12 @@ export default {
   },
   getPastGames: (userId) => {
     return axios.get(`/api/profile/past/${userId}`);
+  },
+  //account API
+  getAccountInfo: () => {
+    return axios.get('/api/auth/account');
+  },
+  updateAccountInfo: (data) => {
+    return axios.put('/api/auth/account', data);
   }
 };
