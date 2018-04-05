@@ -97,5 +97,20 @@ export default {
   },
   updateAccountInfo: (data) => {
     return axios.put('/api/auth/account', data);
+  },
+  //pasword reset API
+  forgotPassword: (email) => {
+    return axios.put('/api/auth/forgot', {
+      email: email
+    });
+  },
+  checkToken: (token) => {
+    return axios.get(`/api/auth/checkToken/${token}`);
+  },
+  resetPassword: (token, password) => {
+    return axios.put('/api/auth/reset', {
+      token: token,
+      password: password
+    });
   }
 };

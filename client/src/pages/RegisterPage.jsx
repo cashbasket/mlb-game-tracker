@@ -148,7 +148,7 @@ class Register extends React.Component {
         />
         <Grid item md={6} sm={10} xs={10}> 
           <Paper className={classes.control}>
-            <Typography variant="title" gutterBottom align="center">
+            <Typography variant="headline" gutterBottom align="center">
                Sign Up
             </Typography>
             
