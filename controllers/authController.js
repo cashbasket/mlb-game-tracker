@@ -1,6 +1,8 @@
 const passport = require('passport');
 const db = require('../models');
 const bcrypt = require('bcrypt-nodejs');
+const helpers = require('../helpers/sendmail');
+var crypto = require('crypto');
 
 module.exports = {
   authenticate: (req, res, next) => {
@@ -106,6 +108,77 @@ module.exports = {
         return next(err);
       }
       res.status(200).send('OK');
+    });
+  },
+
+  forgot: (req, res) => {
+    crypto.randomBytes(20, function(err, buf) {
+      var token = buf.toString('hex');
+      db.user.findOne({ 
+        where: {
+          email: req.body.email
+        }
+      }).then(function(user) {
+        return db.user.update({
+          token: token,
+          tokenExpires: Date.now() + 3600000
+        }, {
+          where: {
+            email: req.body.email
+          }
+        });
+      }).then(function(result) {
+        if(result[0] === 1) 
+        // send password reset email
+          return helpers.sendMail('reset', req.body.email, req.headers.host, req.protocol, token);
+      }).then(function(result) {
+        res.json(result);
+      }).catch(function(err) {
+        res.redirect('/forgot');
+      });
+    });
+  },
+
+  checkToken: (req, res) => {
+    db.user.findOne({
+      where: {
+        token: req.params.token
+      }
+    })
+      .then(user => res.json({
+        user: user
+      }));
+  },
+
+  reset: (req, res) => {
+    let userEmail;
+    db.user.findOne({ 
+      where: {
+        token: req.body.token, 
+        tokenExpires: { $gt: Date.now() } 
+      }
+    }).then(function(user) {
+      if (!user) {
+        return res.redirect('/forgot');
+      }
+      userEmail = user.email;
+    
+      return db.user.update({
+        password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null),
+        token: null,
+        tokenExpires: null
+      }, {
+        where: {
+          email: userEmail
+        }
+      });
+    }).then(function(result) {
+      // send confirmation email
+      return helpers.sendMail('confirm-reset', userEmail, null, null);
+    }).then(function(result) {
+      res.json(result);
+    }).catch(function(err) {
+      res.redirect('/');
     });
   }
 };
