@@ -39,4 +39,16 @@ router.route('/account')
 router.route('/logout')
   .post(authController.logout);
 
+// matches '/api/auth/forgot'
+router.route('/forgot')
+  .put(authController.forgot);  
+
+// matches '/api/auth/checkToken'
+router.route('/checkToken/:token')
+  .get(authController.checkToken);
+  
+// matches '/api/auth/reset/<insert unique string here>' 
+router.route('/reset')
+  .put(authController.reset); 
+
 module.exports = router;
