@@ -49,6 +49,11 @@ main {
   margin: 0 !important;
 }
 
+#userMenu,
+#teamMenu {
+  display: none;
+}
+
 main a,
 main a:focus {
   color: #455a64;
@@ -84,7 +89,14 @@ main a:focus {
   #menuButton {
     display: none;
   }
-  #userMenu {
+  #userMenu, 
+  #teamMenu {
     display: block;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .container {
+    width: 100%;
   }
 }
