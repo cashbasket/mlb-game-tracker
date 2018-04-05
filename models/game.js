@@ -3,7 +3,7 @@ module.exports = function(sequelize, DataTypes) {
     season: { type: DataTypes.STRING,
       allowNull: false
     },
-    gameDate: { type: DataTypes.DATEONLY,
+    gameDate: { type: DataTypes.DATE,
       allowNull: false
     },
     gameTime: { type: DataTypes.TIME,
