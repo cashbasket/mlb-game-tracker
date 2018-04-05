@@ -24,7 +24,7 @@ app.use(session({
   }),
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 24 * 60 * 60 * 1000 }
+  cookie: { maxAge: 24 * 60 * 60 * 1000 * 7 }
 }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,7 +38,7 @@ require('./config/passport')(app);
 // Add routes
 app.use(routes);
 
-db.sequelize.sync().then(function() {
+db.sequelize.sync({force: true}).then(function() {
   app.listen(PORT, function() {
     console.log(`🌎 ==> Server now on port ${PORT}!`);
   });
