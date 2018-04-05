@@ -105,13 +105,13 @@ class App extends Component {
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={theme}>
-          <Grid>
-            <Row style={{paddingLeft: 15, paddingRight: 15}}>
-              <Col sm={12}>
-                <Router>
-                  <div>
-                    <Navbar/>
-                    <main>
+          <Router>
+            <div>
+              <Navbar/>
+              <main> 
+                <Grid>
+                  <Row style={{paddingLeft: 15, paddingRight: 15}}>
+                    <Col sm={12}>
                       <Route path="/team/:teamId" component={TeamPage} />
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
@@ -119,12 +119,12 @@ class App extends Component {
                       <PrivateRoute path="/dashboard" component={DashboardPage} />
                       <PrivateRoute path="/user/:username" component={ProfilePage} />
                       <PrivateRoute path="/account" component={AccountPage} />
-                    </main>
-                  </div>
-                </Router>
-              </Col>
-            </Row>
-          </Grid>
+                    </Col>
+                  </Row>
+                </Grid>
+              </main>
+            </div>
+          </Router>
         </MuiThemeProvider>
       </MuiPickersUtilsProvider>
     );
