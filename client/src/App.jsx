@@ -8,6 +8,7 @@ import TeamPage from './pages/TeamPage';
 import GamePage from './pages/GamePage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
+import AccountPage from './pages/AccountPage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -18,15 +19,15 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#718792',
-      main: '#455a64',
-      dark: '#1c313a',
+      light: '#4f5b62',
+      main: '#263238',
+      dark: '#000a12',
       contrastText: '#fff',
     },
     secondary: {
-      light: '#484848',
-      main: '#212121',
-      dark: '#000000',
+      light: '#ffffff',
+      main: '#cfd8dc',
+      dark: '#9ea7aa',
       contrastText: '#000',
     },
   },
@@ -104,25 +105,26 @@ class App extends Component {
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={theme}>
-          <Grid>
-            <Row style={{paddingLeft: 15, paddingRight: 15}}>
-              <Col sm={12}>
-                <Router>
-                  <div>
-                    <Navbar/>
-                    <main>
+          <Router>
+            <div>
+              <Navbar/>
+              <main> 
+                <Grid>
+                  <Row style={{paddingLeft: 15, paddingRight: 15}}>
+                    <Col sm={12}>
                       <Route path="/team/:teamId" component={TeamPage} />
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
                       <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
                       <PrivateRoute path="/dashboard" component={DashboardPage} />
                       <PrivateRoute path="/user/:username" component={ProfilePage} />
-                    </main>
-                  </div>
-                </Router>
-              </Col>
-            </Row>
-          </Grid>
+                      <PrivateRoute path="/account" component={AccountPage} />
+                    </Col>
+                  </Row>
+                </Grid>
+              </main>
+            </div>
+          </Router>
         </MuiThemeProvider>
       </MuiPickersUtilsProvider>
     );

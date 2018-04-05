@@ -23,7 +23,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 3
   },
   postPaper: {
-    backgroundColor: '#b1c4ce',
+    backgroundColor: theme.palette.secondary.main,
     color: theme.palette.primary.contrastText,
     padding: theme.spacing.unit * 2,
     border: `1px solid ${theme.palette.primary.dark}`

@@ -18,15 +18,24 @@ const createAccountLimiter = new RateLimit({
   message: 'Too many accounts created from this IP address. Please try again after an hour'
 });
 
+// matches '/api/auth/authenticate'
 router.route('/authenticate')
   .get(authController.authenticate);
 
+// matches '/api/auth/register'
 router.route('/register')
   .post(createAccountLimiter, authController.register);
 
+// matches '/api/auth/login'
 router.route('/login')
   .post(loginLimiter, authController.login);
 
+// matches '/api/auth/account'
+router.route('/account')
+  .get(authController.account)
+  .put(authController.update);
+
+// matches '/api/auth/logout'
 router.route('/logout')
   .post(authController.logout);
 

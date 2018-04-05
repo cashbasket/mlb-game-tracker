@@ -10,7 +10,6 @@ import { withRouter } from 'react-router-dom';
 import MenuIcon from 'material-ui-icons/Menu';
 import Button from 'material-ui/Button';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import AccountCircle from 'material-ui-icons/AccountCircle';
 import Avatar from 'material-ui/Avatar';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import { withUser, update } from '../services/withUser';
@@ -43,9 +42,6 @@ const styles = {
     marginTop: 25,
     marginBottom: 10,
     padding: '0 8px',
-  },
-  userMenu: {
-    display: 'none'
   }
 };
 
@@ -105,7 +101,7 @@ class Navbar extends React.Component {
             <AppBar position="fixed">
               <Grid>
                 <Row>
-                  <Col md={12}>
+                  <Col sm>
                     <Toolbar>
                       <IconButton id="menuButton" className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                         <MenuIcon />
@@ -113,7 +109,9 @@ class Navbar extends React.Component {
                       <Typography variant="title" color="inherit" className={classes.flex}>
                         Went Yard
                       </Typography>
-                      <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
+                      <div id="teamMenu">
+                        <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
+                      </div>
                       {user ? (
                         <div id="userMenu" className={classes.userMenu}>
                       
@@ -144,7 +142,7 @@ class Navbar extends React.Component {
                           >
                             <MenuItem component={Link} to="/dashboard" onClick={this.handleClose}>Dashboard</MenuItem>
                             <MenuItem component={Link} to={`/user/${user.username}`} onClick={this.handleClose}>My Profile</MenuItem>
-                            <MenuItem component={Link} to={`/user/${user.username}/account`} onClick={this.handleClose}>My Account</MenuItem>
+                            <MenuItem component={Link} to="/account" onClick={this.handleClose}>Account</MenuItem>
                             <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
                           </Menu>
                         </div>
@@ -175,14 +173,14 @@ class Navbar extends React.Component {
                   <List component="nav">
                     {user ? (
                       <div>
-                        <ListItem button component={Link} to="dashboard"> 
+                        <ListItem button component={Link} to="/dashboard"> 
                           <ListItemText primary="Dashboard" />
                         </ListItem>
                         <ListItem button component={Link} to={`/user/${user.username}`}> 
                           <ListItemText primary="My Profile" />
                         </ListItem>
-                        <ListItem button component={Link} to={`/user/${user.username}/account`}>
-                          <ListItemText primary="My Account" />
+                        <ListItem button component={Link} to="/account">
+                          <ListItemText primary="Account" />
                         </ListItem>
                         <ListItem button onClick={this.handleLogout}>
                           <ListItemText primary="Log Out" />
