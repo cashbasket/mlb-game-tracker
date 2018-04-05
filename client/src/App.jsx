@@ -9,6 +9,8 @@ import GamePage from './pages/GamePage';
 import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import AccountPage from './pages/AccountPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -119,6 +121,8 @@ class App extends Component {
                       <PrivateRoute path="/dashboard" component={DashboardPage} />
                       <PrivateRoute path="/user/:username" component={ProfilePage} />
                       <PrivateRoute path="/account" component={AccountPage} />
+                      <Route exact path="/forgot" component={ForgotPasswordPage} />
+                      <Route path="/reset/:token?" component={ResetPasswordPage} />
                     </Col>
                   </Row>
                 </Grid>
