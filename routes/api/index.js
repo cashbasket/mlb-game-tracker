@@ -4,6 +4,7 @@ const gameRoutes = require('./game');
 const scheduleRoutes = require('./schedule');
 const dashboardRoutes = require('./dashboard');
 const profileRoutes = require('./profile');
+const adminRoutes = require('./admin');
 const authRoutes = require('./auth');
 
 // mlb schedule routes
@@ -13,5 +14,6 @@ router.use('/game', gameRoutes);
 router.use('/schedule', scheduleRoutes);
 router.use('/dashboard', dashboardRoutes);
 router.use('/profile', profileRoutes);
+router.use('/admin', adminRoutes);
 
 module.exports = router;
