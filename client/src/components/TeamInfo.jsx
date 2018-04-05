@@ -10,8 +10,8 @@ import Button from 'material-ui/Button';
 
 const styles = theme => ({
   root: {
-    backgroundColor: '#bfcbd1',
-    border: '1px solid #718792',
+    backgroundColor: theme.palette.secondary.main,
+    border: '1px solid #263238',
     padding: theme.spacing.unit,
     margin: 0,
     maxWidth: '100%'
@@ -41,7 +41,7 @@ class TeamInfo extends React.Component {
   render() {
     const { classes, data } = this.props;
     return (
-      <Paper className={classes.root} id="teamInfo">
+      <Paper className={classes.root}>
         <Row className={classes.heading}>
           <Col md={12}>
             {data.logo && (
@@ -55,6 +55,7 @@ class TeamInfo extends React.Component {
                 )}
               </div>
             )}
+            <Typography variant="headline" align="center">{data.city} {data.name}</Typography>
           </Col>
         </Row>
         <Row>
