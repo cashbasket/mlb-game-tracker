@@ -118,7 +118,7 @@ class TeamPage extends React.Component {
             <TeamInfo data={this.state}/>
           </Col>
           <Col md={9}>
-            <Typography variant="display1" className={classes.upcoming}>{user ? 'All' : 'Upcoming'} {city} {name} Games</Typography>
+            <Typography variant="display1" className={classes.upcoming}>{user ? 'All' : 'Upcoming'} {name} Games</Typography>
             <div className={classes.dateFilter}>
               <Row>
                 <Col lg={4} md={5} sm={6}>
