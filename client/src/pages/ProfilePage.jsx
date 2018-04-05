@@ -40,13 +40,10 @@ class ProfilePage extends React.Component {
     let userId;
     API.getUser(this.state.username)
       .then((res) => {
-        console.log('User stuff:');
-        console.log(res.data.userInfo);
         userId = res.data.userInfo.id;
         profileInfo.userInfo = res.data.userInfo;
         return API.getUpcomingForProfile(userId);
       }).then((res) => {
-        console.log(res.data);
         profileInfo.upcomingGames = res.data.upcomingGames;
         return API.getPastGames(userId);
       }).then((res) => {
@@ -60,14 +57,9 @@ class ProfilePage extends React.Component {
       });
   };
 
-  getProfileData = (username) => {
-    
-  }
-
   render() {
-    console.log(this.state);
     const { pastGames, upcomingGames, userInfo } = this.state;
-    const { classes, user } = this.props;    
+    const { classes } = this.props;    
     return (
       <div>
         <Row id="page-content" className="hidden">
