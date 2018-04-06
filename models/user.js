@@ -38,6 +38,10 @@ module.exports = function(sequelize, DataTypes) {
     url: {
       type: DataTypes.STRING,
       defaultValue: null
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     }
   },
   {
