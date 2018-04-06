@@ -170,7 +170,7 @@ class GamePage extends React.Component {
                   <br/>
                   <AttendButton 
                     variant="raised"
-                    color="default"
+                    color="primary"
                     gameId={gameId} 
                     gameDate={gameDate} 
                     gameTime={gameTime}

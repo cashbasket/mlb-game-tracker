@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Navbar from './components/Navbar';
+import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
@@ -16,21 +17,23 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
+import { withStyles } from 'material-ui/styles';
+import landingPageBg from './bg_light.jpg';
 
 // Defines the colors, fonts, etc. that the app will use.
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: '#4f5b62',
-      main: '#263238',
-      dark: '#000a12',
-      contrastText: '#fff',
+      light: '#f05545',
+      main: '#b71c1c',
+      dark: '#7f0000',
+      contrastText: '#ffffff',
     },
     secondary: {
-      light: '#ffffff',
-      main: '#cfd8dc',
-      dark: '#9ea7aa',
-      contrastText: '#000',
+      light: '#62727b',
+      main: '#37474f',
+      dark: '#102027',
+      contrastText: '#ffffff',
     },
   },
   typography: {
@@ -45,6 +48,12 @@ const theme = createMuiTheme({
       textTransform: 'uppercase',
       marginBottom: 10
     }
+  }
+});
+
+const styles = theme => ({
+  landingPage: {
+    background: `url(${landingPageBg})`
   }
 });
 
@@ -103,17 +112,19 @@ class App extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     user = this.props.user;
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <MuiThemeProvider theme={theme}>
-          <Router>
-            <div>
+          <Router> 
+            <Fragment>
               <Navbar/>
               <main> 
                 <Grid>
                   <Row style={{paddingLeft: 15, paddingRight: 15}}>
                     <Col sm={12}>
+                      <PropsRoute exact path="/" component={LandingPage} authenticate={this.authenticate} />
                       <Route path="/team/:teamId" component={TeamPage} />
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
@@ -127,7 +138,7 @@ class App extends Component {
                   </Row>
                 </Grid>
               </main>
-            </div>
+            </Fragment>
           </Router>
         </MuiThemeProvider>
       </MuiPickersUtilsProvider>
@@ -135,4 +146,4 @@ class App extends Component {
   }
 }
 
-export default withUser(App);
+export default withUser(withStyles(styles)(App));
