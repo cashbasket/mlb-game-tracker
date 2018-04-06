@@ -5,6 +5,7 @@ import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import API from '../utils/api';
 import Refresh from 'material-ui-icons/Refresh';
+import AttachMoney from 'material-ui-icons/AttachMoney';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
@@ -29,7 +30,12 @@ const styles = theme => ({
   },
   attendButton: {
     fontSize: 20,
-    marginBottom: theme.spacing.unit * 3
+    marginBottom: theme.spacing.unit
+  },
+  buyTickets: {
+    marginBottom: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2
   },
   scorePaper: {
     backgroundColor: theme.palette.primary.dark,
@@ -71,6 +77,7 @@ class GamePage extends React.Component {
       gameId: this.props.match.params.gameId,
       homeTeam: {},
       awayTeam: {},
+      url: '',
       gameDate: '',
       gameTime: '',
       homeTeamScore: null,
@@ -114,7 +121,8 @@ class GamePage extends React.Component {
           venueType: game.venue.stadiumType,
           venueSurface: game.venue.surface,
           venueDimensions: game.venue.dimensions,
-          isAttending: isAttending
+          isAttending: isAttending,
+          url: game.url
         }, () => {
           this.getPosts(this.state.gameId);
         });
@@ -148,7 +156,7 @@ class GamePage extends React.Component {
   }
 
   render() {
-    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts } = this.state;
+    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
     const gameDateTime = moment(`${gameDate} ${gameTime}`, 'YYYY-MM-DD HH:mm:ss');
@@ -181,9 +189,16 @@ class GamePage extends React.Component {
                     className={classes.attendButton}
                   />
                   <br/>
+                  {(moment(gameDate) > moment() && (
+                    <Button size="small" variant="raised" color="secondary" className={classes.buyTickets} component={Link} to={url} target="_blank">
+                      <AttachMoney className={classes.leftIcon}/>
+                      Buy Tickets
+                    </Button>
+                  ))}
                 </div>
               </Col>
             </Row>
+            <br/>
             <Row>
               <Col lg={12} className={classes.mainContent}>
                 {homeTeamScore !== null && awayTeamScore !== null && (
