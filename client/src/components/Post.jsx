@@ -25,6 +25,9 @@ const styles = theme => ({
   },
   postText: {
     fontSize: 16
+  },
+  button: {
+    marginTop: theme.spacing.unit
   }
 });
 
@@ -93,9 +96,13 @@ class Post extends React.Component {
                   </Link> said:
                 </Typography>
                 <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
-               
+                <Typography>
+                  <Link component="a" to={`/game/${postData.game.id}`}>
+                    {postData.game.Away.name} at {postData.game.Home.name} {moment(postData.game.gameDate).format('M/D/YYYY')}
+                  </Link>
+                </Typography>
                 {this.props.user && postData.user.id == this.props.user.id && 
-                  <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
+                  <Button className={classes.button} style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
                     <Delete/> Delete
                   </Button>
                 }

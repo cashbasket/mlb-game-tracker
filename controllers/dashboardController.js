@@ -195,7 +195,17 @@ module.exports = {
     db.post.findAll({
       include: [{
         model: db.game,
-        required: true
+        required: true,
+        include: [{
+          model: db.team,
+          as: 'Home',
+          required: true
+        },
+        {
+          model: db.team,
+          as: 'Away',
+          required: true
+        }]
       },{
         model: db.user,
         required: true,
