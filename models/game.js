@@ -10,7 +10,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     awayTeamScore: DataTypes.INTEGER,
-    homeTeamScore: DataTypes.INTEGER
+    homeTeamScore: DataTypes.INTEGER,
+    url: DataTypes.STRING
   },
   {
     timestamps: false
