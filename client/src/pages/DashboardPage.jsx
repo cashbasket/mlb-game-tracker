@@ -15,16 +15,16 @@ import LoadingModal from '../components/LoadingModal';
 
 const styles = theme => ({
   statPaper: {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.secondary.contrastText,
     minHeight: 125,
     textAlign: 'center',
     padding: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 3
   },
   postPaper: {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: '#b0bec5',
+    color: theme.palette.secondary.contrastText,
     padding: theme.spacing.unit * 2,
     border: `1px solid ${theme.palette.primary.dark}`
   },

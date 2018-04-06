@@ -17,7 +17,7 @@ const styles = theme => ({
   },
   paper: {
     padding: theme.spacing.unit,
-    backgroundColor: theme.palette.primary.dark
+    backgroundColor: theme.palette.secondary.dark
   },
   popover: {
     pointerEvents: 'none',

@@ -117,6 +117,7 @@ class Game extends React.Component {
                   addAttendance={this.addAttendance} 
                   deleteAttendance={this.deleteAttendance} 
                   isAttending={isAttending}
+                  color="primary"
                 />}
               </CardActions>
             </div>
