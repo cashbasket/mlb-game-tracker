@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
-import { Link, withRouter } from 'react-router-dom';
+import React from 'react';
+import { Row, Col } from 'react-flexbox-grid';
+import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import API from '../utils/api';
@@ -129,7 +129,7 @@ class GamePage extends React.Component {
       });
   };
 
-  getPosts = (gameId) => {
+  getPosts = () => {
     API.getPosts(this.state.gameId)
       .then((res) => {
         this.setState({
@@ -143,14 +143,14 @@ class GamePage extends React.Component {
 
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
-      .then((res) => {
+      .then(() => {
         this.setState({isAttending: true});
       });
   }
 
   deleteAttendance = (id) => {
     API.deleteAttendance(id)
-      .then((res) => {
+      .then(() => {
         this.setState({isAttending: false});
       });
   }
@@ -159,7 +159,6 @@ class GamePage extends React.Component {
     const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
-    const gameDateTime = moment(`${gameDate} ${gameTime}`, 'YYYY-MM-DD HH:mm:ss');
     return (
       <div>
         <Row id="page-content" className="hidden">

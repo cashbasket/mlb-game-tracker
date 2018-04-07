@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
 import { withStyles } from 'material-ui/styles';
 import { Redirect } from 'react-router-dom';
-import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import LoginForm from '../components/LoginForm';
 import { withUser } from '../services/withUser';

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import TextField from 'material-ui/TextField';
 import API from '../utils/api';
 import { withUser } from '../services/withUser';
 import Button from 'material-ui/Button';
@@ -21,7 +20,7 @@ class PostEditor extends Component {
     event.preventDefault();
     if (this.state.value.toString('html') !== '<p><br></p>') {
       API.createPost(this.props.user.id, this.props.gameId, this.state.value.toString('html'))
-        .then((res) => {
+        .then(() => {
           this.props.getPosts(this.props.gameId);
           this.setState({value: RichTextEditor.createEmptyValue()});
         });

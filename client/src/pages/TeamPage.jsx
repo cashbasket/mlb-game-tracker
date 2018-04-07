@@ -108,7 +108,7 @@ class TeamPage extends React.Component {
   }
 
   render() {
-    const { startDate, endDate, displayedGames, teamId, name, city } = this.state;
+    const { startDate, endDate, displayedGames, teamId, name } = this.state;
     const { classes, user } = this.props;
     return (
       <div>
