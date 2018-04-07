@@ -40,9 +40,8 @@ const theme = createMuiTheme({
     fontFamily: '\'Roboto\', sans-serif',
     fontSize: 14,
     title: {
-      fontFamily: '\'Abril Fatface\', cursive',
-      fontSize: 30,
-      fontWeight: 700
+      fontFamily: '\'Playball\', cursive',
+      fontSize: 40
     },
     headline: {
       textTransform: 'uppercase',

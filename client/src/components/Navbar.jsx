@@ -107,7 +107,7 @@ class Navbar extends React.Component {
                         <MenuIcon />
                       </IconButton>
                       <Typography variant="title" color="inherit" className={classes.flex}>
-                        Went Yard
+                        <i class="fas fa-baseball-ball"></i> Went Yard
                       </Typography>
                       <div id="teamMenu">
                         <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
