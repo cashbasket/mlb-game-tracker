@@ -1,13 +1,10 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
-import { withRouter } from 'react-router-dom';
 import { withUser } from '../services/withUser';
 import moment from 'moment';
 import Button from 'material-ui/Button';
 import CheckBox from 'material-ui-icons/CheckBox';
 import CheckBoxOutline from 'material-ui-icons/CheckBoxOutlineBlank';
-import API from '../utils/api';
 
 const styles = theme => ({
   leftIcon: {

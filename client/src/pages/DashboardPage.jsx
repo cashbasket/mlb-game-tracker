@@ -65,7 +65,7 @@ class DashboardPage extends React.Component {
     this.getDashboardData(username);
   }
 
-  getDashboardData = (username) => {
+  getDashboardData = () => {
     let dashboardInfo = {};
     API.getGamesAttended()
       .then((res) => {
@@ -109,16 +109,7 @@ class DashboardPage extends React.Component {
 
   render() {
     const { userId, totalGames, totalPosts, totalBallparks, wins, losses, lastGame, upcomingGames, recentPosts } = this.state;
-    const { classes, user } = this.props;
-    const gameList = lastGame ? (
-      <GameList>
-        <Game details={lastGame} />
-      </GameList>
-    ) : (
-      <Typography variant="subheading">
-          You haven't attended any games yet!
-      </Typography>
-    );
+    const { classes } = this.props;
     
     if(!this.props.user) {
       return (

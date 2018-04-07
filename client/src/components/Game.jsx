@@ -52,14 +52,14 @@ class Game extends React.Component {
 
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
-      .then((res) => {
+      .then(() => {
         this.setState({isAttending: true});
       });
   }
 
   deleteAttendance = (id) => {
     API.deleteAttendance(id)
-      .then((res) => {
+      .then(() => {
         this.setState({isAttending: false});
       });
   }
