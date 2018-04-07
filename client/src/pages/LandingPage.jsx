@@ -44,7 +44,7 @@ class LandingPage extends React.Component {
     };
   }
   render() {
-    const user = JSON.parse(sessionStorage.getItem('user'));
+    const user = JSON.parse(sessionStorage.getItem('user') || 'null');
     const loggedIn = user && user.id === this.props.user.id ? true : false;
     const { classes } = this.props;
     

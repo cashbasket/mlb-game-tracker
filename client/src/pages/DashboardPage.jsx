@@ -87,10 +87,10 @@ class DashboardPage extends React.Component {
         dashboardInfo.lastGame = res.data.game;
         return API.getUpcomingGames();
       }).then((res) => {
-        dashboardInfo.upcomingGames = res.data.games;
+        dashboardInfo.upcomingGames = res.data.games || [];
         return API.getRecentPosts();
       }).then((res) => {
-        dashboardInfo.recentPosts = res.data.posts;
+        dashboardInfo.recentPosts = res.data.posts || [];
         dashboardInfo.modalOpen = false;
         this.setState(dashboardInfo, () => {
           document.getElementById('page-content').classList.remove('hidden');
