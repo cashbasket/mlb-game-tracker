@@ -13,7 +13,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "async-child-process": "^1.1.1",
     "concurrently": "^3.5.0",
     "nodemon": "^1.11.0"
   },
