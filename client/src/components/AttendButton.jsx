@@ -32,11 +32,11 @@ class AttendButton extends React.Component {
           )}
           {!this.props.isAttending ? (
             <Fragment>
-              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'Are you at this game?' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'Did you go to this game?' : 'Are you going to this game?')}
+              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'Are you there now?' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'Did you go?' : 'Are you going?')}
             </Fragment>
           ) : (
             <Fragment>
-              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'I\'m at this game' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'I went to this game' : 'I\'m going to this game')}
+              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'I\'m there' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'I went' : 'I\'m going')}
             </Fragment>
           )
           }

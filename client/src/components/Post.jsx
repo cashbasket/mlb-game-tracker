@@ -15,9 +15,9 @@ import Avatar from 'material-ui/Avatar';
 
 const styles = theme => ({
   avatar: {
-    width: 120,
-    height: 120,
-    border: `1px solid ${theme.palette.primary.main}`
+    width: 100,
+    height: 100,
+    border: `1px solid ${theme.palette.secondary.dark}`
   },
   post: {
     padding: theme.spacing.unit * 2,

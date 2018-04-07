@@ -21,12 +21,16 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit,
   },
+  gameInfo: {
+    padding: theme.spacing.unit * 2,
+    backgroundColor: '#b0bec5',
+    border: `1px solid ${theme.palette.secondary.dark}`
+  },
   section: {
     marginBottom: theme.spacing.unit * 3
   },
   gameHeader: {
-    textAlign: 'center',
-    marginBottom: theme.spacing.unit
+    textAlign: 'center'
   },
   attendButton: {
     fontSize: 20,
@@ -38,7 +42,7 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit * 2
   },
   scorePaper: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: theme.palette.secondary.dark,
     color: '#FFFFFF',
     marginBottom: theme.spacing.unit * 3
   },
@@ -55,10 +59,6 @@ const styles = theme => ({
     minHeight: 125,
     marginBottom: theme.spacing.unit * 3
   },
-  mainContent: {
-    paddingLeft: theme.spacing.unit * 2,
-    paddingRight: theme.spacing.unit * 2
-  },
   leftIcon: {
     marginRight: 5
   },
@@ -66,7 +66,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.light
   },
   logo: {
-    maxWidth: 200
+    maxWidth: 160
   }
 });
 
@@ -163,42 +163,46 @@ class GamePage extends React.Component {
     return (
       <div>
         <Row id="page-content" className="hidden">
-          <Col lg={12}>
-            <Row>
-              <Col lg={12}>
-                <Typography variant="display1" className={`${classes.gameHeader}`}>
-                  <strong>{homeTeam.city} {homeTeam.name}</strong> <small>vs.</small> <strong>{awayTeam.city} {awayTeam.name}</strong>
-                </Typography>
-                <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
-                  <br/>
-                  <div>
-                    <img className={classes.logo} src={`/img/logos/${homeTeam.logo}`}/>
-                    <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/>
-                  </div>
-                  <br/>
-                  <AttendButton 
-                    variant="raised"
-                    color="primary"
-                    gameId={gameId} 
-                    gameDate={gameDate} 
-                    gameTime={gameTime}
-                    addAttendance={this.addAttendance} 
-                    deleteAttendance={this.deleteAttendance} 
-                    isAttending={isAttending}
-                    size="large"
-                    className={classes.attendButton}
-                  />
-                  <br/>
-                  {(moment(gameDate) > moment() && (
-                    <Button size="small" variant="raised" color="secondary" className={classes.buyTickets} component={Link} to={url} target="_blank">
-                      <AttachMoney className={classes.leftIcon}/>
+          <Col lg={4}>
+            <Paper className={classes.gameInfo}>
+              <Row>
+                <Col lg={12}>
+                  <Typography variant="display1" className={`${classes.gameHeader}`}>
+                    <strong>{homeTeam.city} {homeTeam.name}</strong><br/><small>vs.</small><br/><strong>{awayTeam.city} {awayTeam.name}</strong>
+                  </Typography>
+                  <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
+                    <br/>
+                    <div>
+                      <img className={classes.logo} src={`/img/logos/${homeTeam.logo}`}/><br/>
+                      <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/>
+                    </div>
+                    <br/>
+                    <AttendButton 
+                      variant="raised"
+                      color="primary"
+                      gameId={gameId} 
+                      gameDate={gameDate} 
+                      gameTime={gameTime}
+                      addAttendance={this.addAttendance} 
+                      deleteAttendance={this.deleteAttendance} 
+                      isAttending={isAttending}
+                      size="large"
+                      className={classes.attendButton}
+                    />
+                    <br/>
+                    {(moment(gameDate) > moment() && (
+                      <Button size="small" variant="raised" color="secondary" className={classes.buyTickets} component={Link} to={url} target="_blank">
+                        <AttachMoney className={classes.leftIcon}/>
                       Buy Tickets
-                    </Button>
-                  ))}
-                </div>
-              </Col>
-            </Row>
-            <br/>
+                      </Button>
+                    ))}
+                  </div>
+                
+                </Col>
+              </Row>
+            </Paper>
+          </Col>
+          <Col lg>
             <Row>
               <Col lg={12} className={classes.mainContent}>
                 {homeTeamScore !== null && awayTeamScore !== null && (
@@ -208,7 +212,7 @@ class GamePage extends React.Component {
                   </Paper>
                 )}
                 <Row>
-                  <Col md={6}>
+                  <Col lg={6}>
                     <Paper className={classes.details}>
                       <Typography variant="headline" className="text-center bold">Date and Time</Typography>
                       <Typography variant="subheading" className={`${classes.dateTime}`}>
@@ -217,7 +221,7 @@ class GamePage extends React.Component {
                       </Typography>
                     </Paper>
                   </Col>
-                  <Col md={6}>
+                  <Col lg={6}>
                     <Paper className={classes.details}>
                       <Typography variant="headline" className="text-center bold">
                 Game Location
@@ -252,7 +256,7 @@ class GamePage extends React.Component {
               <Col md={12}>
                 <Row>
                   <Col md={6}>
-                    {posts.length ? ( <Typography className={classes.bold} variant="subheading">Found <strong>{posts.length}</strong> posts for this game.</Typography>)
+                    {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
                       :
                       (<Typography variant="subheading" className={classes.bold}>
                     There are no posts for this game.
