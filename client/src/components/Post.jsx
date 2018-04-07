@@ -73,12 +73,12 @@ class Post extends React.Component {
                 <Col md={10}>
                   <Typography variant="subheading">
                     <Link to={`/user/${postData.user.username}`}>
-                      <strong>{postData.user.username}</strong>
+                      <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
                     </Link> said:
                   </Typography>
                   <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
                   <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
-                  {postData.user.id == this.props.user.id && 
+                  {this.props.user && postData && postData.user.id == this.props.user.id && 
                   <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
                     <Delete/> Delete Post
                   </Button>
@@ -92,7 +92,7 @@ class Post extends React.Component {
                 <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
                 <Typography variant="subheading">
                   <Link component="a" to={`/user/${postData.user.username}`} onClick={() => this.props.handleUserChange(postData.user.username)}>
-                    <strong>{postData.user.username}</strong>
+                    <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
                   </Link> said:
                 </Typography>
                 <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
@@ -101,7 +101,7 @@ class Post extends React.Component {
                     {postData.game.Away.name} at {postData.game.Home.name} {moment(postData.game.gameDate).format('M/D/YYYY')}
                   </Link>
                 </Typography>
-                {this.props.user && postData.user.id == this.props.user.id && 
+                {this.props.user && postData.user && postData.user.id == this.props.user.id && 
                   <Button className={classes.button} style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
                     <Delete/> Delete
                   </Button>

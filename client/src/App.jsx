@@ -18,8 +18,6 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
 import MomentUtils from 'material-ui-pickers/utils/moment-utils';
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider';
-import { withStyles } from 'material-ui/styles';
-import landingPageBg from './bg_light.jpg';
 
 // Defines the colors, fonts, etc. that the app will use.
 const theme = createMuiTheme({
@@ -48,12 +46,6 @@ const theme = createMuiTheme({
       textTransform: 'uppercase',
       marginBottom: 10
     }
-  }
-});
-
-const styles = theme => ({
-  landingPage: {
-    background: `url(${landingPageBg})`
   }
 });
 
@@ -149,4 +141,4 @@ class App extends Component {
   }
 }
 
-export default withUser(withStyles(styles)(App));
+export default withUser(App);

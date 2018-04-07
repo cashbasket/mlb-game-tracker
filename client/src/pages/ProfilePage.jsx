@@ -9,12 +9,19 @@ import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
 import Avatar from 'material-ui/Avatar';
+import Paper from 'material-ui/Paper';
 
 const styles = theme => ({
   avatar: {
     width: 160,
     height: 160,
+    margin: '0 auto 20px auto',
     border: `1px solid ${theme.palette.primary.main}`
+  },
+  paper: {
+    padding: theme.spacing.unit * 2,
+    backgroundColor: '#b0bec5',
+    border: `1px solid ${theme.palette.secondary.dark}`
   },
   userInfo: {
     marginBottom: theme.spacing.unit * 3
@@ -63,21 +70,21 @@ class ProfilePage extends React.Component {
     return (
       <div>
         <Row id="page-content" className="hidden">
-          <Col md={12}>
-            <Row className={classes.userInfo}>
-              <Col md={2}>
-                <Avatar
-                  alt={userInfo.username}
-                  src={userInfo.gravatar}
-                  className={`img-fluid ${classes.avatar}`}/>
-              </Col>
-              <Col md={10}>
-                <Typography className={classes.username} variant="display2">{userInfo.username}</Typography>
-                <Typography variant="subheading">{userInfo.description ? userInfo.description : ''}</Typography>
-              </Col>
-            </Row>
+          <Col md={4}>
+            <Paper className={classes.paper}>
+              <Avatar
+                alt={userInfo.username}
+                src={userInfo.gravatar}
+                className={`img-fluid ${classes.avatar}`}/>
+              <Typography align="center" className={classes.username} variant="display1">
+                {userInfo.name ? userInfo.name : userInfo.username }
+              </Typography>
+              <Typography align="center" variant="subheading">{userInfo.description ? userInfo.description : ''}</Typography>
+            </Paper>
+          </Col>
+          <Col md>
             <Typography variant="headline">
-             Upcoming Games
+             Games I'm Going to
             </Typography>
             {upcomingGames.length ? (
               <GameList>
@@ -95,7 +102,7 @@ class ProfilePage extends React.Component {
             )}
             <br/>
             <Typography variant="headline">
-           Past Games
+           Games I've Been To
             </Typography>
             {pastGames.length ? (
               <GameList>
