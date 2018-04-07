@@ -202,7 +202,7 @@ class GamePage extends React.Component {
                       className={classes.attendButton}
                     />
                     <br/>
-                    {(moment(gameDate) > moment() && (
+                    {(moment(gameDate) > moment() && url && (
                       <Button size="small" variant="raised" color="secondary" className={classes.buyTickets} component={Link} to={url} target="_blank">
                         <AttachMoney className={classes.leftIcon}/>
                       Buy Tickets

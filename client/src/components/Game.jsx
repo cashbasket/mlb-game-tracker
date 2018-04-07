@@ -111,7 +111,7 @@ class Game extends React.Component {
                       Game Details
                       </Button>
                     </Col>
-                    {(moment(gameDate) > moment() && (
+                    {(moment(gameDate) > moment() && url && (
                       <Col md={3}>
                         <Button size="small" color="primary" className={`plainLink ${classes.controls}`} component={Link} to={url} target="_blank">
                           <AttachMoney className={classes.leftIcon}/>
