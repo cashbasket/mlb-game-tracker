@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import API from '../utils/api';
 import Paper from 'material-ui/Paper';
@@ -120,10 +120,15 @@ class DashboardPage extends React.Component {
       </Typography>
     );
     
+    if(!this.props.user) {
+      return (
+        <Redirect to="/"/>
+      );
+    }
     return (
       <div>
         <Row id="page-content" className="hidden">
-          <Col md={9}>
+          <Col md={8}>
             <Typography variant="headline">
               Your Statcard
             </Typography>
@@ -200,7 +205,7 @@ class DashboardPage extends React.Component {
               </Typography>
             )}
           </Col>
-          <Col md={3}>
+          <Col md>
             <Typography variant="headline">
               Recent Posts
             </Typography>
