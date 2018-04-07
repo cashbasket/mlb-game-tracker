@@ -143,7 +143,7 @@ class Navbar extends React.Component {
                             <MenuItem component={Link} to="/dashboard" onClick={this.handleClose}>Dashboard</MenuItem>
                             <MenuItem component={Link} to={`/user/${user.username}`} onClick={this.handleClose}>My Profile</MenuItem>
                             <MenuItem component={Link} to="/account" onClick={this.handleClose}>Account</MenuItem>
-                            <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
+                            <MenuItem data-test="logout-button" onClick={this.handleLogout}>Log Out</MenuItem>
                           </Menu>
                         </div>
                       ) : (
