@@ -7,7 +7,7 @@ import Typography from 'material-ui/Typography';
 import LoginForm from '../components/LoginForm';
 import { withUser } from '../services/withUser';
 import { withRouter } from 'react-router-dom';
-import bg from '../bg_light.jpg';
+import LandingPageBg from '../bg_light.jpg';
 
 const styles = theme => ({
   root: {
@@ -43,6 +43,17 @@ class LandingPage extends React.Component {
       loggedIn: this.props.user ? true : false
     };
   }
+
+  componentDidMount = () => {
+    let elem = document.querySelector('body');
+    elem.style.backgroundImage = `url(${LandingPageBg})`;
+  }
+
+  componentWillUnmount = () => {
+    let elem = document.querySelector('body');
+    elem.style.backgroundImage = 'none';
+  }
+
   render() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const loggedIn = user && user.id === this.props.user.id ? true : false;
@@ -58,9 +69,9 @@ class LandingPage extends React.Component {
       <Fragment>
         <Row>
           <Col md>
-            <Typography variant="display3" className={classes.heading}>Remember that one game?</Typography>
+            <Typography variant="display3" className={classes.heading}>Remember the game?</Typography>
             <Typography variant="subheading" className={classes.subheading}>
-              We do. And, we're sure someone else does, too. Find like-minded baseball fans who blah blah blah
+              We do, and we're sure someone else does, too. <strong>WENT YARD</strong> is a site built for baseball fans, by baseball fans. Track your favorite team, track your own personal game attendance history, and chat with like-minded fans who just might have been there with you!
             </Typography>
           </Col>
         </Row>
@@ -75,9 +86,5 @@ class LandingPage extends React.Component {
     );
   }
 }
-
-LandingPage.propTypes = {
-  user: PropTypes.object.isRequired
-};
 
 export default withUser(withRouter(withStyles(styles)(LandingPage)));
