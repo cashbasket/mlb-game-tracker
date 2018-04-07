@@ -129,7 +129,7 @@ class App extends Component {
                       <PrivateRoute path="/game/:gameId" component={GamePage} />
                       <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
                       <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                      <PrivateRoute path="/dashboard" component={DashboardPage} />
+                      <Route exact path="/dashboard" component={DashboardPage} />
                       <PrivateRoute path="/user/:username" component={ProfilePage} />
                       <PrivateRoute path="/account" component={AccountPage} />
                       <Route exact path="/forgot" component={ForgotPasswordPage} />
