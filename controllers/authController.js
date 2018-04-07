@@ -77,6 +77,7 @@ module.exports = {
         return res.json({message: 'That email address is already in use.'});
       return db.user.update({
         email: req.body.email,
+        name: req.body.name,
         description: req.body.description,
         teamId: req.body.favoriteTeam
       }, {

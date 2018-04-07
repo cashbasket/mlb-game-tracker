@@ -56,6 +56,7 @@ class AccountPage extends React.Component {
       password: '',
       confirmPassword: '',
       favoriteTeam: '',
+      name: '',
       description: '',
       passwordError: false,
       confirmPasswordError: false,
@@ -77,6 +78,7 @@ class AccountPage extends React.Component {
       .then((res) => {
         accountObj.gravatar = res.data.user.gravatar;
         accountObj.email = res.data.user.email;
+        accountObj.name = res.data.user.name;
         accountObj.confirmEmail = res.data.user.email;
         accountObj.description = res.data.user.description;
         accountObj.favoriteTeam = res.data.user.teamId;
@@ -153,12 +155,13 @@ class AccountPage extends React.Component {
   };
   
   updateInfo = () => {
-    const { email, confirmEmail, password, confirmPassword, description, favoriteTeam } = this.state;
+    const { email, confirmEmail, password, confirmPassword, name, description, favoriteTeam } = this.state;
     const accountObj = {
       email: email,
       confirmEmail: email,
       password: password,
       favoriteTeam: favoriteTeam,
+      name: name,
       description: description
     };
     if ((!password.length || (password.length && password.match(passwordRegex))) && 
@@ -291,7 +294,14 @@ class AccountPage extends React.Component {
                   </Col>
                   <Col md={6}>
                     <Typography variant="subheading" className="bold">Personal Info</Typography>
-
+                    <TextField
+                      fullWidth
+                      name="name"
+                      margin="normal"
+                      value={this.state.name}
+                      label="Display Name (optional)"
+                      onChange={this.handleInputChange.bind(this)}
+                    />
                     <TextField
                       fullWidth
                       name="description"
