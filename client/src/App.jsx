@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Navbar from './components/Navbar';
 import LandingPage from './pages/LandingPage';
@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import AccountPage from './pages/AccountPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import NoMatch from './pages/NoMatch';
 import API from './utils/api';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import { withUser, update } from './services/withUser';
@@ -123,16 +124,19 @@ class App extends Component {
                 <Grid>
                   <Row style={{paddingLeft: 15, paddingRight: 15}}>
                     <Col sm={12}>
-                      <PropsRoute exact path="/" component={LandingPage} authenticate={this.authenticate} />
-                      <Route path="/team/:teamId" component={TeamPage} />
-                      <PrivateRoute path="/game/:gameId" component={GamePage} />
-                      <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
-                      <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                      <Route exact path="/dashboard" component={DashboardPage} />
-                      <PrivateRoute path="/user/:username" component={ProfilePage} />
-                      <PrivateRoute path="/account" component={AccountPage} />
-                      <Route exact path="/forgot" component={ForgotPasswordPage} />
-                      <Route path="/reset/:token?" component={ResetPasswordPage} />
+                      <Switch>
+                        <PropsRoute exact path="/" component={LandingPage} authenticate={this.authenticate} />
+                        <Route exact path="/team/:teamId" component={TeamPage} />
+                        <PrivateRoute exact path="/game/:gameId" component={GamePage} />
+                        <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
+                        <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
+                        <Route exact path="/dashboard" component={DashboardPage} />
+                        <PrivateRoute exact path="/user/:username" component={ProfilePage} />
+                        <PrivateRoute exact path="/account" component={AccountPage} />
+                        <Route exact path="/forgot" component={ForgotPasswordPage} />
+                        <Route exact path="/reset/:token?" component={ResetPasswordPage} />
+                        <Route component={NoMatch} />
+                      </Switch>
                     </Col>
                   </Row>
                 </Grid>
