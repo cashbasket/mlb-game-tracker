@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'react-flexbox-grid';
 import { withStyles } from 'material-ui/styles';
 import { Redirect } from 'react-router-dom';
@@ -41,11 +42,12 @@ class LandingPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: this.props && this.props.user ? true : false
+      loggedIn: this.props.user ? true : false
     };
   }
   render() {
-    const { loggedIn } = this.state;
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    const loggedIn = user && user.id === this.props.user.id ? true : false;
     const { classes } = this.props;
     
     if (loggedIn) {
@@ -75,5 +77,9 @@ class LandingPage extends React.Component {
     );
   }
 }
+
+LandingPage.propTypes = {
+  user: PropTypes.object.isRequired
+};
 
 export default withUser(withRouter(withStyles(styles)(LandingPage)));
