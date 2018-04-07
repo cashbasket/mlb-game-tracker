@@ -106,14 +106,14 @@ class Game extends React.Component {
                 <CardActions>
                   <Row style={{minWidth: '85%'}}>
                     <Col md={3}>
-                      <Button size="small" color="primary" className={classes.controls} component={Link} to={`/game/${id}`}>
+                      <Button size="small" color="primary" className={`plainLink ${classes.controls}`} component={Link} to={`/game/${id}`}>
                         <Info className={classes.leftIcon}/>
                       Game Details
                       </Button>
                     </Col>
                     {(moment(gameDate) > moment() && (
                       <Col md={3}>
-                        <Button size="small" color="primary" className={classes.controls} component={Link} to={url} target="_blank">
+                        <Button size="small" color="primary" className={`plainLink ${classes.controls}`} component={Link} to={url} target="_blank">
                           <AttachMoney className={classes.leftIcon}/>
                       Buy Tickets
                         </Button>
