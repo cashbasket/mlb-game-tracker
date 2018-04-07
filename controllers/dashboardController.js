@@ -213,7 +213,8 @@ module.exports = {
       }],
       order: [
         ['postDate', 'DESC']
-      ]
+      ],
+      limit: 10
     })
       .then(dbDash => res.json({
         posts: dbDash
