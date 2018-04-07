@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import API from '../utils/api';
-import Refresh from 'material-ui-icons/Refresh';
 import AttachMoney from 'material-ui-icons/AttachMoney';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
@@ -16,6 +15,10 @@ import PostEditor from '../components/PostEditor';
 import PostList from '../components/PostList';
 import Post from '../components/Post';
 import Button from 'material-ui/Button';
+import io from 'socket.io-client';
+
+const socketParams = { rememberTransport: false, transports: ['websocket'] };
+const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
 
 const styles = theme => ({
   paper: {
@@ -98,6 +101,7 @@ class GamePage extends React.Component {
     this.addAttendance = this.addAttendance.bind(this);
     this.deleteAttendance = this.deleteAttendance.bind(this);
     this.getPosts = this.getPosts.bind(this);
+    this.send = this.send.bind(this);
   }
 
   componentDidMount = () => {
@@ -139,7 +143,12 @@ class GamePage extends React.Component {
           document.getElementById('page-content').classList.remove('hidden'));
       });
   }
-  
+
+  send = () => {
+    const msg = 'Comments were just modified!';
+    socket.emit('comment', msg);
+    this.getPosts();
+  }
 
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
@@ -156,6 +165,10 @@ class GamePage extends React.Component {
   }
 
   render() {
+    // testing for socket connections
+    socket.on('comment', () => {
+      this.getPosts();
+    });
     const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
@@ -247,7 +260,7 @@ class GamePage extends React.Component {
                   <Typography variant="headline" className="text-center bold">
                     Game Discussion
                   </Typography>
-                  <PostEditor gameId={gameId} getPosts={this.getPosts}/>
+                  <PostEditor gameId={gameId} send={this.send}/>
                 </div>
               </Col>
             </Row>
@@ -259,21 +272,12 @@ class GamePage extends React.Component {
                       :
                       (<Typography variant="subheading" className={classes.bold}>
                     There are no posts for this game.
-                      </Typography>)}                  </Col>
-                  <Col md={6} style={{textAlign: 'right'}}>
-                    <Button 
-                      variant="raised" 
-                      color="primary"
-                      className={classes.refresh} 
-                      size="large"
-                      onClick={() => this.getPosts(gameId)}>
-                      <Refresh className={classes.leftIcon}/>Refresh Posts
-                    </Button>
+                      </Typography>)}                  
                   </Col>
                 </Row>
                 <PostList>
                   { posts.map(post => (
-                    <Post key={post.id} postData={post} getPosts={this.getPosts}/>
+                    <Post key={post.id} postData={post} send={this.send} />
                   ))}
                 </PostList>
               </Col>

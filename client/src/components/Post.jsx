@@ -47,8 +47,8 @@ class Post extends React.Component {
 
   deletePost = (postId) => {
     API.deletePost(postId)
-      .then((res) => {
-        this.props.getPosts(this.props.postData.gameId ? this.props.postData.gameId: '');
+      .then(() => {
+        this.props.send && this.props.send();
       });
   }
 
