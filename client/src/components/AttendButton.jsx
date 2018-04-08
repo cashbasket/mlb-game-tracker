@@ -8,7 +8,7 @@ import CheckBoxOutline from 'material-ui-icons/CheckBoxOutlineBlank';
 
 const styles = theme => ({
   leftIcon: {
-    marginRight: theme.spacing.unit / 3,
+    marginRight: theme.spacing.unit / 2,
   },
   iconSmall: {
     fontSize: 20,
@@ -27,15 +27,7 @@ class AttendButton extends React.Component {
           ) : (
             <CheckBoxOutline className={classes.leftIcon}/>
           )}
-          {!this.props.isAttending ? (
-            <Fragment>
-              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'Are you there now?' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'Did you go?' : 'Are you going?')}
-            </Fragment>
-          ) : (
-            <Fragment>
-              {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'I\'m there' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'I went' : 'I\'m going')}
-            </Fragment>
-          )
+          {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'I\'m there' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'I went' : 'I\'m going')
           }
         </Button>
         }
