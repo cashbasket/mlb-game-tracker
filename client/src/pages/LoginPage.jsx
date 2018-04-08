@@ -9,11 +9,9 @@ class LoginPage extends React.Component {
   render() { 
     return (
       <Row>
-        <Col md/>
-        <Col md={6}>
+        <Col md={6} mdOffset={3}>
           <LoginForm authenticate={this.props.authenticate}/>
         </Col>
-        <Col md/>
       </Row>
     );
   }
