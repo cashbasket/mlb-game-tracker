@@ -28,13 +28,6 @@ const styles = theme => ({
   },
   username: {
     marginBottom: theme.spacing.unit
-  },
-  infoDiv: {
-    marginBottom: theme.spacing.unit * 2,
-    textAlign: 'center'
-  },
-  bold: {
-    fontWeight: 700
   }
 });
 
