@@ -110,7 +110,7 @@ class Navbar extends React.Component {
                       <IconButton id="menuButton" className={classes.menuButton} color="inherit" aria-label="Menu" onClick={this.toggleDrawer(true)}>
                         <MenuIcon />
                       </IconButton>
-                      <Typography variant="title" color="inherit" className={classes.flex}>
+                      <Typography id="siteTitle" variant="title" color="inherit" className={classes.flex}>
                         <Link className={classes.title} to="/">
                           <i className="fas fa-baseball-ball"></i> Went Yard
                         </Link>

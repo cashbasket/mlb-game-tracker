@@ -100,4 +100,7 @@ main a:focus {
   .container {
     width: 100%;
   }
+  #siteTitle {
+    font-size: 28px;
+  }
 }
