@@ -12,12 +12,17 @@ import Delete from 'material-ui-icons/DeleteForever';
 import Divider from'material-ui/Divider';
 import API from '../utils/api';
 import Avatar from 'material-ui/Avatar';
+import Check from 'material-ui-icons/Check';
 
 const styles = theme => ({
   avatar: {
     width: 100,
     height: 100,
     border: `1px solid ${theme.palette.secondary.dark}`
+  },
+  buttonText: theme.typography.button,
+  attending: {
+    color: theme.palette.primary.main
   },
   post: {
     padding: theme.spacing.unit * 2,
@@ -53,7 +58,7 @@ class Post extends React.Component {
   }
 
   render() {
-    const { classes, postData, dashboard } = this.props;
+    const { classes, postData, dashboard, gameDate } = this.props;
     const text = postData.postText;
     return (
       <li>
@@ -74,8 +79,13 @@ class Post extends React.Component {
                   <Typography variant="subheading">
                     <Link to={`/user/${postData.user.username}`}>
                       <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
-                    </Link> said:
+                    </Link>
                   </Typography>
+                  {postData.user.attendances.length > 0 && (
+                    <Typography variant="subheading" className={`${classes.attending} ${classes.buttonText}`}>
+                      {moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDate, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
+                    </Typography>
+                  )}
                   <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
                   <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
                   {this.props.user && postData && postData.user.id == this.props.user.id && 
@@ -93,7 +103,7 @@ class Post extends React.Component {
                 <Typography variant="subheading">
                   <Link component="a" to={`/user/${postData.user.username}`} onClick={() => this.props.handleUserChange(postData.user.username)}>
                     <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
-                  </Link> said:
+                  </Link>
                 </Typography>
                 <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
                 <Typography>

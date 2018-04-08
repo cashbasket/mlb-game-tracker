@@ -7,11 +7,9 @@ router.route('/:id')
   .get(gameController.game);
 
 // Matches with "/api/game/attendance"
-router.route('/attendance')
-  .post(authCheck(), gameController.createAtt);
-
-// Matches with "/api/game/attendance/:id"
-router.route('/attendance/:id')
+router.route('/attendance/:id?')
+  .get(gameController.attendees)
+  .post(authCheck(), gameController.createAtt)
   .delete(authCheck(), gameController.deleteAtt);
 
 // Matches with "/api/game/posts/:id"
