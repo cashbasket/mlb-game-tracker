@@ -21,9 +21,33 @@ import io from 'socket.io-client';
 const socketParams = { rememberTransport: false, transports: ['websocket'] };
 const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
 
+const BoxScoreCell = withStyles(theme => ({
+  head: {
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    paddingTop: 0,
+    paddingBottom: 0,
+    fontSize: 13,
+    border: 'none',
+    color: '#999'
+  },
+  body: {
+    fontSize: 16,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2,
+    paddingTop: 0,
+    paddingBottom: 0,
+    border: 'none'
+  },
+}))(TableCell);
+
 const styles = theme => ({
   paper: {
     padding: theme.spacing.unit,
+  },
+  boxScoreLogo: {
+    width: 30,
+    height: 'auto'
   },
   gameInfo: {
     padding: theme.spacing.unit * 2,
@@ -34,7 +58,8 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 3
   },
   gameHeader: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: theme.spacing.unit * 2
   },
   attendButton: {
     fontSize: 20,
@@ -60,8 +85,16 @@ const styles = theme => ({
   boxScore: {
     overflowX: 'auto',
     backgroundColor: '#fff',
-    padding: theme.spacing.unit * 2,
+    border: `1px solid ${theme.palette.secondary.dark}`,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingTop: 0,
+    paddingBottom: 0,
     marginBottom: theme.spacing.unit * 3
+  },
+  runs: {
+    color: theme.palette.primary.light,
+    fontWeight: 'bold'
   },
   details: {
     backgroundColor: '#fff',
@@ -77,6 +110,10 @@ const styles = theme => ({
   },
   logo: {
     maxWidth: 160
+  },
+  tickets: {
+    fontSize: 18,
+    fontWeight: 700
   }
 });
 
@@ -157,6 +194,7 @@ class GamePage extends React.Component {
   getBoxScore = () => {
     API.getBoxScore(this.state.gameId, this.state.season)
       .then((res) => {
+        console.log(res.data);
         this.setState({
           boxScore: res.data.gameboxscore
         });
@@ -203,21 +241,49 @@ class GamePage extends React.Component {
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
     return (
-      <div>
-        <Row id="page-content" className="hidden">
+      <div id="page-content" className="hidden">
+        <Typography variant="display1" className={`${classes.gameHeader}`}>
+          <Link to={`/team/${awayTeam.id}`}><strong>{awayTeam.city} {awayTeam.name}</strong></Link> <small>at</small> <Link to={`/team/${homeTeam.id}`}><strong>{homeTeam.city} {homeTeam.name}</strong></Link>
+        </Typography>
+        <Row>
           <Col lg={3}>
             <Paper className={classes.gameInfo}>
               <Row>
+                <Col md>
+                  <Link className="plainLink" to={`/team/${awayTeam.id}`}>
+                    <img className="img-fluid" src={`/img/logos/${awayTeam.logo}`} alt={`${awayTeam.city} ${awayTeam.name} logo`}/>
+                  </Link>
+                </Col>
+                <Col md>
+                  <Link className="plainLink" to={`/team/${awayTeam.id}`}>
+                    <img className="img-fluid" src={`/img/logos/${homeTeam.logo}`} alt={`${homeTeam.city} ${homeTeam.name} logo`}/>
+                  </Link>
+                </Col>
+              </Row>
+              <br/>
+              <Row>
                 <Col lg={12}>
-                  <Typography variant="display1" className={`${classes.gameHeader}`}>
-                    <small><strong>{awayTeam.city} {awayTeam.name}</strong><br/>at<br/><strong>{homeTeam.city} {homeTeam.name}</strong></small>
-                  </Typography>
                   <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
+                    <Typography variant="headline" className="text-center bold">Date and Time</Typography>
+                    <Typography variant="subheading" className={`${classes.dateTime}`}>
+                      {moment(gameDate).format('dddd, MMMM Do, YYYY')}<br/>
+                      {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
+                    </Typography>
                     <br/>
-                    <div>
-                      <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/><br/>
-                      <img className={classes.logo} src={`/img/logos/${homeTeam.logo}`}/>
-                    </div>
+                    <Typography variant="headline" className="text-center bold">
+                Game Location
+                    </Typography>
+                    <VenuePopover 
+                      venueName={venueName} 
+                      capacity={venueCapacity} 
+                      type={venueType} 
+                      surface={venueSurface} 
+                      dimensions={venueDimensions}
+                    />
+                    <Typography variant="subheading" className="text-center">
+                      {venueAddress}<br/>
+                      {venueCity}, {venueState} {venueZip}
+                    </Typography>
                     <br/>
                     {attendees.length > 0 && (
                       <Fragment>
@@ -241,10 +307,11 @@ class GamePage extends React.Component {
                     />
                     <br/>
                     {(moment(gameDate) > moment() && url && (
-                      <Button size="small" variant="raised" color="secondary" className={classes.buyTickets} component={Link} to={url} target="_blank">
-                        <AttachMoney className={classes.leftIcon}/>
+                      <Typography variant="subheading" className={classes.tickets}>
+                        <Link to={url} target="_blank">
                       Buy Tickets
-                      </Button>
+                        </Link>
+                      </Typography>
                     ))}
                   </div>
                 
@@ -258,98 +325,73 @@ class GamePage extends React.Component {
                 {homeTeamScore !== null && awayTeamScore !== null && (
                   <Paper className={`${classes.paper} ${classes.scorePaper}`}>
                     <Typography variant="headline" className="text-center bold" style={{color: '#FFFFFF'}}>Final Score</Typography>
-                    <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</Typography>
+                    <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}><small>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</small></Typography>
                   </Paper>
                 )}
-                {boxScore.game ? (
+                {boxScore.game && (
                   <Paper className={classes.boxScore}>
                     <Table>
                       <TableHead>
                         <TableRow key="1">
-                          <TableCell padding="none">Team</TableCell>
+                          <BoxScoreCell></BoxScoreCell>
+                          <BoxScoreCell></BoxScoreCell>
                           {boxScore.inningSummary.inning.map(n => {
-                            return <TableCell key={n['@number']} padding="dense">{n['@number']}</TableCell>;
+                            return <BoxScoreCell key={n['@number']}>{n['@number']}</BoxScoreCell>;
                           })}
-                          <TableCell padding="dense">R</TableCell>
-                          <TableCell padding="dense">H</TableCell>
-                          <TableCell padding="dense">E</TableCell>
+                          <BoxScoreCell>R</BoxScoreCell>
+                          <BoxScoreCell>H</BoxScoreCell>
+                          <BoxScoreCell>E</BoxScoreCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
                         <TableRow key="2">
-                          <TableCell padding="none">{boxScore.game.awayTeam.Name}</TableCell>
+                          <BoxScoreCell style={{paddingRight: 0}}>
+                            <img src={`/img/logos/${awayTeam.logo}`} className={classes.boxScoreLogo}/>
+                          </BoxScoreCell>
+                          <BoxScoreCell style={{paddingLeft : 0}}>
+                            {boxScore.game.awayTeam.Name}
+                          </BoxScoreCell>
                           {boxScore.inningSummary.inning.map(n => {
-                            return <TableCell key={n['@number']} padding="dense">{n['awayScore']}</TableCell>;
+                            return <BoxScoreCell key={n['@number']}>{n['awayScore']}</BoxScoreCell>;
                           })}
-                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Runs['#text']}</TableCell>
-                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Hits['#text']}</TableCell>
-                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Errors['#text']}</TableCell>
+                          <BoxScoreCell><span className={classes.runs}>{boxScore.awayTeam.awayTeamStats.Runs['#text']}</span></BoxScoreCell>
+                          <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Hits['#text']}</BoxScoreCell>
+                          <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Errors['#text']}</BoxScoreCell>
                         </TableRow>
                         <TableRow key="3">
-                          <TableCell padding="none">{boxScore.game.homeTeam.Name}</TableCell>
+                          <BoxScoreCell style={{paddingRight: 0}}>
+                            <img src={`/img/logos/${homeTeam.logo}`} className={classes.boxScoreLogo}/>
+                          </BoxScoreCell>
+                          <BoxScoreCell style={{paddingLeft: 0}}>
+                            {boxScore.game.homeTeam.Name}
+                          </BoxScoreCell>
                           {boxScore.inningSummary.inning.map(n => {
-                            return <TableCell key={n['@number']} padding="dense">{n['homeScore']}</TableCell>;
+                            return <BoxScoreCell key={n['@number']}>{n['homeScore']}</BoxScoreCell>;
                           })}
-                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Runs['#text']}</TableCell>
-                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Hits['#text']}</TableCell>
-                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Errors['#text']}</TableCell>
+                          <BoxScoreCell><span className={classes.runs}>{boxScore.homeTeam.homeTeamStats.Runs['#text']}</span></BoxScoreCell>
+                          <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Hits['#text']}</BoxScoreCell>
+                          <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Errors['#text']}</BoxScoreCell>
                         </TableRow>
                       </TableBody>
                     </Table>
                   </Paper>
-                ) : ''}
-                <Row>
-                  <Col lg={6}>
-                    <Paper className={classes.details}>
-                      <Typography variant="headline" className="text-center bold">Date and Time</Typography>
-                      <Typography variant="subheading" className={`${classes.dateTime}`}>
-                        {moment(gameDate).format('dddd, MMMM Do, YYYY')}<br/>
-                        {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
-                      </Typography>
-                    </Paper>
-                  </Col>
-                  <Col lg={6}>
-                    <Paper className={classes.details}>
-                      <Typography variant="headline" className="text-center bold">
-                Game Location
-                      </Typography>
-                      <VenuePopover 
-                        venueName={venueName} 
-                        capacity={venueCapacity} 
-                        type={venueType} 
-                        surface={venueSurface} 
-                        dimensions={venueDimensions}
-                      />
-                      <Typography variant="subheading" className="text-center">
-                        {venueAddress}<br/>
-                        {venueCity}, {venueState} {venueZip}
-                      </Typography>
-                    </Paper>
-                  </Col>
-                </Row>
+                )}
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
                 <div className={classes.section}>
-                  <Typography variant="headline" className="text-center bold">
-                    Game Discussion
-                  </Typography>
                   <PostEditor gameId={gameId} send={this.send}/>
                 </div>
               </Col>
             </Row>
             <Row>
               <Col md={12}>
-                <Row>
-                  <Col md={6}>
-                    {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
-                      :
-                      (<Typography variant="subheading" className={classes.bold}>
-                    There are no posts for this game.
-                      </Typography>)}                  
-                  </Col>
-                </Row>
+                {posts.length ? ( <Typography align="center" className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
+                  :
+                  (<Typography align="center" variant="subheading" className={classes.bold}>
+                    There are no posts for this game... yet.
+                  </Typography>)}                  
                 <PostList>
                   { posts.map(post => (
                     <Post key={post.id} postData={post} gameDate={gameDate} send={this.send} />

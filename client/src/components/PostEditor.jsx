@@ -3,6 +3,7 @@ import API from '../utils/api';
 import { withUser } from '../services/withUser';
 import Button from 'material-ui/Button';
 import RichTextEditor from 'react-rte';
+import Paper from 'material-ui/Paper';
 
 class PostEditor extends Component {
   constructor(props) {
@@ -42,17 +43,17 @@ class PostEditor extends Component {
       ]
     };
     return (
-      <div>
+      <Paper>
         <RichTextEditor
           value={this.state.value}
           onChange={this.onChange}
           toolbarConfig={toolbarConfig}
-          placeholder="Write something..."
+          placeholder="Write something about the game..."
         />
         <Button fullWidth variant="raised" color="primary" onClick={this.handleSubmit}>
           Submit Post
         </Button>
-      </div>
+      </Paper>
     );
   }
 }
