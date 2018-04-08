@@ -1,6 +1,4 @@
 const db = require('../models');
-const Op = db.Sequelize.Op;
-const moment = require('moment');
 
 // Defining methods for the teamController
 module.exports = {

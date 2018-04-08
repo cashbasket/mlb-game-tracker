@@ -180,13 +180,13 @@ class GamePage extends React.Component {
               <Row>
                 <Col lg={12}>
                   <Typography variant="display1" className={`${classes.gameHeader}`}>
-                    <strong>{homeTeam.city} {homeTeam.name}</strong><br/><small>vs.</small><br/><strong>{awayTeam.city} {awayTeam.name}</strong>
+                    <strong>{awayTeam.city} {awayTeam.name}</strong><br/><small>at</small><br/><strong>{homeTeam.city} {homeTeam.name}</strong>
                   </Typography>
                   <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
                     <br/>
                     <div>
-                      <img className={classes.logo} src={`/img/logos/${homeTeam.logo}`}/><br/>
-                      <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/>
+                      <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/><br/>
+                      <img className={classes.logo} src={`/img/logos/${homeTeam.logo}`}/>
                     </div>
                     <br/>
                     <AttendButton 
