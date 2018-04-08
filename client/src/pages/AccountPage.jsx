@@ -58,6 +58,7 @@ class AccountPage extends React.Component {
       favoriteTeam: '',
       name: '',
       description: '',
+      admin: 0,
       passwordError: false,
       confirmPasswordError: false,
       favoriteTeamError: false,
@@ -82,6 +83,7 @@ class AccountPage extends React.Component {
         accountObj.confirmEmail = res.data.user.email;
         accountObj.description = res.data.user.description;
         accountObj.favoriteTeam = res.data.user.teamId;
+        accountObj.admin = res.data.user.admin;
         accountObj.mlbTeams = [];
         accountObj.modalOpen = false;
         return API.getAllTeams();
@@ -154,6 +156,51 @@ class AccountPage extends React.Component {
     }
   };
   
+  updateGames = () => {
+    this.setState({modalOpen: true});
+    API.getGamesToUpdate()
+      .then((dbGames) => {
+        const games = dbGames.data.gamelogs.length;
+        let gamesUpdated = 0;
+        dbGames.data.gamelogs.map(n => {
+          let gameData = {};
+          let awayTeamId = Number.parseInt(n.game.awayTeam.ID, 10);
+          let homeTeamId = Number.parseInt(n.game.homeTeam.ID, 10);
+          if (Number.parseInt(n.team.ID, 10) === awayTeamId){
+            gameData.awayTeamScore = Number.parseInt(n.stats.RunsFor['#text'], 10);
+            gameData.homeTeamScore = Number.parseInt(n.stats.RunsAgainst['#text'], 10);
+          }
+          else {
+            gameData.homeTeamScore = Number.parseInt(n.stats.RunsFor['#text'], 10);
+            gameData.awayTeamScore = Number.parseInt(n.stats.RunsAgainst['#text'], 10);
+          }
+          if (gameData.awayTeamScore > gameData.homeTeamScore) {
+            gameData.winningTeamId = awayTeamId;
+            gameData.losingTeamId = homeTeamId;
+          }
+          else {
+            gameData.winningTeamId = homeTeamId;
+            gameData.losingTeamId = awayTeamId;
+          }
+          API.updateGameInfo(Number.parseInt(n.game.id, 10), gameData)
+            .then((response) => {
+              gamesUpdated++;
+              if (games === gamesUpdated) {
+                this.setState({modalOpen: false, snackbarMessage: 'Game information updated successfully.', snackbarOpen: true});
+              }
+            })
+            .catch((err) => {
+              console.log('Error updating game info.', err);
+              this.setState({modalOpen: false, snackbarMessage: 'Something went wrong with your request.', snackbarOpen: true});
+            });
+        });
+      })
+      .catch((err) => {
+        console.log('Error updating game info.', err);
+        this.setState({modalOpen: false, snackbarMessage: 'Something went wrong with your request.', snackbarOpen: true});
+      });
+  };
+
   updateInfo = () => {
     const { email, confirmEmail, password, confirmPassword, name, description, favoriteTeam } = this.state;
     const accountObj = {
@@ -341,6 +388,15 @@ class AccountPage extends React.Component {
                     </Button>
                   </Col>
                 </Row>
+                {this.state.admin && (
+                  <Row>
+                    <Col md={12} style={{textAlign: 'center'}}>                 
+                      <Button variant="raised" color="primary" className={classes.button} onClick={() => this.updateGames()} >
+                Update Game Information
+                      </Button>
+                    </Col>
+                  </Row>
+                )}
               </form>
             </Paper>
           </Col>
