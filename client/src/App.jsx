@@ -82,6 +82,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 class App extends Component {
   constructor() {
     super();
+    this.state = {
+      auth: ''
+    };
     this.authenticate = this.authenticate.bind(this);
   }
 
@@ -89,13 +92,18 @@ class App extends Component {
     API.authenticate().then((res) => {
       if (res.data.authenticated) {
         update(res.data.user);
-        if (typeof fn === 'function') {
-          fn();
-        }
+        this.setState({auth: true},
+          () => {
+            if (typeof fn === 'function') {
+              fn();
+            }
+          });
+      } else {
+        this.setState({auth: false});
       }
     }).catch((err) => {
       update(null);
-      console.log('Error fetching authorized user.');
+      console.log(err);
     });
   }
 
@@ -104,7 +112,10 @@ class App extends Component {
   }
 
   render() {
-    const { classes } = this.props;
+    // don't render until auth state has been set
+    if (this.state.auth === '')
+      return null;
+
     user = this.props.user;
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
