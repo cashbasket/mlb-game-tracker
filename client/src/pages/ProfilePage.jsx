@@ -70,7 +70,7 @@ class ProfilePage extends React.Component {
     return (
       <div>
         <Row id="page-content" className="hidden">
-          <Col md={4}>
+          <Col md={3}>
             <Paper className={classes.paper}>
               <Avatar
                 alt={userInfo.username}

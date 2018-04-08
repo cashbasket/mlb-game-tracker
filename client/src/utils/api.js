@@ -30,12 +30,16 @@ export default {
     return axios.get(`/api/schedule/${teamId}?start=${startDate}&end=${endDate}`);
   },
   // Team Record API calls
-  getTeamRecord: (season, abbr) => {
-    return axios.get(`/api/msf/record?team=${abbr}&season=${season}`);
+  getTeamRecord: (season, team) => {
+    return axios.get(`/api/msf/record/${season}/${team}`);
   },
   // Game API calls
   getGameInfo: gameId => {
     return axios.get(`/api/game/${gameId}`);
+  },
+  // Team Record API calls
+  getBoxScore: (gameId, season) => {
+    return axios.get(`/api/msf/game/${season}/${gameId}`);
   },
   addAttendance: (userId, gameId) => {
     return axios.post('/api/game/attendance', {

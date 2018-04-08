@@ -9,6 +9,7 @@ import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
 import Paper from 'material-ui/Paper';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import AttendButton from '../components/AttendButton';
 import VenuePopover from '../components/VenuePopover';
 import PostEditor from '../components/PostEditor';
@@ -56,6 +57,12 @@ const styles = theme => ({
   bold: {
     fontWeight: 700
   },
+  boxScore: {
+    overflowX: 'auto',
+    backgroundColor: '#fff',
+    padding: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 3
+  },
   details: {
     backgroundColor: '#fff',
     padding: theme.spacing.unit * 2,
@@ -97,6 +104,7 @@ class GamePage extends React.Component {
       isAttending: false,
       modalOpen: true,
       posts: [],
+      boxScore: {},
       attendees: 0
     };
     this.addAttendance = this.addAttendance.bind(this);
@@ -107,6 +115,7 @@ class GamePage extends React.Component {
 
   componentDidMount = () => {
     let attendees = 0;
+    let boxScore = {};
     API.getAttendees(this.state.gameId)
       .then((res) => {
         attendees = res.data.attendees;
@@ -122,6 +131,7 @@ class GamePage extends React.Component {
           awayTeam: game.Away,
           homeTeamScore: game.homeTeamScore,
           awayTeamScore: game.awayTeamScore,
+          season: game.season,
           venueName: game.venue.name,
           venueAddress: game.venue.address,
           venueCity: game.venue.city,
@@ -133,12 +143,25 @@ class GamePage extends React.Component {
           venueDimensions: game.venue.dimensions,
           isAttending: isAttending,
           url: game.url,
-          attendees: attendees
+          attendees: attendees,
+          boxScore: boxScore
         }, () => {
-          this.getPosts(this.state.gameId);
+          if (this.state.homeTeamScore !== null && this.state.awayTeamScore !== null) {
+            this.getBoxScore();
+          }
+          this.getPosts();
         });
       });
   };
+
+  getBoxScore = () => {
+    API.getBoxScore(this.state.gameId, this.state.season)
+      .then((res) => {
+        this.setState({
+          boxScore: res.data.gameboxscore
+        });
+      });
+  }
 
   getPosts = () => {
     API.getPosts(this.state.gameId)
@@ -176,18 +199,18 @@ class GamePage extends React.Component {
     socket.on('comment', () => {
       this.getPosts();
     });
-    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees } = this.state;
+    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, boxScore } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
     return (
       <div>
         <Row id="page-content" className="hidden">
-          <Col lg={4}>
+          <Col lg={3}>
             <Paper className={classes.gameInfo}>
               <Row>
                 <Col lg={12}>
                   <Typography variant="display1" className={`${classes.gameHeader}`}>
-                    <strong>{awayTeam.city} {awayTeam.name}</strong><br/><small>at</small><br/><strong>{homeTeam.city} {homeTeam.name}</strong>
+                    <small><strong>{awayTeam.city} {awayTeam.name}</strong><br/>at<br/><strong>{homeTeam.city} {homeTeam.name}</strong></small>
                   </Typography>
                   <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
                     <br/>
@@ -213,7 +236,7 @@ class GamePage extends React.Component {
                       addAttendance={this.addAttendance} 
                       deleteAttendance={this.deleteAttendance} 
                       isAttending={isAttending}
-                      size="large"
+                      size="medium"
                       className={classes.attendButton}
                     />
                     <br/>
@@ -229,15 +252,52 @@ class GamePage extends React.Component {
               </Row>
             </Paper>
           </Col>
-          <Col lg>
+          <Col lg={9}>
             <Row>
               <Col lg={12} className={classes.mainContent}>
                 {homeTeamScore !== null && awayTeamScore !== null && (
                   <Paper className={`${classes.paper} ${classes.scorePaper}`}>
                     <Typography variant="headline" className="text-center bold" style={{color: '#FFFFFF'}}>Final Score</Typography>
-                    <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}>{homeTeam.name} {homeTeamScore}, {awayTeam.name} {awayTeamScore}</Typography>
+                    <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</Typography>
                   </Paper>
                 )}
+                {boxScore.game ? (
+                  <Paper className={classes.boxScore}>
+                    <Table>
+                      <TableHead>
+                        <TableRow key="1">
+                          <TableCell padding="none">Team</TableCell>
+                          {boxScore.inningSummary.inning.map(n => {
+                            return <TableCell key={n['@number']} padding="dense">{n['@number']}</TableCell>;
+                          })}
+                          <TableCell padding="dense">R</TableCell>
+                          <TableCell padding="dense">H</TableCell>
+                          <TableCell padding="dense">E</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        <TableRow key="2">
+                          <TableCell padding="none">{boxScore.game.awayTeam.Name}</TableCell>
+                          {boxScore.inningSummary.inning.map(n => {
+                            return <TableCell key={n['@number']} padding="dense">{n['awayScore']}</TableCell>;
+                          })}
+                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Runs['#text']}</TableCell>
+                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Hits['#text']}</TableCell>
+                          <TableCell padding="dense">{boxScore.awayTeam.awayTeamStats.Errors['#text']}</TableCell>
+                        </TableRow>
+                        <TableRow key="3">
+                          <TableCell padding="none">{boxScore.game.homeTeam.Name}</TableCell>
+                          {boxScore.inningSummary.inning.map(n => {
+                            return <TableCell key={n['@number']} padding="dense">{n['homeScore']}</TableCell>;
+                          })}
+                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Runs['#text']}</TableCell>
+                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Hits['#text']}</TableCell>
+                          <TableCell padding="dense">{boxScore.homeTeam.homeTeamStats.Errors['#text']}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </Paper>
+                ) : ''}
                 <Row>
                   <Col lg={6}>
                     <Paper className={classes.details}>
