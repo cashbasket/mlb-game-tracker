@@ -28,6 +28,12 @@ const styles = theme => ({
   },
   username: {
     marginBottom: theme.spacing.unit
+  },
+  noResults: {
+    padding: theme.spacing.unit * 2,
+    backgroundColor: theme.palette.primary.light,
+    fontSize: 16,
+    color: theme.palette.secondary.contrastText
   }
 });
 
@@ -87,7 +93,7 @@ class ProfilePage extends React.Component {
           </Col>
           <Col md>
             <Typography variant="headline">
-              <strong>Games I'm Going to</strong>
+              <strong><i class="fas fa-angle-right"></i> Games I'm Going to</strong>
             </Typography>
             {upcomingGames.length ? (
               <GameList>
@@ -99,13 +105,13 @@ class ProfilePage extends React.Component {
                 ))}
               </GameList>
             ) : (
-              <Typography variant="subheading">
-                {userInfo.username} has no upcoming games :(
-              </Typography>
+              <Paper className={classes.noResults}>
+                <strong>{userInfo.name ? userInfo.name : userInfo.username}</strong> has no upcoming games.
+              </Paper>
             )}
             <br/>
             <Typography variant="headline">
-              <strong>Games I've Been To</strong>
+              <strong><i class="fas fa-angle-right"></i> Games I've Been To</strong>
             </Typography>
             {pastGames.length ? (
               <GameList>
@@ -117,9 +123,9 @@ class ProfilePage extends React.Component {
                 ))}
               </GameList>
             ) : (
-              <Typography variant="subheading">
-                {userInfo.username} hasn't been to any games yet. Lame.
-              </Typography>
+              <Paper className={classes.noResults}>
+                <strong>{userInfo.name ? userInfo.name : userInfo.username}</strong> hasn't been to any games yet! Lame.
+              </Paper>
             )}
           </Col>
         </Row>
