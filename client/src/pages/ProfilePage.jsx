@@ -80,6 +80,9 @@ class ProfilePage extends React.Component {
                 {userInfo.name ? userInfo.name : userInfo.username }
               </Typography>
               <Typography align="center" variant="subheading">{userInfo.description ? userInfo.description : ''}</Typography>
+              {userInfo.team ? (
+                <img src={`/img/logos/${userInfo.team.logo}`} className="img-fluid team-info-logo"/>
+              ) : ''}
             </Paper>
           </Col>
           <Col md>
