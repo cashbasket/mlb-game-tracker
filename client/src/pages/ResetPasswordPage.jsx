@@ -14,6 +14,9 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 4
   },
+  header: {
+    marginBottom: theme.spacing.unit
+  },
   message: {
     color: theme.palette.primary.contrastText
   },
@@ -121,8 +124,7 @@ class ResetPassworPage extends React.Component {
     return (
       <div id="page-content">
         <Row>
-          <Col md />
-          <Col md={8}>
+          <Col md={6} mdOffset={3}>
             <Paper className={classes.paper}>
               <form
                 style={{width: '100%'}}
@@ -134,8 +136,8 @@ class ResetPassworPage extends React.Component {
                 <Row>
                   <Col md={12}>
                  
-                    <Typography variant="headline" align="center">Reset Password</Typography>
-                    <Typography variant="subheading">
+                    <Typography className={classes.header} variant="display1" align="center">Reset Password</Typography>
+                    <Typography>
                   Fill out the fields below to reset your password. Once your password is successfully reset, you will be redirected to the login page, where you can log in with your new password.
                     </Typography>
                     <TextField
@@ -177,7 +179,6 @@ class ResetPassworPage extends React.Component {
               </form>
             </Paper>
           </Col>
-          <Col md />
         </Row>
         <LoadingModal open={this.state.modalOpen} />
       </div>

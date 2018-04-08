@@ -97,7 +97,7 @@ class LoginForm extends React.Component {
           message={<span id="registerInfo">{this.state.snackbarMessage}</span>}
         />
         <Paper className={classes.control}>
-          <Typography variant="headline" gutterBottom align="center">
+          <Typography variant="display1" gutterBottom align="center">
                Log In
           </Typography>
           <form

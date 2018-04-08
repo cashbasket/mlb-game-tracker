@@ -18,8 +18,7 @@ class NoMatch extends React.Component {
     const { classes } = this.props;
     return (
       <Row>
-        <Col md/>
-        <Col md={8}>
+        <Col md={8} mdOffset={2}>
           <Paper className={classes.paper}>
             <img src="https://media.giphy.com/media/cj2vxgPiADd5e/giphy.gif" alt="404 Error" className="img-404 img-fluid" />
             <Typography variant="display3">Strike Three!</Typography>
@@ -32,7 +31,6 @@ class NoMatch extends React.Component {
             </Typography>
           </Paper>
         </Col>
-        <Col md/>
       </Row>
     );
   }
