@@ -17,6 +17,9 @@ const styles = theme => ({
   card: {
     marginBottom: 15
   },
+  gameTitle: {
+    fontSize: 20
+  },
   content: {
     flex: '1 0 auto',
   },
@@ -75,8 +78,7 @@ class Game extends React.Component {
             <Row>
               <Col md>
                 <CardContent className={classes.content}>
-           
-                  <Typography variant="headline">
+                  <Typography className={classes.gameTitle} variant="headline">
                     {this.props.teamId ? (
                       <Fragment>
                         {this.props.teamId == Away.id ? (
@@ -91,7 +93,7 @@ class Game extends React.Component {
                       </Fragment>
                     ) : (
                       <Fragment>
-                        <Link to={`/team/${Away.id}`} onClick={() => this.props.handleTeamChange(Away.id)}>{Away.city} {Away.name}</Link> <small>at</small> {Home.city} {Home.name}
+                        <Link to={`/team/${Away.id}`} onClick={() => this.props.handleTeamChange(Away.id)}>{Away.city} {Away.name}</Link> <small>at</small> <Link to={`/team/${Home.id}`}>{Home.city} {Home.name}</Link>
                       </Fragment>
                     )}         
                   </Typography>
