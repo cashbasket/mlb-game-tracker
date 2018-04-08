@@ -50,10 +50,13 @@ class Post extends React.Component {
     return e.innerHTML;
   }
 
-  deletePost = (postId) => {
+  deletePost = (postId, isDashboard = false) => {
     API.deletePost(postId)
       .then(() => {
         this.props.send && this.props.send();
+        if(isDashboard) {
+          this.props.getPosts();
+        }
       });
   }
 
@@ -112,7 +115,9 @@ class Post extends React.Component {
                   </Link>
                 </Typography>
                 {this.props.user && postData.user && postData.user.id == this.props.user.id && 
-                  <Button className={classes.button} style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
+                  <Button className={classes.button} style={{float: 'right'}} size="small" onClick={() => {
+                    this.deletePost(postData.id, true);
+                  }}>
                     <Delete/> Delete
                   </Button>
                 }
