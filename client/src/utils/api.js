@@ -37,6 +37,13 @@ export default {
   getGameInfo: gameId => {
     return axios.get(`/api/game/${gameId}`);
   },
+  // Game API calls
+  getGamesToUpdate: () => {
+    return axios.get('/api/msf/update');
+  },
+  updateGameInfo: (gameId, data) => {
+    return axios.put(`/api/admin/game/${gameId}`, data);
+  },
   // Team Record API calls
   getBoxScore: (gameId, season) => {
     return axios.get(`/api/msf/game/${season}/${gameId}`);

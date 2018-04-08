@@ -29,5 +29,19 @@ module.exports = {
     })
       .then(dbGame => res.json(dbGame.data))
       .catch(err => res.status(400).json(err));
+  },
+
+  update: function(req, res) {
+    axios({
+      method: 'get',
+      url: '/current/team_gamelogs.json?team=lad,cle,hou,was,bos,ari,chc,nyy,col,mil,min,stl,tb,kc,laa,tex,sea,mia,tor,bal,pit,oak,atl,sd,nym,cin,cws,phi,det,sf&teamstats=RF,RA&date=since-2-weeks-ago',
+      baseURL: 'https://api.mysportsfeeds.com/v1.2/pull/mlb',
+      auth: {
+        username: process.env.MSF_USERNAME,
+        password: process.env.MSF_PW
+      }
+    })
+      .then(dbGame => res.json(dbGame.data.teamgamelogs))
+      .catch(err => res.status(400).json(err));
   }
 };
