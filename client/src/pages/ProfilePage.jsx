@@ -87,7 +87,7 @@ class ProfilePage extends React.Component {
           </Col>
           <Col md>
             <Typography variant="headline">
-             Games I'm Going to
+              <strong>Games I'm Going to</strong>
             </Typography>
             {upcomingGames.length ? (
               <GameList>
@@ -105,7 +105,7 @@ class ProfilePage extends React.Component {
             )}
             <br/>
             <Typography variant="headline">
-           Games I've Been To
+              <strong>Games I've Been To</strong>
             </Typography>
             {pastGames.length ? (
               <GameList>
