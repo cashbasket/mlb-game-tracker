@@ -35,6 +35,20 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
 
+  //gets all attendance records for game
+  attendees: function(req, res) {
+    db.attendance
+      .findAll({
+        where: {
+          gameId: req.params.id
+        }
+      })
+      .then(dbAttendees => res.json({
+        attendees: dbAttendees
+      }))
+      .catch (err => res.status(400).json(err));
+  },
+
   // create an attendance record
   createAtt: function(req, res) {
     db.attendance
@@ -60,7 +74,14 @@ module.exports = {
       include: [{
         model: db.user,
         required: true,
-        attributes: { exclude: ['email', 'password', 'token', 'tokenExpires'] }
+        attributes: { exclude: ['email', 'password', 'token', 'tokenExpires']},
+        include: [{
+          model: db.attendance,
+          required: false,
+          where: {
+            gameId: req.params.id
+          }
+        }] 
       }],
       where: { gameId: req.params.id },
       order: [

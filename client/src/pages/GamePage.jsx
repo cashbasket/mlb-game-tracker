@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
@@ -96,7 +96,8 @@ class GamePage extends React.Component {
       venueDimensions: '',
       isAttending: false,
       modalOpen: true,
-      posts: []
+      posts: [],
+      attendees: 0
     };
     this.addAttendance = this.addAttendance.bind(this);
     this.deleteAttendance = this.deleteAttendance.bind(this);
@@ -105,7 +106,12 @@ class GamePage extends React.Component {
   }
 
   componentDidMount = () => {
-    API.getGameInfo(this.state.gameId)
+    let attendees = 0;
+    API.getAttendees(this.state.gameId)
+      .then((res) => {
+        attendees = res.data.attendees;
+        return API.getGameInfo(this.state.gameId);
+      })
       .then((res) => {
         const game = res.data.game;
         const isAttending = game.attendances.length > 0 ? true : false;
@@ -126,7 +132,8 @@ class GamePage extends React.Component {
           venueSurface: game.venue.surface,
           venueDimensions: game.venue.dimensions,
           isAttending: isAttending,
-          url: game.url
+          url: game.url,
+          attendees: attendees
         }, () => {
           this.getPosts(this.state.gameId);
         });
@@ -169,7 +176,7 @@ class GamePage extends React.Component {
     socket.on('comment', () => {
       this.getPosts();
     });
-    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url } = this.state;
+    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
     return (
@@ -189,6 +196,14 @@ class GamePage extends React.Component {
                       <img className={classes.logo} src={`/img/logos/${awayTeam.logo}`}/>
                     </div>
                     <br/>
+                    {attendees.length > 0 && (
+                      <Fragment>
+                        <Typography variant="subheading" className="bold">
+                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDate, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
+                        </Typography>
+                        <br/>
+                      </Fragment>
+                    )}
                     <AttendButton 
                       variant="raised"
                       color="primary"
@@ -277,7 +292,7 @@ class GamePage extends React.Component {
                 </Row>
                 <PostList>
                   { posts.map(post => (
-                    <Post key={post.id} postData={post} send={this.send} />
+                    <Post key={post.id} postData={post} gameDate={gameDate} send={this.send} />
                   ))}
                 </PostList>
               </Col>

@@ -39,6 +39,9 @@ export default {
       gameId: gameId
     });
   },
+  getAttendees: (gameId) => {
+    return axios.get(`/api/game/attendance/${gameId}`);
+  },
   deleteAttendance: (gameId) => {
     return axios.delete(`/api/game/attendance/${gameId}`);
   },
