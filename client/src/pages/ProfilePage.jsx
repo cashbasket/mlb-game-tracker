@@ -28,6 +28,13 @@ const styles = theme => ({
   },
   username: {
     marginBottom: theme.spacing.unit
+  },
+  infoDiv: {
+    marginBottom: theme.spacing.unit * 2,
+    textAlign: 'center'
+  },
+  bold: {
+    fontWeight: 700
   }
 });
 
@@ -80,6 +87,9 @@ class ProfilePage extends React.Component {
                 {userInfo.name ? userInfo.name : userInfo.username }
               </Typography>
               <Typography align="center" variant="subheading">{userInfo.description ? userInfo.description : ''}</Typography>
+              {userInfo.team ? (
+                <img src={`/img/logos/${userInfo.team.logo}`} className="img-fluid team-info-logo"/>
+              ) : ''}
             </Paper>
           </Col>
           <Col md>
