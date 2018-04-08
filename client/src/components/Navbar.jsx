@@ -21,12 +21,16 @@ import Divider from 'material-ui/Divider';
 import TeamList from '../components/TeamList';
 import API from '../utils/api';
 
-const styles = {
+const styles = theme => ({
   root: {
     flexGrow: 1,
   },
   flex: {
     flex: 1,
+  },
+  title: {
+    color: theme.palette.primary.contrastText,
+    textDecoration: 'none'
   },
   menuButton: {
     marginLeft: -12,
@@ -43,7 +47,7 @@ const styles = {
     marginBottom: 10,
     padding: '0 8px',
   }
-};
+});
 
 class Navbar extends React.Component {
   constructor(props){
@@ -107,7 +111,9 @@ class Navbar extends React.Component {
                         <MenuIcon />
                       </IconButton>
                       <Typography variant="title" color="inherit" className={classes.flex}>
-                        <i className="fas fa-baseball-ball"></i> Went Yard
+                        <Link className={classes.title} to="/">
+                          <i className="fas fa-baseball-ball"></i> Went Yard
+                        </Link>
                       </Typography>
                       <div id="teamMenu">
                         <TeamMenu handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
