@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import API from '../utils/api';
-import Grid from 'material-ui/Grid';
+import {Row, Col} from 'react-flexbox-grid';
 import { withStyles } from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
 import { Redirect } from 'react-router-dom';
@@ -22,6 +22,10 @@ const favoriteTeamHelper = 'You must choose your favorite MLB team. No one will 
 const styles = theme => ({
   root: {
     flexGrow: 1
+  },
+  submitButtonDiv: {
+    textAlign: 'center',
+    margin: '0 auto'
   },
   button: {
     marginTop: theme.spacing.unit * 2
@@ -137,7 +141,7 @@ class Register extends React.Component {
       );
     }
     return (
-      <Grid container justify="center">
+      <Fragment>
         <Snackbar
           open={this.state.snackbarOpen}
           onClose={this.handleSnackbarClose}
@@ -146,16 +150,15 @@ class Register extends React.Component {
           }}
           message={<span id="registerInfo">{this.state.snackbarMessage}</span>}
         />
-        <Grid item md={6} sm={10} xs={10}> 
-          <Paper className={classes.control}>
-            <Typography variant="headline" gutterBottom align="center">
+        <Row>
+          <Col md={6} mdOffset={3}> 
+            <Paper className={classes.control}>
+              <Typography variant="display1" gutterBottom align="center">
                Sign Up
-            </Typography>
-            
-            <Grid container spacing={0}
-              alignItems="center"
-              direction="column"
-              justify="center">
+              </Typography>
+              <Typography align="center">
+                Complete the form below to create a <em>Went Yard</em> account. If you like baseball, we're confident you'll have a good time here. If you <strong>don't</strong> like baseball, then... well, we don't know what to say to that.
+              </Typography>
               <form
                 style={{width: '100%'}}
                 onSubmit={(e) => {
@@ -163,85 +166,75 @@ class Register extends React.Component {
                   return this.register();
                 }}
               >
-                <Grid item md={12}>
-                  <TextField
-                    fullWidth 
-                    id="email-input"
-                    label="Enter Your Email Address"
-                    inputRef={(input) => this.emailElem = input}
-                    name="email"
-                    type="email"
-                    autoComplete="current-email"
-                    margin="normal"
-                    onChange={this.handleInputChange.bind(this)}
-                    required={true}
-                  />
-                </Grid>
-                <Grid item md={12}>
-                  <TextField
-                    fullWidth 
-                    id="password-input"
-                    label="Create a Password"
-                    inputRef={(input) => this.passwordElem = input}
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    margin="normal"
-                    required={true}
-                    error={this.state.passwordError}
-                    helperText= {this.state.passwordErrorText}
-                    onChange={this.handleInputChange.bind(this)}
-                  />
-                </Grid>
-                <Grid item md={12}>
-                  <TextField
-                    fullWidth 
-                    id="username-input"
-                    label="Choose a Username"
-                    inputRef={(input) => this.emailElem = input}
-                    name="username"
-                    type="text"
-                    autoComplete="current-username"
-                    margin="normal"
-                    required={true}
-                    error={this.state.usernameError}
-                    helperText={this.state.usernameErrorText}
-                    onChange={this.handleInputChange.bind(this)}
-                  />
-                </Grid>
-                <Grid item md={12}>
-                  <TextField
-                    fullWidth
-                    select
-                    required
-                    label="Favorite MLB Team"
-                    name="favoriteTeam"
-                    margin="normal"
-                    value={this.state.favoriteTeam}
-                    onChange={this.handleInputChange.bind(this)}
-                    helperText={this.state.favoriteTeamErrorText}
-                    error={this.state.favoriteTeamError}
-                  >
-                    <MenuItem value="" />
-                    {this.state.mlbTeams.map(team => (
-                      <MenuItem key={team.id} value={team.id}>
-                        {team.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item md={12}>
-                  <Grid container spacing={0} justify="center">
-                    <Button type="submit" variant="raised" color="primary" className={classes.button}>
+                <TextField
+                  fullWidth 
+                  id="email-input"
+                  label="Enter Your Email Address"
+                  inputRef={(input) => this.emailElem = input}
+                  name="email"
+                  type="email"
+                  autoComplete="current-email"
+                  margin="normal"
+                  onChange={this.handleInputChange.bind(this)}
+                  required={true}
+                />
+                <TextField
+                  fullWidth 
+                  id="password-input"
+                  label="Create a Password"
+                  inputRef={(input) => this.passwordElem = input}
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  margin="normal"
+                  required={true}
+                  error={this.state.passwordError}
+                  helperText= {this.state.passwordErrorText}
+                  onChange={this.handleInputChange.bind(this)}
+                />
+                <TextField
+                  fullWidth 
+                  id="username-input"
+                  label="Choose a Username"
+                  inputRef={(input) => this.emailElem = input}
+                  name="username"
+                  type="text"
+                  autoComplete="current-username"
+                  margin="normal"
+                  required={true}
+                  error={this.state.usernameError}
+                  helperText={this.state.usernameErrorText}
+                  onChange={this.handleInputChange.bind(this)}
+                />
+                <TextField
+                  fullWidth
+                  select
+                  required
+                  label="Favorite MLB Team"
+                  name="favoriteTeam"
+                  margin="normal"
+                  value={this.state.favoriteTeam}
+                  onChange={this.handleInputChange.bind(this)}
+                  helperText={this.state.favoriteTeamErrorText}
+                  error={this.state.favoriteTeamError}
+                >
+                  <MenuItem value="" />
+                  {this.state.mlbTeams.map(team => (
+                    <MenuItem key={team.id} value={team.id}>
+                      {team.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <div className={classes.submitButtonDiv}>
+                  <Button type="submit" variant="raised" color="primary" className={classes.button}>
                     Create Account
-                    </Button>
-                  </Grid>
-                </Grid>
+                  </Button>
+                </div>
               </form>
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
+            </Paper>
+          </Col>
+        </Row>
+      </Fragment>
     );
   }
 }

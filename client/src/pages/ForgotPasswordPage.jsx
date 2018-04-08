@@ -14,6 +14,9 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 4
   },
+  header: {
+    marginBottom: theme.spacing.unit
+  },
   message: {
     color: theme.palette.primary.contrastText
   },
@@ -64,8 +67,7 @@ class ForgotPasswordPage extends React.Component {
     return (
       <div id="page-content">
         <Row>
-          <Col md />
-          <Col md={8}>
+          <Col md={6} mdOffset={3}>
             <Paper className={classes.paper}>
               <form
                 style={{width: '100%'}}
@@ -77,8 +79,8 @@ class ForgotPasswordPage extends React.Component {
                 <Row>
                   <Col md={12}>
                  
-                    <Typography variant="headline" align="center">Forget Your Password?</Typography>
-                    <Typography variant="subheading">
+                    <Typography variant="display1" className={classes.header} align="center">Forget Your Password?</Typography>
+                    <Typography>
                   Bummer. We can help, though! Just enter your email address below, and hit "Send" to have a password-reset email sent to you.
                     </Typography>
                     <div id="sentInfo" className={`${classes.messageDiv} hidden`}>
@@ -109,7 +111,6 @@ class ForgotPasswordPage extends React.Component {
               </form>
             </Paper>
           </Col>
-          <Col md />
         </Row>
         <LoadingModal open={this.state.modalOpen} />
       </div>
