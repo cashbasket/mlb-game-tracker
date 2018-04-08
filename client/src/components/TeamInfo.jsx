@@ -69,6 +69,14 @@ class TeamInfo extends React.Component {
             ) : (
               <Fragment>
                 <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>Current Record:</Typography>
+                  <Typography>{data.wins} - {data.losses}</Typography>
+                </div>
+                <div className={classes.infoDiv}>
+                  <Typography variant="subheading" className={classes.bold}>Current Divisional Ranking:</Typography>
+                  <Typography>{data.rank} ({data.gamesBack} games behind)</Typography>
+                </div>
+                <div className={classes.infoDiv}>
                   <Typography variant="subheading" className={classes.bold}>Established:</Typography>
                   <Typography>{data.established}</Typography>
                 </div>

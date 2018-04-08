@@ -41,6 +41,10 @@ class TeamPage extends React.Component {
       league: '',
       division: '',
       manager: '',
+      wins: '',
+      losses: '',
+      rank: '',
+      gamesBack: '',
       modalOpen: false
     };
   }
@@ -55,6 +59,7 @@ class TeamPage extends React.Component {
         API.getTeamInfo(this.state.teamId)
           .then((res) => {
             infoObj = { 
+              abbr: res.data.team.abbr,
               city: res.data.team.city,
               name: res.data.team.name, 
               logo: res.data.team.logo,
@@ -68,6 +73,13 @@ class TeamPage extends React.Component {
           })
           .then((res) => {
             infoObj.displayedGames = res.data.games;
+            return API.getTeamRecord('current', infoObj.abbr);
+          })
+          .then((res) => {
+            infoObj.wins = res.data.stats.Wins['#text'];
+            infoObj.losses = res.data.stats.Losses['#text'];
+            infoObj.rank = res.data.rank;
+            infoObj.gamesBack = res.data.stats.GamesBack['#text'];
             infoObj.modalOpen = false;
             this.setState(infoObj, () => {
               document.getElementById('page-content').classList.remove('hidden');
@@ -87,6 +99,7 @@ class TeamPage extends React.Component {
     API.getTeamInfo(this.state.teamId)
       .then((res) => {
         this.setState({ name: res.data.team.name,
+          abbr: res.data.team.abbr,
           city: res.data.team.city,
           logo: res.data.team.logo,
           teamVenueName: res.data.team.venue.name,

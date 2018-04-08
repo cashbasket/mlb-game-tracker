@@ -29,6 +29,10 @@ export default {
   getTeamSchedule: (teamId, startDate, endDate) => {
     return axios.get(`/api/schedule/${teamId}?start=${startDate}&end=${endDate}`);
   },
+  // Team Record API calls
+  getTeamRecord: (season, abbr) => {
+    return axios.get(`/api/msf/record?team=${abbr}&season=${season}`);
+  },
   // Game API calls
   getGameInfo: gameId => {
     return axios.get(`/api/game/${gameId}`);
