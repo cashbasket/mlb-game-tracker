@@ -33,6 +33,9 @@ const styles = theme => ({
   },
   button: {
     marginTop: theme.spacing.unit
+  },
+  dashUserLink: {
+    borderBottom: 'none'
   }
 });
 
@@ -102,25 +105,31 @@ class Post extends React.Component {
           ) : (
             <Row>
               <Col md={12}> 
-                <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
+                <Typography variant="subheading"><strong>RE:</strong> <Link className="plainLink" component="a" to={`/game/${postData.game.id}`}>
+                  {postData.game.Away.name} at {postData.game.Home.name} {moment(postData.game.gameDate).format('M/D/YYYY')}
+                </Link>
+                </Typography>
+                <br/>
                 <Typography variant="subheading">
-                  <Link component="a" to={`/user/${postData.user.username}`} onClick={() => this.props.handleUserChange(postData.user.username)}>
+                  <Link className={classes.dashUserLink} component="a" to={`/user/${postData.user.username}`} onClick={() => this.props.handleUserChange(postData.user.username)}>
                     <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
-                  </Link>
+                  </Link> said:
                 </Typography>
                 <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
-                <Typography>
-                  <Link component="a" to={`/game/${postData.game.id}`}>
-                    {postData.game.Away.name} at {postData.game.Home.name} {moment(postData.game.gameDate).format('M/D/YYYY')}
-                  </Link>
-                </Typography>
-                {this.props.user && postData.user && postData.user.id == this.props.user.id && 
-                  <Button className={classes.button} style={{float: 'right'}} size="small" onClick={() => {
+                <Row>
+                  <Col md={7}>
+                    <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
+                  </Col>
+                  <Col md>
+                    {this.props.user && postData.user && postData.user.id == this.props.user.id && 
+                  <Button className={classes.button} color="secondary" style={{float: 'right'}} size="small" onClick={() => {
                     this.deletePost(postData.id, true);
                   }}>
                     <Delete/> Delete
                   </Button>
-                }
+                    }
+                  </Col>
+                </Row>
               </Col>
             </Row>
           )}
