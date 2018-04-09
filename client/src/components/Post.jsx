@@ -37,7 +37,7 @@ const styles = theme => ({
   },
   post: {
     padding: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2
   },
   postText: {
     fontSize: 16
@@ -135,6 +135,7 @@ class Post extends React.Component {
     const { classes, postData, dashboard, gameDate } = this.props;
     const { isEditing, comments } = this.state;
     const text = postData.postText;
+    const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
     return (
       <li>
         <div>
@@ -159,7 +160,7 @@ class Post extends React.Component {
                     </Typography>
                     {postData.user.attendances.length > 0 && (
                       <Typography variant="subheading" className={`${classes.attending} ${classes.buttonText}`}>
-                        {moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDate, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
+                        {moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
                       </Typography>
                     )}
                     {isEditing ? (
@@ -187,7 +188,7 @@ class Post extends React.Component {
                 </Row>
               </Paper>
               <Row className="commentSection" style={{display: this.state.commentsVisible ? 'block' : 'none'}}>
-                <Col md={10} mdOffset={2}>
+                <Col md>
                   <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
                     <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
                       <PostList>

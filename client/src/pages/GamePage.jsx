@@ -223,6 +223,8 @@ class GamePage extends React.Component {
     const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, boxScore } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
+    const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
+
     return (
       <div id="page-content" className="hidden">
         <Typography variant="display1" className={`${classes.gameHeader}`}>
@@ -249,7 +251,7 @@ class GamePage extends React.Component {
                   <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
                     <Typography variant="headline" className="text-center bold">Date and Time</Typography>
                     <Typography variant="subheading" className={`${classes.dateTime}`}>
-                      {moment(gameDate).format('dddd, MMMM Do, YYYY')}<br/>
+                      {moment(gameDateTime).format('dddd, MMMM Do, YYYY')}<br/>
                       {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
                     </Typography>
                     <br/>
@@ -271,7 +273,7 @@ class GamePage extends React.Component {
                     {attendees.length > 0 && (
                       <Fragment>
                         <Typography variant="subheading" className="bold">
-                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDate, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
+                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
                         </Typography>
                         <br/>
                       </Fragment>
