@@ -10,7 +10,6 @@
     "material-ui-icons": "^1.0.0-beta.36",
     "material-ui-pickers": "^1.0.0-rc.4",
     "react": "^16.0.0",
-    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.0.0",
     "react-flexbox-grid": "^2.0.0",
     "react-router-dom": "^4.2.2",

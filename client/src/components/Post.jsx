@@ -17,7 +17,6 @@ import CommentsIcon from 'material-ui-icons/Comment';
 import PostList from './PostList';
 import PostEditor from './PostEditor';
 import CommentEditor from './CommentEditor';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
   avatar: {
@@ -49,7 +48,11 @@ const styles = theme => ({
     borderBottom: 'none'
   },
   comments: {
-    backgroundColor: '#b0bec5'
+    backgroundColor: '#b0bec5',
+    padding: theme.spacing.unit * 2,
+    maxHeight: 400,
+    overflowY: 'auto',
+    overflowX: 'hidden'
   }
 });
 
@@ -177,18 +180,13 @@ class Post extends React.Component {
                 <Col md mdOffset={1}>
                   <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
                     <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
-                      <Scrollbars
-                        style={{ height: 400 }} >
-                        <div style={{ padding: 20 }}>
-                          <PostList>
-                            {comments && 
+                      <PostList>
+                        {comments && 
                        comments.map(comment => (
                          <Comment key={comment.id} commentData={comment} getComments={this.getComments} />
                        ))
-                            }
-                          </PostList>
-                        </div>
-                      </Scrollbars>
+                        }
+                      </PostList>
                     </div>
                   </Paper>
                   <Paper className={classes.commentEditor}>

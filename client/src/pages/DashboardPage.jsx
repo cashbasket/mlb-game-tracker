@@ -12,7 +12,6 @@ import Divider from 'material-ui/Divider';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 const styles = theme => ({
   statPaper: {
@@ -26,7 +25,11 @@ const styles = theme => ({
   postPaper: {
     backgroundColor: '#b0bec5',
     color: theme.palette.secondary.contrastText,
-    border: `1px solid ${theme.palette.primary.dark}`
+    border: `1px solid ${theme.palette.primary.dark}`,
+    maxHeight: 500,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    padding: theme.spacing.unit * 2
   },
   postsDiv: {
     maxHeight: 500,
@@ -216,25 +219,20 @@ class DashboardPage extends React.Component {
             </Typography>
             <Paper className={classes.postPaper}>
               {recentPosts.length ? (
-                <Scrollbars
-                  style={{ height: 500, color: '#000' }} >
-                  <div style={{ padding: 10 }}>
-                    <PostList>
-                      {recentPosts.map((post, index) => (
-                        <Fragment key={`postFrament-${post.id}`}>
-                          <Post key={post.id} 
-                            postData={post} 
-                            dashboard={true} 
-                            handleUserChange={this.handleUserChange} 
-                            getPosts={this.getPosts} />
-                          {index !== recentPosts.length - 1 && 
+                <PostList>
+                  {recentPosts.map((post, index) => (
+                    <Fragment key={`postFrament-${post.id}`}>
+                      <Post key={post.id} 
+                        postData={post} 
+                        dashboard={true} 
+                        handleUserChange={this.handleUserChange} 
+                        getPosts={this.getPosts} />
+                      {index !== recentPosts.length - 1 && 
                         <Divider className={classes.divider}/>
-                          }
-                        </Fragment>
-                      ))}
-                    </PostList>
-                  </div>
-                </Scrollbars>
+                      }
+                    </Fragment>
+                  ))}
+                </PostList>
               ) : (
                 <Typography variant="subheading">
                 There are currently no posts to show.
