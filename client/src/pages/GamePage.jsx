@@ -15,7 +15,6 @@ import VenuePopover from '../components/VenuePopover';
 import PostEditor from '../components/PostEditor';
 import PostList from '../components/PostList';
 import Post from '../components/Post';
-import Button from 'material-ui/Button';
 import io from 'socket.io-client';
 
 const socketParams = { rememberTransport: false, transports: ['websocket'] };
@@ -381,7 +380,9 @@ class GamePage extends React.Component {
             <Row>
               <Col xs={12}>
                 <div className={classes.section}>
-                  <PostEditor gameId={gameId} send={this.send}/>
+                  <Paper>
+                    <PostEditor gameId={gameId} send={this.send}/>
+                  </Paper>
                 </div>
               </Col>
             </Row>

@@ -102,6 +102,17 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
 
+  updatePost: function(req, res) {
+    db.post.update({
+      postText: req.body.postText
+    },{
+      where: {
+        id: req.params.id
+      }
+    }).then(dbPost => res.json(dbPost))
+      .catch(err => res.status(400).json(err));
+  },
+
   // delete route for deleting posts
   deletePost: function(req, res) {
     db.post.destroy({
