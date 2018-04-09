@@ -136,7 +136,7 @@ module.exports = {
       }],
       where: { postId: req.params.id },
       order: [
-        ['commentDate', 'ASC']
+        ['commentDate', 'DESC']
       ]
     })
       .then(dbComment => res.json({
