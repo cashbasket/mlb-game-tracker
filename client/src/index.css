@@ -43,6 +43,11 @@ main {
   font-family: 'Roboto', sans-serif;
 }
 
+.commentSection .public-DraftEditor-content {
+  min-height: 75px;
+  font-family: 'Roboto', sans-serif;
+}
+
 .bold {
   font-weight: bold !important;
 }

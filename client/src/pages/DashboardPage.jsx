@@ -127,7 +127,7 @@ class DashboardPage extends React.Component {
         <Row id="page-content" className="hidden">
           <Col md={8}>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Your Statcard</strong>
+              <i className="fas fa-angle-right"></i> <strong>Your Statcard</strong>
             </Typography>
             <Row>
               <Col md={3}>
@@ -172,7 +172,7 @@ class DashboardPage extends React.Component {
               </Col>
             </Row>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Last Game</strong>
+              <i className="fas fa-angle-right"></i> <strong>Last Game</strong>
             </Typography>
             {lastGame ? (
               <GameList>
@@ -185,7 +185,7 @@ class DashboardPage extends React.Component {
             )}
             <br/>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Upcoming Games</strong>
+              <i className="fas fa-angle-right"></i> <strong>Upcoming Games</strong>
             </Typography>
             {upcomingGames.length ? (
               <GameList>
@@ -204,7 +204,7 @@ class DashboardPage extends React.Component {
           </Col>
           <Col md>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Recent Posts</strong>
+              <i className="fas fa-angle-right"></i> <strong>Recent Posts</strong>
             </Typography>
             <Paper className={classes.postPaper}>
               {recentPosts.length ? (

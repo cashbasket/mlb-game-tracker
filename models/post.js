@@ -20,6 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       onDelete: 'CASCADE'
     });
+    Post.hasMany(models.comment);
   };
   return Post;
 };

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import API from '../utils/api';
-import AttachMoney from 'material-ui-icons/AttachMoney';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
@@ -15,10 +14,8 @@ import VenuePopover from '../components/VenuePopover';
 import PostEditor from '../components/PostEditor';
 import PostList from '../components/PostList';
 import Post from '../components/Post';
-import io from 'socket.io-client';
-
-const socketParams = { rememberTransport: false, transports: ['websocket'] };
-const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
+import Button from 'material-ui/Button';
+import Refresh from 'material-ui-icons/Refresh';
 
 const BoxScoreCell = withStyles(theme => ({
   head: {
@@ -146,7 +143,6 @@ class GamePage extends React.Component {
     this.addAttendance = this.addAttendance.bind(this);
     this.deleteAttendance = this.deleteAttendance.bind(this);
     this.getPosts = this.getPosts.bind(this);
-    this.send = this.send.bind(this);
   }
 
   componentDidMount = () => {
@@ -211,12 +207,6 @@ class GamePage extends React.Component {
       });
   }
 
-  send = () => {
-    const msg = 'Comments were just modified!';
-    socket.emit('comment', msg);
-    this.getPosts();
-  }
-
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
       .then(() => {
@@ -232,13 +222,11 @@ class GamePage extends React.Component {
   }
 
   render() {
-    // testing for socket connections
-    socket.on('comment', () => {
-      this.getPosts();
-    });
     const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, boxScore } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
+    const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
+
     return (
       <div id="page-content" className="hidden">
         <Typography variant="display1" className={`${classes.gameHeader}`}>
@@ -265,7 +253,7 @@ class GamePage extends React.Component {
                   <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
                     <Typography variant="headline" className="text-center bold">Date and Time</Typography>
                     <Typography variant="subheading" className={`${classes.dateTime}`}>
-                      {moment(gameDate).format('dddd, MMMM Do, YYYY')}<br/>
+                      {moment(gameDateTime).format('dddd, MMMM Do, YYYY')}<br/>
                       {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
                     </Typography>
                     <br/>
@@ -287,7 +275,7 @@ class GamePage extends React.Component {
                     {attendees.length > 0 && (
                       <Fragment>
                         <Typography variant="subheading" className="bold">
-                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDate, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
+                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
                         </Typography>
                         <br/>
                       </Fragment>
@@ -381,21 +369,32 @@ class GamePage extends React.Component {
               <Col xs={12}>
                 <div className={classes.section}>
                   <Paper>
-                    <PostEditor gameId={gameId} send={this.send}/>
+                    <PostEditor gameId={gameId} getPosts={this.getPosts}/>
                   </Paper>
                 </div>
               </Col>
             </Row>
             <Row>
-              <Col md={12}>
-                {posts.length ? ( <Typography align="center" className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
+              <Col md={8}>
+                {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
                   :
-                  (<Typography align="center" variant="subheading" className={classes.bold}>
+                  (<Typography variant="subheading" className={classes.bold}>
                     There are no posts for this game... yet.
-                  </Typography>)}                  
+                  </Typography>)}  
+              </Col>
+              <Col md>
+                <div style={{textAlign:'right'}}>
+                  <Button variant="raised" color="secondary" size="large" onClick={this.getPosts}>
+                    <Refresh className={classes.iconLeft}/> Refresh Posts
+                  </Button>   
+                </div>             
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
                 <PostList>
                   { posts.map(post => (
-                    <Post key={post.id} postData={post} gameDate={gameDate} send={this.send} />
+                    <Post key={post.id} postData={post} gameDate={gameDate} getPosts={this.getPosts} />
                   ))}
                 </PostList>
               </Col>
