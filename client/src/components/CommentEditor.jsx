@@ -4,12 +4,23 @@ import API from '../utils/api';
 import { withUser } from '../services/withUser';
 import Button from 'material-ui/Button';
 import RichTextEditor from 'react-rte';
+import { withStyles } from 'material-ui/styles';
+
+const styles = theme => ({
+  commentError: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
+    textAlign: 'center',
+    padding: theme.spacing.unit * 2
+  }
+});
 
 class CommentEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: RichTextEditor.createEmptyValue()
+      value: RichTextEditor.createEmptyValue(),
+      error: false
     };
   }
 
@@ -31,12 +42,14 @@ class CommentEditor extends Component {
       if (!this.props.commentId) {
         API.createComment(this.props.user.id, this.props.postId, this.state.value.toString('html'))
           .then(() => {
-            this.props.send();
             this.props.getComments(() => {
               var commentsDiv = document.getElementById(`comments-${this.props.postId}`);
-              commentsDiv.scrollTop = commentsDiv.scrollHeight;
+              commentsDiv.scrollTop = 0;
             });
-            this.setState({value: RichTextEditor.createEmptyValue()});
+            this.setState({error: false, value: RichTextEditor.createEmptyValue()});
+          })
+          .catch((err) => {
+            this.setState({error: true});
           });
       } else {
         API.updateComment(this.props.commentId, this.state.value.toString('html'))
@@ -50,6 +63,7 @@ class CommentEditor extends Component {
   }
           
   render () {
+    const { classes } = this.props;
     const toolbarConfig = {
       // Optionally specify the groups to display (displayed in the order listed).
       display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'LINK_BUTTONS'],
@@ -71,6 +85,9 @@ class CommentEditor extends Component {
           toolbarConfig={toolbarConfig}
           placeholder="Leave a comment..."
         />
+        <div className={classes.commentError} style={{display: this.state.error ? 'block' : 'none'}}>
+          Looks like the post you're trying to comment on was deleted by the user. Sorry!
+        </div>
         {this.props.commentContent ? (
           <Row>
             <Col md>
@@ -94,4 +111,4 @@ class CommentEditor extends Component {
   }
 }
 
-export default withUser(CommentEditor);
+export default withUser(withStyles(styles)(CommentEditor));
