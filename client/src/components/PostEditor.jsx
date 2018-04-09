@@ -31,15 +31,14 @@ class PostEditor extends Component {
       if (!this.props.postId) {
         API.createPost(this.props.user.id, this.props.gameId, this.state.value.toString('html'))
           .then(() => {
-            this.props.send();
             this.setState({value: RichTextEditor.createEmptyValue()});
           });
       } else {
         API.updatePost(this.props.postId, this.state.value.toString('html'))
           .then(() => {
-            this.props.send();
             this.setState({value: RichTextEditor.createEmptyValue()});
             this.props.updateEditStatus(false);
+            this.props.getPosts();
           });
       }
     }

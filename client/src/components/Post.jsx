@@ -9,18 +9,27 @@ import { withUser } from '../services/withUser';
 import moment from 'moment';
 import Button from 'material-ui/Button';
 import Delete from 'material-ui-icons/DeleteForever';
-import Divider from'material-ui/Divider';
+import Comment from './Comment';
 import API from '../utils/api';
 import Avatar from 'material-ui/Avatar';
-import Check from 'material-ui-icons/Check';
 import Edit from 'material-ui-icons/Edit';
+import CommentsIcon from 'material-ui-icons/Comment';
+import PostList from './PostList';
 import PostEditor from './PostEditor';
+import CommentEditor from './CommentEditor';
+import io from 'socket.io-client';
+
+const socketParams = { rememberTransport: false, transports: ['websocket'] };
+const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
 
 const styles = theme => ({
   avatar: {
     width: 100,
     height: 100,
     border: `1px solid ${theme.palette.secondary.dark}`
+  },
+  iconLeft: {
+    marginRight: theme.spacing.unit / 2
   },
   buttonText: theme.typography.button,
   attending: {
@@ -33,11 +42,23 @@ const styles = theme => ({
   postText: {
     fontSize: 16
   },
+  commentEditor: {
+    marginBottom: theme.spacing.unit * 2
+  },
   button: {
     marginTop: theme.spacing.unit
   },
   dashUserLink: {
     borderBottom: 'none'
+  },
+  comments: {
+    backgroundColor: '#b0bec5'
+  },
+  commentsListDiv: {
+    padding: theme.spacing.unit * 2,
+    maxHeight: 400,
+    overflowY: 'auto',
+    overflowX: 'hidden'
   }
 });
 
@@ -45,12 +66,48 @@ class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      postId: this.props.postData.id,
       gameDate: '',
       gameTitle: '',
+      comments: [],
+      commentsVisible: false,
       isEditing: false
     };
+    this.getComments = this.getComments.bind(this);
     this.updateEditStatus = this.updateEditStatus.bind(this);
+    this.send = this.send.bind(this);
   }
+
+  componentDidMount = () => {
+    this.getComments();
+  }
+
+  toggleComments = () => {
+    this.setState({commentsVisible: !this.state.commentsVisible }, () => {
+      () => {
+        var commentsDiv = document.getElementById(`comments-${this.props.postData.id}`);
+        commentsDiv.scrollTop = commentsDiv.scrollHeight;
+      };
+    });
+  }
+
+  send = () => {
+    const msg = 'A comment was added!';
+    socket.emit('comment', msg);
+    this.getComments();
+  }
+
+  getComments = (fn) => {
+    API.getComments(this.state.postId)
+      .then((res) => {
+        this.setState({comments: res.data.comments}, () => {
+          if (typeof fn === 'function') {
+            fn();
+          }
+        });
+      });
+  }
+
   htmlDecode = (input) => {
     var e = document.createElement('div');
     e.innerHTML = input;
@@ -64,7 +121,6 @@ class Post extends React.Component {
   deletePost = (postId, isDashboard = false) => {
     API.deletePost(postId)
       .then(() => {
-        this.props.send && this.props.send();
         if(isDashboard) {
           this.props.getPosts();
         }
@@ -72,56 +128,85 @@ class Post extends React.Component {
   }
 
   render() {
+    //testing for socket connections
+    socket.on('comment', () => {
+      this.getComments();
+    });
     const { classes, postData, dashboard, gameDate } = this.props;
-    const { isEditing } = this.state;
+    const { isEditing, comments } = this.state;
     const text = postData.postText;
     return (
       <li>
         <div>
           {!dashboard ? (
-            <Paper className={classes.post}>     
-              <Row>
-                <Col md={2}>
-                  <Link to={`/user/${postData.user.username}`}>
-                    <Avatar
-                      alt={postData.user.username}
-                      src={postData.user.gravatar}
-                      className={`img-fluid ${classes.avatar}`}
-                    />
-                  </Link>
-                </Col>
-                <Col md={10}>
-                  <Typography variant="subheading">
+            <Fragment>
+              <Paper className={classes.post}>     
+                <Row>
+                  <Col md={2}>
                     <Link to={`/user/${postData.user.username}`}>
-                      <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
+                      <Avatar
+                        alt={postData.user.username}
+                        src={postData.user.gravatar}
+                        className={`img-fluid ${classes.avatar}`}
+                      />
                     </Link>
-                  </Typography>
-                  {postData.user.attendances.length > 0 && (
-                    <Typography variant="subheading" className={`${classes.attending} ${classes.buttonText}`}>
-                      {moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDate, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
+                  </Col>
+                  <Col md={10}>
+                    <Typography variant="subheading">
+                      <Link to={`/user/${postData.user.username}`}>
+                        <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
+                      </Link>
                     </Typography>
-                  )}
-                  {isEditing ? (
-                    <PostEditor postId={postData.id} postContent={this.htmlDecode(text)} updateEditStatus={this.updateEditStatus} send={this.props.send}/>
-                  ) : (
-                    <Fragment>
-                      <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
-                      <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
-                    </Fragment>
-                  )}
-                  {this.props.user && postData && postData.user.id == this.props.user.id && 
+                    {postData.user.attendances.length > 0 && (
+                      <Typography variant="subheading" className={`${classes.attending} ${classes.buttonText}`}>
+                        {moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDate, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
+                      </Typography>
+                    )}
+                    {isEditing ? (
+                      <PostEditor postId={postData.id} postContent={this.htmlDecode(text)} updateEditStatus={this.updateEditStatus} getPosts={this.props.getPosts}/>
+                    ) : (
+                      <Fragment>
+                        <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
+                        <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
+                      </Fragment>
+                    )}
+                    <Button style={{float: 'right'}} size="small" onClick={() => this.toggleComments()}>
+                      <CommentsIcon className={classes.iconLeft}/> Comments ({comments.length})
+                    </Button>
+                    {this.props.user && postData && postData.user.id == this.props.user.id && 
                   <Fragment>
                     <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
-                      <Delete/> Delete Post
+                      <Delete className={classes.iconLeft}/> Delete Post
                     </Button>
                     <Button style={{float: 'right'}} size="small" onClick={() => this.updateEditStatus(true)}>
-                      <Edit/> Edit Post
+                      <Edit className={classes.iconLeft}/> Edit Post
                     </Button>
                   </Fragment>
-                  }
+                    }
+                  </Col>
+                </Row>
+              </Paper>
+              <Row className="commentSection" style={{display: this.state.commentsVisible ? 'block' : 'none'}}>
+                <Col md={10} mdOffset={2}>
+                  <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
+                    <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
+                      <PostList>
+                        {comments && 
+                       comments.map(comment => (
+                         <Comment key={comment.id} commentData={comment} getComments={this.getComments} send={this.send} />
+                       ))
+                        }
+                      </PostList>
+                    </div>
+                  </Paper>
+                  <Paper className={classes.commentEditor}>
+                    <div className="commentEditor">
+                      <CommentEditor postId={postData.id} getComments={this.getComments} send={this.send}/>
+                    </div>
+                  </Paper>
                 </Col>
               </Row>
-            </Paper>
+            </Fragment>
           ) : (
             <Row>
               <Col md={12}> 

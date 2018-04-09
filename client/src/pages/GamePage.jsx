@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Typography from 'material-ui/Typography';
 import moment from 'moment';
 import API from '../utils/api';
-import AttachMoney from 'material-ui-icons/AttachMoney';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
@@ -15,10 +14,6 @@ import VenuePopover from '../components/VenuePopover';
 import PostEditor from '../components/PostEditor';
 import PostList from '../components/PostList';
 import Post from '../components/Post';
-import io from 'socket.io-client';
-
-const socketParams = { rememberTransport: false, transports: ['websocket'] };
-const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
 
 const BoxScoreCell = withStyles(theme => ({
   head: {
@@ -146,7 +141,6 @@ class GamePage extends React.Component {
     this.addAttendance = this.addAttendance.bind(this);
     this.deleteAttendance = this.deleteAttendance.bind(this);
     this.getPosts = this.getPosts.bind(this);
-    this.send = this.send.bind(this);
   }
 
   componentDidMount = () => {
@@ -211,12 +205,6 @@ class GamePage extends React.Component {
       });
   }
 
-  send = () => {
-    const msg = 'Comments were just modified!';
-    socket.emit('comment', msg);
-    this.getPosts();
-  }
-
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
       .then(() => {
@@ -232,10 +220,6 @@ class GamePage extends React.Component {
   }
 
   render() {
-    // testing for socket connections
-    socket.on('comment', () => {
-      this.getPosts();
-    });
     const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, boxScore } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
@@ -381,7 +365,7 @@ class GamePage extends React.Component {
               <Col xs={12}>
                 <div className={classes.section}>
                   <Paper>
-                    <PostEditor gameId={gameId} send={this.send}/>
+                    <PostEditor gameId={gameId} getPosts={this.getPosts}/>
                   </Paper>
                 </div>
               </Col>
@@ -395,7 +379,7 @@ class GamePage extends React.Component {
                   </Typography>)}                  
                 <PostList>
                   { posts.map(post => (
-                    <Post key={post.id} postData={post} gameDate={gameDate} send={this.send} />
+                    <Post key={post.id} postData={post} gameDate={gameDate} getPosts={this.getPosts} />
                   ))}
                 </PostList>
               </Col>
