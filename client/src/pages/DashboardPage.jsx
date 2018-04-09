@@ -25,16 +25,13 @@ const styles = theme => ({
   postPaper: {
     backgroundColor: '#b0bec5',
     color: theme.palette.secondary.contrastText,
-    border: `1px solid ${theme.palette.primary.dark}`,
-    maxHeight: 500,
-    overflowX: 'hidden',
-    overflowY: 'auto',
-    padding: theme.spacing.unit * 2
+    border: `1px solid ${theme.palette.primary.dark}`
   },
   postsDiv: {
     maxHeight: 500,
     overflowX: 'hidden',
     overflowY: 'auto',
+    padding: theme.spacing.unit * 2
   },
   postsScrollDiv: {
     padding: theme.spacing.unit * 2
@@ -219,20 +216,22 @@ class DashboardPage extends React.Component {
             </Typography>
             <Paper className={classes.postPaper}>
               {recentPosts.length ? (
-                <PostList>
-                  {recentPosts.map((post, index) => (
-                    <Fragment key={`postFrament-${post.id}`}>
-                      <Post key={post.id} 
-                        postData={post} 
-                        dashboard={true} 
-                        handleUserChange={this.handleUserChange} 
-                        getPosts={this.getPosts} />
-                      {index !== recentPosts.length - 1 && 
+                <div className={classes.postsDiv}>
+                  <PostList>
+                    {recentPosts.map((post, index) => (
+                      <Fragment key={`postFrament-${post.id}`}>
+                        <Post key={post.id} 
+                          postData={post} 
+                          dashboard={true} 
+                          handleUserChange={this.handleUserChange} 
+                          getPosts={this.getPosts} />
+                        {index !== recentPosts.length - 1 && 
                         <Divider className={classes.divider}/>
-                      }
-                    </Fragment>
-                  ))}
-                </PostList>
+                        }
+                      </Fragment>
+                    ))}
+                  </PostList>
+                </div>
               ) : (
                 <Typography variant="subheading">
                 There are currently no posts to show.
