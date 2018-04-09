@@ -32,6 +32,7 @@ class PostEditor extends Component {
         API.createPost(this.props.user.id, this.props.gameId, this.state.value.toString('html'))
           .then(() => {
             this.setState({value: RichTextEditor.createEmptyValue()});
+            this.props.getPosts();
           });
       } else {
         API.updatePost(this.props.postId, this.state.value.toString('html'))
