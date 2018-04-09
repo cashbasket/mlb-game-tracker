@@ -14,6 +14,8 @@ import VenuePopover from '../components/VenuePopover';
 import PostEditor from '../components/PostEditor';
 import PostList from '../components/PostList';
 import Post from '../components/Post';
+import Button from 'material-ui/Button';
+import Refresh from 'material-ui-icons/Refresh';
 
 const BoxScoreCell = withStyles(theme => ({
   head: {
@@ -373,12 +375,23 @@ class GamePage extends React.Component {
               </Col>
             </Row>
             <Row>
-              <Col md={12}>
-                {posts.length ? ( <Typography align="center" className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
+              <Col md={8}>
+                {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
                   :
-                  (<Typography align="center" variant="subheading" className={classes.bold}>
+                  (<Typography variant="subheading" className={classes.bold}>
                     There are no posts for this game... yet.
-                  </Typography>)}                  
+                  </Typography>)}  
+              </Col>
+              <Col md>
+                <div style={{textAlign:'right'}}>
+                  <Button variant="raised" color="secondary" size="large" onClick={this.getPosts}>
+                    <Refresh className={classes.iconLeft}/> Refresh Posts
+                  </Button>   
+                </div>             
+              </Col>
+            </Row>
+            <Row>
+              <Col md>
                 <PostList>
                   { posts.map(post => (
                     <Post key={post.id} postData={post} gameDate={gameDate} getPosts={this.getPosts} />
