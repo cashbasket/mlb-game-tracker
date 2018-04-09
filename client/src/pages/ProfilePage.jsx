@@ -16,7 +16,7 @@ const styles = theme => ({
     width: 160,
     height: 160,
     margin: '0 auto 20px auto',
-    border: `1px solid ${theme.palette.primary.main}`
+    border: `1px solid ${theme.palette.secondary.dark}`
   },
   paper: {
     padding: theme.spacing.unit * 2,

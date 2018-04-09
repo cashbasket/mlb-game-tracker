@@ -35,6 +35,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     color: theme.palette.primary.dark
+  },
+  noResults: {
+    padding: theme.spacing.unit * 2,
+    backgroundColor: theme.palette.primary.light,
+    fontSize: 16,
+    color: theme.palette.secondary.contrastText
   }
 });
 
@@ -173,9 +179,9 @@ class DashboardPage extends React.Component {
                 <Game details={lastGame} userId={userId} />
               </GameList>
             ) : (
-              <Typography variant="subheading">
+              <Paper className={classes.noResults}>
                 You haven't attended any games yet.
-              </Typography>
+              </Paper>
             )}
             <br/>
             <Typography variant="headline">
@@ -191,9 +197,9 @@ class DashboardPage extends React.Component {
                 ))}
               </GameList>
             ) : (
-              <Typography variant="subheading">
+              <Paper className={classes.noResults}>
                 You have no upcoming games.
-              </Typography>
+              </Paper>
             )}
           </Col>
           <Col md>
