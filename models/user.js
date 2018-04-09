@@ -57,6 +57,7 @@ module.exports = function(sequelize, DataTypes) {
     });
     
     User.hasMany(models.post);
+    User.hasMany(models.comment);
     User.hasMany(models.attendance);
   };
 
