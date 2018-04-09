@@ -104,11 +104,11 @@ class Comment extends React.Component {
                         {this.props.user && commentData && commentData.user.id == this.props.user.id && 
                   <Row>
                     <Col md style={{textAlign: 'right'}}>
-                      <Button  size="small" onClick={() => this.deleteComment(commentData.id)}>
-                        <Delete/> Delete
-                      </Button>
                       <Button  size="small" onClick={() => this.updateEditStatus(true)}>
                         <Edit/> Edit
+                      </Button>
+                      <Button  size="small" onClick={() => this.deleteComment(commentData.id)}>
+                        <Delete/> Delete
                       </Button>
                     </Col>
                   </Row>
