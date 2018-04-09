@@ -102,6 +102,7 @@ module.exports = {
       .catch(err => res.status(400).json(err));
   },
 
+  // updates a post
   updatePost: function(req, res) {
     db.post.update({
       postText: req.body.postText
@@ -122,6 +123,56 @@ module.exports = {
       }
     })
       .then(dbPost => res.json(dbPost))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // gets all comments for a post
+  comments: function(req, res) {
+    db.comment.findAll({
+      include: [{
+        model: db.user,
+        required: true,
+        attributes: { exclude: ['email', 'password', 'token', 'tokenExpires']},
+      }],
+      where: { postId: req.params.id },
+      order: [
+        ['commentDate', 'ASC']
+      ]
+    })
+      .then(dbComment => res.json({
+        comments: dbComment
+      }))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // create a comment record
+  createComment: function(req, res) {
+    db.comment
+      .create(req.body)
+      .then(dbComment => res.json(dbComment))
+      .catch(err => res.status(400).json(err));
+  },
+
+  updateComment: function(req, res) {
+    db.comment.update({
+      commentText: req.body.commentText
+    },{
+      where: {
+        id: req.params.id
+      }
+    }).then(dbComment => res.json(dbComment))
+      .catch(err => res.status(400).json(err));
+  },
+
+  // delete route for deleting comments
+  deleteComment: function(req, res) {
+    db.comment.destroy({
+      where: {
+        id: req.params.id,
+        userId: req.user.id
+      }
+    })
+      .then(dbComment => res.json(dbComment))
       .catch(err => res.status(400).json(err));
   }
 };
