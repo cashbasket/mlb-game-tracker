@@ -17,10 +17,6 @@ import CommentsIcon from 'material-ui-icons/Comment';
 import PostList from './PostList';
 import PostEditor from './PostEditor';
 import CommentEditor from './CommentEditor';
-import io from 'socket.io-client';
-
-const socketParams = { rememberTransport: false, transports: ['websocket'] };
-const socket = window.location.hostname === 'localhost' ? io('http://localhost:3001', socketParams ) : io(socketParams);
 
 const styles = theme => ({
   avatar: {
@@ -75,7 +71,6 @@ class Post extends React.Component {
     };
     this.getComments = this.getComments.bind(this);
     this.updateEditStatus = this.updateEditStatus.bind(this);
-    this.send = this.send.bind(this);
   }
 
   componentDidMount = () => {
@@ -89,12 +84,6 @@ class Post extends React.Component {
         commentsDiv.scrollTop = commentsDiv.scrollHeight;
       };
     });
-  }
-
-  send = () => {
-    const msg = 'A comment was added!';
-    socket.emit('comment', msg);
-    this.getComments();
   }
 
   getComments = (fn) => {
@@ -118,22 +107,20 @@ class Post extends React.Component {
     this.setState({ isEditing: bool });
   }
 
-  deletePost = (postId, isDashboard = false) => {
+  deletePost = (postId) => {
     API.deletePost(postId)
       .then(() => {
-        if(isDashboard) {
-          this.props.getPosts();
-        }
+        this.props.getPosts();
       });
   }
 
   render() {
     //testing for socket connections
-    socket.on('comment', () => {
-      this.getComments();
-    });
+    // socket.on('comment', () => {
+    //   this.getComments();
+    // });
     const { classes, postData, dashboard, gameDate } = this.props;
-    const { isEditing, comments } = this.state;
+    const { isEditing, comments, commentsVisible } = this.state;
     const text = postData.postText;
     const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
     return (
@@ -171,7 +158,11 @@ class Post extends React.Component {
                         <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
                       </Fragment>
                     )}
-                    <Button style={{float: 'right'}} size="small" onClick={() => this.toggleComments()}>
+                    <Button style={{float: 'right'}} size="small" onClick={() => { 
+                      if (!commentsVisible)
+                        this.getComments();
+                      this.toggleComments() ;
+                    } }>
                       <CommentsIcon className={classes.iconLeft}/> Comments ({comments.length})
                     </Button>
                     {this.props.user && postData && postData.user.id == this.props.user.id && 
@@ -188,13 +179,13 @@ class Post extends React.Component {
                 </Row>
               </Paper>
               <Row className="commentSection" style={{display: this.state.commentsVisible ? 'block' : 'none'}}>
-                <Col md>
+                <Col md mdOffset={1}>
                   <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
                     <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
                       <PostList>
                         {comments && 
                        comments.map(comment => (
-                         <Comment key={comment.id} commentData={comment} getComments={this.getComments} send={this.send} />
+                         <Comment key={comment.id} commentData={comment} getComments={this.getComments} />
                        ))
                         }
                       </PostList>
@@ -202,7 +193,7 @@ class Post extends React.Component {
                   </Paper>
                   <Paper className={classes.commentEditor}>
                     <div className="commentEditor">
-                      <CommentEditor postId={postData.id} getComments={this.getComments} send={this.send}/>
+                      <CommentEditor postId={postData.id} getComments={this.getComments} />
                     </div>
                   </Paper>
                 </Col>
