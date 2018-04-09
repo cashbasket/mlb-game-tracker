@@ -71,6 +71,11 @@ export default {
       postText: postText
     });
   },
+  updatePost: (postId, postText) => {
+    return axios.put(`/api/game/posts/${postId}`, {
+      postText: postText
+    });
+  },
   deletePost: (postId) => {
     return axios.delete(`/api/game/posts/${postId}`);
   },

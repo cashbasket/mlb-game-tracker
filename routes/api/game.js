@@ -22,6 +22,7 @@ router.route('/posts')
 
 // Matches with "/api/game/posts/:id"
 router.route('/posts/:id')
+  .put(authCheck(), gameController.updatePost)
   .delete(authCheck(), gameController.deletePost);  
 
 module.exports = router;
