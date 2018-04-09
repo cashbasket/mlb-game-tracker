@@ -168,10 +168,10 @@ class Post extends React.Component {
                     {this.props.user && postData && postData.user.id == this.props.user.id && 
                   <Fragment>
                     <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
-                      <Delete className={classes.iconLeft}/> Delete Post
+                      <Delete className={classes.iconLeft}/> Delete
                     </Button>
                     <Button style={{float: 'right'}} size="small" onClick={() => this.updateEditStatus(true)}>
-                      <Edit className={classes.iconLeft}/> Edit Post
+                      <Edit className={classes.iconLeft}/> Edit
                     </Button>
                   </Fragment>
                     }
