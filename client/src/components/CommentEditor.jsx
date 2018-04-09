@@ -53,10 +53,17 @@ class CommentEditor extends Component {
           });
       } else {
         API.updateComment(this.props.commentId, this.state.value.toString('html'))
-          .then(() => {
-            this.setState({value: RichTextEditor.createEmptyValue()});
-            this.props.updateEditStatus(false);
-            this.props.getComments();
+          .then((res) => {
+            if(res.data[0] === 0) {
+              this.setState({error: true});
+            } else {
+              this.setState({value: RichTextEditor.createEmptyValue()});
+              this.props.updateEditStatus(false);
+              this.props.getComments();
+            }
+          })
+          .catch((err) => {
+            this.setState({error: true});
           });
       }
     }
