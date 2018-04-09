@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { Row, Col } from 'react-flexbox-grid';
 import API from '../utils/api';
 import { withUser } from '../services/withUser';
 import Button from 'material-ui/Button';
 import RichTextEditor from 'react-rte';
-import Paper from 'material-ui/Paper';
 
 class PostEditor extends Component {
   constructor(props) {
@@ -13,6 +13,14 @@ class PostEditor extends Component {
     };
   }
 
+  componentDidMount = () => {
+    if (this.props.postContent) {
+      this.setState({
+        value: RichTextEditor.createValueFromString(this.props.postContent, 'html')
+      });
+    }
+  }
+
   onChange = (value) => {
     this.setState({value});
   };
@@ -20,11 +28,20 @@ class PostEditor extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     if (this.state.value.toString('html') !== '<p><br></p>') {
-      API.createPost(this.props.user.id, this.props.gameId, this.state.value.toString('html'))
-        .then(() => {
-          this.props.send();
-          this.setState({value: RichTextEditor.createEmptyValue()});
-        });
+      if (!this.props.postId) {
+        API.createPost(this.props.user.id, this.props.gameId, this.state.value.toString('html'))
+          .then(() => {
+            this.setState({value: RichTextEditor.createEmptyValue()});
+            this.props.getPosts();
+          });
+      } else {
+        API.updatePost(this.props.postId, this.state.value.toString('html'))
+          .then(() => {
+            this.setState({value: RichTextEditor.createEmptyValue()});
+            this.props.updateEditStatus(false);
+            this.props.getPosts();
+          });
+      }
     }
   }
           
@@ -43,17 +60,33 @@ class PostEditor extends Component {
       ]
     };
     return (
-      <Paper>
+      <Fragment>
         <RichTextEditor
           value={this.state.value}
           onChange={this.onChange}
           toolbarConfig={toolbarConfig}
           placeholder="Write something about the game..."
         />
-        <Button fullWidth variant="raised" color="primary" onClick={this.handleSubmit}>
+        {this.props.postContent ? (
+          <Row>
+            <Col md>
+              <Button fullWidth variant="raised" color="primary" onClick={this.handleSubmit}>
+                Submit Edits
+              </Button>
+            </Col>
+            <Col md>
+              <Button fullWidth variant="raised" color="secondary" onClick={() => this.props.updateEditStatus(false)}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
+        ) : (
+          <Button fullWidth variant="raised" color="primary" onClick={this.handleSubmit}>
           Submit Post
-        </Button>
-      </Paper>
+          </Button>
+            
+        )}
+      </Fragment>
     );
   }
 }

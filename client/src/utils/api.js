@@ -71,8 +71,32 @@ export default {
       postText: postText
     });
   },
+  updatePost: (postId, postText) => {
+    return axios.put(`/api/game/posts/${postId}`, {
+      postText: postText
+    });
+  },
   deletePost: (postId) => {
     return axios.delete(`/api/game/posts/${postId}`);
+  },
+  // Comment API calls
+  getComments: (postId) => {
+    return axios.get(`/api/game/posts/${postId}/comments`);
+  },
+  createComment: (userId, postId, commentText) => {
+    return axios.post('/api/game/posts/comments', {
+      userId: userId,
+      postId: postId,
+      commentText: commentText
+    });
+  },
+  updateComment: (commentId, commentText) => {
+    return axios.put(`/api/game/posts/comments/${commentId}`, {
+      commentText: commentText
+    });
+  },
+  deleteComment: (commentId) => {
+    return axios.delete(`/api/game/posts/comments/${commentId}`);
   },
   //Dashboard API
   getGamesAttended: () => {

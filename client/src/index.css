@@ -4,6 +4,8 @@ body {
   overflow-x: hidden;
   background-color: #eceff1;
   background-size: cover;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
 }
 
 .site {
@@ -38,6 +40,11 @@ main {
 
 .public-DraftEditor-content { 
   min-height: 110px; 
+  font-family: 'Roboto', sans-serif;
+}
+
+.commentSection .public-DraftEditor-content {
+  min-height: 75px;
   font-family: 'Roboto', sans-serif;
 }
 

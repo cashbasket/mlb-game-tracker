@@ -25,8 +25,16 @@ const styles = theme => ({
   postPaper: {
     backgroundColor: '#b0bec5',
     color: theme.palette.secondary.contrastText,
-    padding: theme.spacing.unit * 2,
     border: `1px solid ${theme.palette.primary.dark}`
+  },
+  postsDiv: {
+    maxHeight: 500,
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    padding: theme.spacing.unit * 2
+  },
+  postsScrollDiv: {
+    padding: theme.spacing.unit * 2
   },
   statSubhead: {
     textTransform: 'uppercase'
@@ -35,6 +43,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
     color: theme.palette.primary.dark
+  },
+  noResults: {
+    padding: theme.spacing.unit * 2,
+    backgroundColor: theme.palette.primary.light,
+    fontSize: 16,
+    color: theme.palette.secondary.contrastText
   }
 });
 
@@ -121,7 +135,7 @@ class DashboardPage extends React.Component {
         <Row id="page-content" className="hidden">
           <Col md={8}>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Your Statcard</strong>
+              <i className="fas fa-angle-right"></i> <strong>Your Statcard</strong>
             </Typography>
             <Row>
               <Col md={3}>
@@ -166,20 +180,20 @@ class DashboardPage extends React.Component {
               </Col>
             </Row>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Last Game</strong>
+              <i className="fas fa-angle-right"></i> <strong>Last Game</strong>
             </Typography>
             {lastGame ? (
               <GameList>
                 <Game details={lastGame} userId={userId} />
               </GameList>
             ) : (
-              <Typography variant="subheading">
+              <Paper className={classes.noResults}>
                 You haven't attended any games yet.
-              </Typography>
+              </Paper>
             )}
             <br/>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Upcoming Games</strong>
+              <i className="fas fa-angle-right"></i> <strong>Upcoming Games</strong>
             </Typography>
             {upcomingGames.length ? (
               <GameList>
@@ -191,36 +205,39 @@ class DashboardPage extends React.Component {
                 ))}
               </GameList>
             ) : (
-              <Typography variant="subheading">
+              <Paper className={classes.noResults}>
                 You have no upcoming games.
-              </Typography>
+              </Paper>
             )}
           </Col>
           <Col md>
             <Typography variant="headline">
-              <i class="fas fa-angle-right"></i> <strong>Recent Posts</strong>
+              <i className="fas fa-angle-right"></i> <strong>Recent Posts</strong>
             </Typography>
             <Paper className={classes.postPaper}>
               {recentPosts.length ? (
-                <PostList>
-                  {recentPosts.map((post, index) => (
-                    <Fragment key={`postFrament-${post.id}`}>
-                      <Post key={post.id} 
-                        postData={post} 
-                        dashboard={true} 
-                        handleUserChange={this.handleUserChange} 
-                        getPosts={this.getPosts} />
-                      {index !== recentPosts.length - 1 && 
+                <div className={classes.postsDiv}>
+                  <PostList>
+                    {recentPosts.map((post, index) => (
+                      <Fragment key={`postFrament-${post.id}`}>
+                        <Post key={post.id} 
+                          postData={post} 
+                          dashboard={true} 
+                          handleUserChange={this.handleUserChange} 
+                          getPosts={this.getPosts} />
+                        {index !== recentPosts.length - 1 && 
                         <Divider className={classes.divider}/>
-                      }
-                    </Fragment>
-                  ))}
-                </PostList>
+                        }
+                      </Fragment>
+                    ))}
+                  </PostList>
+                </div>
               ) : (
                 <Typography variant="subheading">
                 There are currently no posts to show.
                 </Typography>
               )}
+              
             </Paper>
           </Col>
         </Row>
