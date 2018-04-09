@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from 'material-ui/styles';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +13,8 @@ import Divider from'material-ui/Divider';
 import API from '../utils/api';
 import Avatar from 'material-ui/Avatar';
 import Check from 'material-ui-icons/Check';
+import Edit from 'material-ui-icons/Edit';
+import PostEditor from './PostEditor';
 
 const styles = theme => ({
   avatar: {
@@ -44,13 +46,19 @@ class Post extends React.Component {
     super(props);
     this.state = {
       gameDate: '',
-      gameTitle: ''
+      gameTitle: '',
+      isEditing: false
     };
+    this.updateEditStatus = this.updateEditStatus.bind(this);
   }
   htmlDecode = (input) => {
     var e = document.createElement('div');
     e.innerHTML = input;
     return e.innerHTML;
+  }
+
+  updateEditStatus = (bool) => {
+    this.setState({ isEditing: bool });
   }
 
   deletePost = (postId, isDashboard = false) => {
@@ -65,6 +73,7 @@ class Post extends React.Component {
 
   render() {
     const { classes, postData, dashboard, gameDate } = this.props;
+    const { isEditing } = this.state;
     const text = postData.postText;
     return (
       <li>
@@ -92,12 +101,23 @@ class Post extends React.Component {
                       {moment().diff(gameDate, 'hours') > -1 && moment().diff(gameDate, 'hours') < 3 ? 'is at this game' : (moment().diff(gameDate, 'hours') >= 3 ? 'attended this game' : 'is going to this game')}
                     </Typography>
                   )}
-                  <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
-                  <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
+                  {isEditing ? (
+                    <PostEditor postId={postData.id} postContent={this.htmlDecode(text)} updateEditStatus={this.updateEditStatus} send={this.props.send}/>
+                  ) : (
+                    <Fragment>
+                      <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
+                      <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
+                    </Fragment>
+                  )}
                   {this.props.user && postData && postData.user.id == this.props.user.id && 
-                  <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
-                    <Delete/> Delete Post
-                  </Button>
+                  <Fragment>
+                    <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
+                      <Delete/> Delete Post
+                    </Button>
+                    <Button style={{float: 'right'}} size="small" onClick={() => this.updateEditStatus(true)}>
+                      <Edit/> Edit Post
+                    </Button>
+                  </Fragment>
                   }
                 </Col>
               </Row>
@@ -115,7 +135,7 @@ class Post extends React.Component {
                     <strong>{postData.user.name ? postData.user.name : postData.user.username}</strong>
                   </Link> said:
                 </Typography>
-                <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
+                <Typography className={classes.postText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />    
                 <Row>
                   <Col md={7}>
                     <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
