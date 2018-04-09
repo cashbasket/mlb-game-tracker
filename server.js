@@ -5,28 +5,7 @@ const routes = require('./routes');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const app = express();
-const socketIO = require('socket.io', {
-  rememberTransport: false,
-  transports: ['websocket']
-});
-const http = require('http');
 const PORT = process.env.PORT || 3001;
-
-const server = http.createServer(app);
-const io = socketIO(server);
-
-io.on('connection', socket => {
-  console.log('New client connected');
-
-  socket.on('comment', (msg) => {
-    console.log(msg);
-    io.sockets.emit('comment', msg);
-  });
-  
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
 
 // initalize sequelize with session store
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
@@ -60,7 +39,7 @@ require('./config/passport')(app);
 app.use(routes);
 
 db.sequelize.sync().then(function() {
-  server.listen(PORT, function() {
+  app.listen(PORT, function() {
     console.log(`🌎 ==> Server now on port ${PORT}!`);
   });
 });
