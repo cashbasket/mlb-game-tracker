@@ -11,7 +11,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
     textAlign: 'center',
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing.unit
   }
 });
 
