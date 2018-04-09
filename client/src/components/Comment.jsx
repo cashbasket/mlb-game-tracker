@@ -16,9 +16,9 @@ import CommentEditor from './CommentEditor';
 
 const styles = theme => ({
   avatar: {
-    width: 80,
-    height: 80,
-    border: `1px solid ${theme.palette.secondary.dark}`
+    border: `1px solid ${theme.palette.secondary.dark}`,
+    width: 50,
+    height: 'auto'
   },
   buttonText: theme.typography.button,
   attending: {
@@ -75,16 +75,16 @@ class Comment extends React.Component {
       <li>
         <Fragment>
           <Row>
-            <Col md={2}>
-              <Link to={`/user/${commentData.user.username}`}>
-                <Avatar
+            <Col md={1}>
+              <Link className="plainLink" to={`/user/${commentData.user.username}`}>
+                <img 
                   alt={commentData.user.username}
                   src={commentData.user.gravatar}
                   className={`img-fluid ${classes.avatar}`}
                 />
               </Link>
             </Col>
-            <Col md={10}>
+            <Col md>
               <div className={classes.commentBody}>
                 <Typography variant="subheading">
                   <Link to={`/user/${commentData.user.username}`}>
