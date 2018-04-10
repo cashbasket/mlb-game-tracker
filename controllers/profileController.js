@@ -70,8 +70,7 @@ module.exports = {
         }
       }],
       order: [
-        ['gameDate', 'DESC'],
-        ['gameTime', 'DESC'],
+        ['gameDate', 'DESC']
       ]
     })
       .then(dbGames => res.json({
@@ -109,8 +108,7 @@ module.exports = {
         }
       }],
       order: [
-        ['gameDate', 'ASC'],
-        ['gameTime', 'ASC'],
+        ['gameDate', 'ASC']
       ]
     })
       .then(dbGames => res.json({

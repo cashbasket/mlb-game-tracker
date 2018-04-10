@@ -44,8 +44,7 @@ module.exports = {
         where: { userId: userId }
       }],
       order: [
-        ['gameDate', 'ASC'],
-        ['gameTime', 'ASC'],
+        ['gameDate', 'ASC']
       ]
     })
       .then(dbGame => res.json({

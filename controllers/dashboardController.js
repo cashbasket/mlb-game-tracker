@@ -136,14 +136,18 @@ module.exports = {
       },
       {
         model: db.attendance,
-        required: true,
-        where: { 
-          userId: userId
-        }
-      }], 
+        required: false,
+        include: [{
+          model: db.user,
+          required: true,
+          exclude: ['email', 'password', 'token', 'tokenExpires'],
+          where: {
+            id: userId
+          }
+        }],
+      }],
       order: [
-        ['gameDate', 'DESC'],
-        ['gameTime', 'DESC'],
+        ['gameDate', 'DESC']
       ]
     })
       .then(dbDash => res.json({
@@ -181,8 +185,7 @@ module.exports = {
         }
       }], 
       order: [
-        ['gameDate', 'ASC'],
-        ['gameTime', 'ASC'],
+        ['gameDate', 'ASC']
       ]
     })
       .then(dbDash => res.json({
