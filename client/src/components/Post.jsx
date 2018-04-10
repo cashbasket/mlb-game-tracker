@@ -156,13 +156,7 @@ class Post extends React.Component {
                         <Typography><em>{moment(postData.postDate).format('M/D/YYYY, h:mm a')}</em></Typography>
                       </Fragment>
                     )}
-                    <Button style={{float: 'right'}} size="small" onClick={() => { 
-                      if (!commentsVisible)
-                        this.getComments();
-                      this.toggleComments() ;
-                    } }>
-                      <CommentsIcon className={classes.iconLeft}/> Comments ({comments.length})
-                    </Button>
+                    
                     {this.props.user && postData && postData.user.id == this.props.user.id && 
                   <Fragment>
                     <Button style={{float: 'right'}} size="small" onClick={() => this.deletePost(postData.id)}>
@@ -173,11 +167,18 @@ class Post extends React.Component {
                     </Button>
                   </Fragment>
                     }
+                    <Button style={{float: 'right'}} size="small" onClick={() => { 
+                      if (!commentsVisible)
+                        this.getComments();
+                      this.toggleComments() ;
+                    } }>
+                      <CommentsIcon className={classes.iconLeft}/> Comments ({comments.length})
+                    </Button>
                   </Col>
                 </Row>
               </Paper>
               <Row className="commentSection" style={{display: this.state.commentsVisible ? 'block' : 'none'}}>
-                <Col md mdOffset={1}>
+                <Col md>
                   <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
                     <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
                       <PostList>
