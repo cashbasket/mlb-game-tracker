@@ -77,7 +77,7 @@ class Comment extends React.Component {
           <Row>
             <Col md={1}>
               <Link className="plainLink" to={`/user/${commentData.user.username}`}>
-                <img 
+                <Avatar 
                   alt={commentData.user.username}
                   src={commentData.user.gravatar}
                   className={`img-fluid ${classes.avatar}`}
