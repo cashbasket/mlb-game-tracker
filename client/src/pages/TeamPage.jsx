@@ -73,16 +73,19 @@ class TeamPage extends React.Component {
           })
           .then((res) => {
             infoObj.displayedGames = res.data.games;
+            infoObj.modalOpen = false;
+            this.setState(infoObj,
+              () => {
+                document.getElementById('page-content').classList.remove('hidden');
+              });
             return API.getTeamRecord('current', infoObj.abbr);
           })
           .then((res) => {
-            infoObj.wins = res.data.stats.Wins['#text'];
-            infoObj.losses = res.data.stats.Losses['#text'];
-            infoObj.rank = res.data.rank;
-            infoObj.gamesBack = res.data.stats.GamesBack['#text'];
-            infoObj.modalOpen = false;
-            this.setState(infoObj, () => {
-              document.getElementById('page-content').classList.remove('hidden');
+            this.setState({
+              wins: res.data.stats.Wins['#text'],
+              losses: res.data.stats.Losses['#text'],
+              rank: res.data.rank,
+              gamesBack: res.data.stats.GamesBack['#text'],
             });
           });
       });
