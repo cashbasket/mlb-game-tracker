@@ -12,6 +12,7 @@ import Divider from 'material-ui/Divider';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
+import TeamMenu from '../components/TeamMenu';
 
 const styles = theme => ({
   statPaper: {
@@ -190,7 +191,8 @@ class DashboardPage extends React.Component {
               </GameList>
             ) : (
               <Paper className={classes.noResults}>
-                You haven't attended any games yet.
+                <Typography variant="subheading" className="white bold">You haven't attended any games yet!</Typography><br/>
+                <TeamMenu variant="raised" color="secondary" handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
               </Paper>
             )}
             <br/>
@@ -208,7 +210,8 @@ class DashboardPage extends React.Component {
               </GameList>
             ) : (
               <Paper className={classes.noResults}>
-                You have no upcoming games.
+                <Typography variant="subheading" className="white bold">You have no upcoming games scheduled!</Typography><br/>
+                <TeamMenu variant="raised" color="secondary" handleTeamChange={this.props.handleTeamChange ? this.props.handleTeamChange : false}/>
               </Paper>
             )}
           </Col>

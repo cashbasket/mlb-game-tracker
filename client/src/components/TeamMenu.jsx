@@ -49,6 +49,8 @@ class TeamMenu extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
           className={classes.root}
+          variant={this.props.variant ? this.props.variant: 'flat'}
+          color={this.props.color ? this.props.color : false}
         >
           Choose a Team
         </Button>
