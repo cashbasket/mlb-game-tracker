@@ -176,6 +176,7 @@ class GamePage extends React.Component {
           isAttending: isAttending,
           url: game.url,
           attendees: attendees,
+          attendeesCount: attendees.length,
           boxScore: boxScore
         }, () => {
           if (this.state.homeTeamScore !== null && this.state.awayTeamScore !== null) {
@@ -210,19 +211,19 @@ class GamePage extends React.Component {
   addAttendance = (userId, gameId) => {
     API.addAttendance(userId, gameId)
       .then(() => {
-        this.setState({isAttending: true});
+        this.setState({isAttending: true, attendeesCount: this.state.attendeesCount + 1});
       });
   }
 
   deleteAttendance = (id) => {
     API.deleteAttendance(id)
       .then(() => {
-        this.setState({isAttending: false});
+        this.setState({isAttending: false, attendeesCount: this.state.attendeesCount - 1});
       });
   }
 
   render() {
-    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, boxScore } = this.state;
+    const { gameId, gameDate, gameTime, homeTeam, awayTeam, homeTeamScore, awayTeamScore, isAttending, posts, url, attendees, attendeesCount, boxScore } = this.state;
     const { venueName, venueAddress, venueCity, venueState, venueZip, venueCapacity, venueType, venueSurface, venueDimensions } = this.state;
     const { classes } = this.props;
     const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
@@ -272,10 +273,10 @@ class GamePage extends React.Component {
                       {venueCity}, {venueState} {venueZip}
                     </Typography>
                     <br/>
-                    {attendees.length > 0 && (
+                    {attendeesCount > 0 && (
                       <Fragment>
                         <Typography variant="subheading" className="bold">
-                          {`${attendees.length} user${attendees.length > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendees.length > 1 ? '': 's'} on going to this game.`)}`}
+                          {`${attendeesCount} user${attendeesCount > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendeesCount > 1 ? '': 's'} on going to this game.`)}`}
                         </Typography>
                         <br/>
                       </Fragment>
