@@ -171,7 +171,7 @@ class DashboardPage extends React.Component {
               <Col md={3}>
                 <Paper className={classes.statPaper}>
                   <Typography className="white" variant="display3">
-                    {wins} &ndash; {losses}
+                    <small>{wins}&ndash;{losses}</small>
                   </Typography>
                   <Typography className={`white ${classes.statSubhead}`} variant="subheading">
                     W-L record

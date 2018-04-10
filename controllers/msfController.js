@@ -34,7 +34,7 @@ module.exports = {
   update: function(req, res) {
     axios({
       method: 'get',
-      url: '/current/team_gamelogs.json?team=lad,cle,hou,was,bos,ari,chc,nyy,col,mil,min,stl,tb,kc,laa,tex,sea,mia,tor,bal,pit,oak,atl,sd,nym,cin,cws,phi,det,sf&teamstats=RF,RA&date=since-2-weeks-ago',
+      url: '/current/team_gamelogs.json?team=lad,cle,hou,was,bos,ari,chc,nyy,col,mil,min,stl,tb,kc,laa,tex,sea,mia,tor,bal,pit,oak,atl,sd,nym,cin,cws,phi,det,sf&teamstats=RF,RA',
       baseURL: 'https://api.mysportsfeeds.com/v1.2/pull/mlb',
       auth: {
         username: process.env.MSF_USERNAME,
