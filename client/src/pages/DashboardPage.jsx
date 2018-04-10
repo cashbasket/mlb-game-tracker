@@ -17,9 +17,9 @@ const styles = theme => ({
   statPaper: {
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
-    minHeight: 125,
+    minHeight: 100,
     textAlign: 'center',
-    padding: theme.spacing.unit * 2,
+    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit * 1.5}px`,
     marginBottom: theme.spacing.unit * 3
   },
   postPaper: {
@@ -37,7 +37,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2
   },
   statSubhead: {
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    fontSize: 14,
+    marginTop: theme.spacing.unit
   },
   divider: {
     marginTop: theme.spacing.unit,
@@ -140,7 +142,7 @@ class DashboardPage extends React.Component {
             <Row>
               <Col md={3}>
                 <Paper className={classes.statPaper}>
-                  <Typography className="white" variant="display3">
+                  <Typography className="white bold" variant="display2">
                     {totalGames}
                   </Typography>
                   <Typography className={`white ${classes.statSubhead}`} variant="subheading">
@@ -150,7 +152,7 @@ class DashboardPage extends React.Component {
               </Col>
               <Col md={3}>
                 <Paper className={classes.statPaper}>
-                  <Typography className="white" variant="display3">
+                  <Typography className="white bold" variant="display2">
                     {totalPosts}
                   </Typography>
                   <Typography className={`white ${classes.statSubhead}`} variant="subheading">
@@ -160,7 +162,7 @@ class DashboardPage extends React.Component {
               </Col>
               <Col md={3}>
                 <Paper className={classes.statPaper}>
-                  <Typography className="white" variant="display3">
+                  <Typography className="white bold" variant="display2">
                     {totalBallparks}
                   </Typography>
                   <Typography className={`white ${classes.statSubhead}`} variant="subheading">
@@ -170,8 +172,8 @@ class DashboardPage extends React.Component {
               </Col>
               <Col md={3}>
                 <Paper className={classes.statPaper}>
-                  <Typography className="white" variant="display3">
-                    <small>{wins}&ndash;{losses}</small>
+                  <Typography className="white bold" variant="display2">
+                    <small>{wins} - {losses}</small>
                   </Typography>
                   <Typography className={`white ${classes.statSubhead}`} variant="subheading">
                     W-L record

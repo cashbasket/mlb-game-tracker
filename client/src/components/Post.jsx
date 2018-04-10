@@ -38,21 +38,20 @@ const styles = theme => ({
   postText: {
     fontSize: 16
   },
-  commentEditor: {
-    marginBottom: theme.spacing.unit * 2
-  },
   button: {
     marginTop: theme.spacing.unit
   },
   dashUserLink: {
     borderBottom: 'none'
   },
+  commentEditor: {
+    paddingBottom: theme.spacing.unit * 2
+  },
   comments: {
     backgroundColor: '#b0bec5',
-    padding: theme.spacing.unit * 2,
-    maxHeight: 400,
-    overflowY: 'auto',
-    overflowX: 'hidden'
+    paddingTop: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing.unit * 2,
+    paddingRight: theme.spacing.unit * 2
   }
 });
 
@@ -179,8 +178,11 @@ class Post extends React.Component {
               </Paper>
               <Row className="commentSection" style={{display: this.state.commentsVisible ? 'block' : 'none'}}>
                 <Col md>
-                  <Paper className={classes.comments} style={{display: comments.length ? 'block' : 'none'}}>
-                    <div id={`comments-${postData.id}`} className={classes.commentsListDiv}>
+                  <Paper className={classes.comments} >
+                    <div className={classes.commentEditor}>
+                      <CommentEditor postId={postData.id} getComments={this.getComments} />
+                    </div>
+                    <div id={`comments-${postData.id}`} className={classes.commentsListDiv} style={{display: comments.length ? 'block' : 'none'}}>
                       <PostList>
                         {comments && 
                        comments.map(comment => (
@@ -188,11 +190,6 @@ class Post extends React.Component {
                        ))
                         }
                       </PostList>
-                    </div>
-                  </Paper>
-                  <Paper className={classes.commentEditor}>
-                    <div className="commentEditor">
-                      <CommentEditor postId={postData.id} getComments={this.getComments} />
                     </div>
                   </Paper>
                 </Col>

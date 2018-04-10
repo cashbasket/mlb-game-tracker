@@ -17,15 +17,16 @@ import CommentEditor from './CommentEditor';
 const styles = theme => ({
   avatar: {
     border: `1px solid ${theme.palette.secondary.dark}`,
-    width: 50,
-    height: 'auto'
+    width: 80,
+    height: 'auto',
+    marginBottom: theme.spacing.unit
   },
   buttonText: theme.typography.button,
   attending: {
     color: theme.palette.primary.main
   },
   commentText: {
-    fontSize: 14
+    fontSize: 16
   },
   button: {
     marginTop: theme.spacing.unit
@@ -97,7 +98,7 @@ class Comment extends React.Component {
                   <Fragment>
                     <Typography className={classes.commentText} dangerouslySetInnerHTML={{ __html: this.htmlDecode(text) }} />
                     <Row>
-                      <Col md={8}>
+                      <Col md={6}>
                         <Typography><em>{moment(commentData.commentDate).format('M/D/YYYY, h:mm a')}</em></Typography>
                       </Col>
                       <Col md>
