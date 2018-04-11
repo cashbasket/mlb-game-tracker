@@ -111,7 +111,7 @@ class Navbar extends React.Component {
                         <MenuIcon />
                       </IconButton>
                       <Typography id="siteTitle" variant="title" color="inherit" className={classes.flex}>
-                        <Link className={classes.title} to="/">
+                        <Link className={`${classes.title} plainLink white`} to="/">
                           <i className="fas fa-baseball-ball"></i> Went Yard
                         </Link>
                       </Typography>
