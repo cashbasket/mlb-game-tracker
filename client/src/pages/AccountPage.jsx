@@ -11,6 +11,7 @@ import Snackbar from 'material-ui/Snackbar';
 import { withUser } from '../services/withUser';
 import { withRouter } from 'react-router-dom';
 import LoadingModal from '../components/LoadingModal';
+import utils from '../utils';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
 const passwordHelper = 'Valid passwords must be between 8 and 16 chracters, and include at least one upper case letter, one lower case letter, and one numeric digit.';
@@ -208,8 +209,8 @@ class AccountPage extends React.Component {
       confirmEmail: email,
       password: password,
       favoriteTeam: favoriteTeam,
-      name: name,
-      description: description
+      name: utils.stripTags(name),
+      description: utils.stripTags(description)
     };
     if ((!password.length || (password.length && password.match(passwordRegex))) && 
       password === confirmPassword &&
