@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/Menu/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
 import { withUser } from '../services/withUser';
 import { withRouter } from 'react-router-dom';
+import utils from '../utils';
 
 
 const usernameRegex = /^[a-zA-Z0-9]{3,20}$/;
@@ -102,7 +103,7 @@ class Register extends React.Component {
   
   register = () => {
     const userData = {
-      email: this.state.email,
+      email: utils.stripTags(this.state.email),
       password: this.state.password,
       username: this.state.username,
       teamId: this.state.favoriteTeam
