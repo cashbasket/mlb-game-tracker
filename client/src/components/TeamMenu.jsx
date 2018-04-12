@@ -50,7 +50,7 @@ class TeamMenu extends React.Component {
           onClick={this.handleClick}
           className={classes.root}
           variant={this.props.variant ? this.props.variant: 'flat'}
-          color={this.props.color ? this.props.color : false}
+          color={this.props.color ? this.props.color : 'primary'}
         >
           Choose a Team
         </Button>

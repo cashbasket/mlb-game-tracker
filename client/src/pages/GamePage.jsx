@@ -110,6 +110,12 @@ const styles = theme => ({
   tickets: {
     fontSize: 18,
     fontWeight: 700
+  },
+  errorPaper: {
+    backgroundColor: theme.palette.primary.light,
+    fontSize: 24,
+    color: theme.palette.primary.contrastText,
+    padding: theme.spacing.unit * 2
   }
 });
 
@@ -154,36 +160,42 @@ class GamePage extends React.Component {
         return API.getGameInfo(this.state.gameId);
       })
       .then((res) => {
-        const game = res.data.game;
-        const isAttending = game.attendances.length > 0 ? true : false;
-        this.setState({
-          gameDate: game.gameDate,
-          gameTime: game.gameTime,
-          homeTeam: game.Home,
-          awayTeam: game.Away,
-          homeTeamScore: game.homeTeamScore,
-          awayTeamScore: game.awayTeamScore,
-          season: game.season,
-          venueName: game.venue.name,
-          venueAddress: game.venue.address,
-          venueCity: game.venue.city,
-          venueState: game.venue.state,
-          venueZip: game.venue.zip,
-          venueCapacity: game.venue.capacity,
-          venueType: game.venue.stadiumType,
-          venueSurface: game.venue.surface,
-          venueDimensions: game.venue.dimensions,
-          isAttending: isAttending,
-          url: game.url,
-          attendees: attendees,
-          attendeesCount: attendees.length,
-          boxScore: boxScore
-        }, () => {
-          if (this.state.homeTeamScore !== null && this.state.awayTeamScore !== null) {
-            this.getBoxScore();
-          }
-          this.getPosts();
-        });
+        if(res.data.game) {
+          const game = res.data.game;
+          const isAttending = game.attendances.length > 0 ? true : false;
+          this.setState({
+            gameDate: game.gameDate,
+            gameTime: game.gameTime,
+            homeTeam: game.Home,
+            awayTeam: game.Away,
+            homeTeamScore: game.homeTeamScore,
+            awayTeamScore: game.awayTeamScore,
+            season: game.season,
+            venueName: game.venue.name,
+            venueAddress: game.venue.address,
+            venueCity: game.venue.city,
+            venueState: game.venue.state,
+            venueZip: game.venue.zip,
+            venueCapacity: game.venue.capacity,
+            venueType: game.venue.stadiumType,
+            venueSurface: game.venue.surface,
+            venueDimensions: game.venue.dimensions,
+            isAttending: isAttending,
+            url: game.url,
+            attendees: attendees,
+            attendeesCount: attendees.length,
+            boxScore: boxScore
+          }, () => {
+            if (this.state.homeTeamScore !== null && this.state.awayTeamScore !== null) {
+              this.getBoxScore();
+            }
+            this.getPosts();
+          });
+        } else {
+          this.setState({modalOpen: false});
+          document.getElementById('no-game').classList.remove('hidden');
+          return false;
+        }
       });
   };
 
@@ -229,181 +241,190 @@ class GamePage extends React.Component {
     const gameDateTime = moment(gameDate, 'YYYY-MM-DD HH:mm:ss');
 
     return (
-      <div id="page-content" className="hidden">
-        <Typography variant="display1" className={`${classes.gameHeader}`}>
-          <Link to={`/team/${awayTeam.id}`}><strong>{awayTeam.city} {awayTeam.name}</strong></Link> <small>at</small> <Link to={`/team/${homeTeam.id}`}><strong>{homeTeam.city} {homeTeam.name}</strong></Link>
-        </Typography>
-        <Row>
-          <Col lg={3}>
-            <Paper className={classes.gameInfo}>
-              <Row>
-                <Col md>
-                  <Link className="plainLink" to={`/team/${awayTeam.id}`}>
-                    <img className="img-fluid" src={`/img/logos/${awayTeam.logo}`} alt={`${awayTeam.city} ${awayTeam.name} logo`}/>
-                  </Link>
-                </Col>
-                <Col md>
-                  <Link className="plainLink" to={`/team/${awayTeam.id}`}>
-                    <img className="img-fluid" src={`/img/logos/${homeTeam.logo}`} alt={`${homeTeam.city} ${homeTeam.name} logo`}/>
-                  </Link>
-                </Col>
-              </Row>
-              <br/>
-              <Row>
-                <Col lg={12}>
-                  <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
-                    <Typography variant="headline" className="text-center bold">Date and Time</Typography>
-                    <Typography variant="subheading" className={`${classes.dateTime}`}>
-                      {moment(gameDateTime).format('dddd, MMMM Do, YYYY')}<br/>
-                      {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
-                    </Typography>
-                    <br/>
-                    <Typography variant="headline" className="text-center bold">
-                Game Location
-                    </Typography>
-                    <VenuePopover 
-                      venueName={venueName} 
-                      capacity={venueCapacity} 
-                      type={venueType} 
-                      surface={venueSurface} 
-                      dimensions={venueDimensions}
-                    />
-                    <Typography variant="subheading" className="text-center">
-                      {venueAddress}<br/>
-                      {venueCity}, {venueState} {venueZip}
-                    </Typography>
-                    <br/>
-                    {attendeesCount > 0 && (
-                      <Fragment>
-                        <Typography variant="subheading" className="bold">
-                          {`${attendeesCount} user${attendeesCount > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendeesCount > 1 ? '': 's'} on going to this game.`)}`}
-                        </Typography>
-                        <br/>
-                      </Fragment>
-                    )}
-                    <AttendButton 
-                      variant="raised"
-                      color="primary"
-                      gameId={gameId} 
-                      gameDate={gameDate} 
-                      gameTime={gameTime}
-                      addAttendance={this.addAttendance} 
-                      deleteAttendance={this.deleteAttendance} 
-                      isAttending={isAttending}
-                      size="medium"
-                      className={classes.attendButton}
-                    />
-                    <br/>
-                    {(moment(gameDate) > moment() && url && (
-                      <Typography variant="subheading" className={classes.tickets}>
-                        <Link to={url} target="_blank">
-                      Buy Tickets
-                        </Link>
-                      </Typography>
-                    ))}
-                  </div>
-                
-                </Col>
-              </Row>
+      <Fragment>
+        <Row id="no-game" className="hidden">
+          <Col md>
+            <Paper className={classes.errorPaper}>
+              Sorry, we can't find the game you're looking for!
             </Paper>
           </Col>
-          <Col lg={9}>
-            <Row>
-              <Col lg={12} className={classes.mainContent}>
-                {homeTeamScore !== null && awayTeamScore !== null && (
-                  <Paper className={`${classes.paper} ${classes.scorePaper}`}>
-                    <Typography variant="headline" className="text-center bold" style={{color: '#FFFFFF'}}>Final Score</Typography>
-                    <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}><small>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</small></Typography>
-                  </Paper>
-                )}
-                {boxScore.game && (
-                  <Paper className={classes.boxScore}>
-                    <Table>
-                      <TableHead>
-                        <TableRow key="1">
-                          <BoxScoreCell></BoxScoreCell>
-                          <BoxScoreCell></BoxScoreCell>
-                          {boxScore.inningSummary.inning.map(n => {
-                            return <BoxScoreCell key={n['@number']}>{n['@number']}</BoxScoreCell>;
-                          })}
-                          <BoxScoreCell>R</BoxScoreCell>
-                          <BoxScoreCell>H</BoxScoreCell>
-                          <BoxScoreCell>E</BoxScoreCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        <TableRow key="2">
-                          <BoxScoreCell style={{paddingRight: 0}}>
-                            <img src={`/img/logos/${awayTeam.logo}`} className={classes.boxScoreLogo}/>
-                          </BoxScoreCell>
-                          <BoxScoreCell style={{paddingLeft : 0}}>
-                            {boxScore.game.awayTeam.Name}
-                          </BoxScoreCell>
-                          {boxScore.inningSummary.inning.map(n => {
-                            return <BoxScoreCell key={n['@number']}>{n['awayScore']}</BoxScoreCell>;
-                          })}
-                          <BoxScoreCell><span className={classes.runs}>{boxScore.awayTeam.awayTeamStats.Runs['#text']}</span></BoxScoreCell>
-                          <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Hits['#text']}</BoxScoreCell>
-                          <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Errors['#text']}</BoxScoreCell>
-                        </TableRow>
-                        <TableRow key="3">
-                          <BoxScoreCell style={{paddingRight: 0}}>
-                            <img src={`/img/logos/${homeTeam.logo}`} className={classes.boxScoreLogo}/>
-                          </BoxScoreCell>
-                          <BoxScoreCell style={{paddingLeft: 0}}>
-                            {boxScore.game.homeTeam.Name}
-                          </BoxScoreCell>
-                          {boxScore.inningSummary.inning.map(n => {
-                            return <BoxScoreCell key={n['@number']}>{n['homeScore']}</BoxScoreCell>;
-                          })}
-                          <BoxScoreCell><span className={classes.runs}>{boxScore.homeTeam.homeTeamStats.Runs['#text']}</span></BoxScoreCell>
-                          <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Hits['#text']}</BoxScoreCell>
-                          <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Errors['#text']}</BoxScoreCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </Paper>
-                )}
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <div className={classes.section}>
-                  <Paper>
-                    <PostEditor gameId={gameId} getPosts={this.getPosts}/>
-                  </Paper>
-                </div>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={8}>
-                {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
-                  :
-                  (<Typography variant="subheading" className={classes.bold}>
-                    There are no posts for this game... yet.
-                  </Typography>)}  
-              </Col>
-              <Col md>
-                <div style={{textAlign:'right'}}>
-                  <Button variant="raised" color="secondary" size="large" onClick={this.getPosts}>
-                    <Refresh className={classes.iconLeft}/> Refresh Posts
-                  </Button>   
-                </div>             
-              </Col>
-            </Row>
-            <Row>
-              <Col md>
-                <PostList>
-                  { posts.map(post => (
-                    <Post key={post.id} postData={post} gameDate={gameDate} getPosts={this.getPosts} />
-                  ))}
-                </PostList>
-              </Col>
-            </Row>
-          </Col>
         </Row>
-        <LoadingModal open={this.state.modalOpen} />
-      </div>
+        <div id="page-content" className="hidden">
+          <Typography variant="display1" className={`${classes.gameHeader}`}>
+            <Link to={`/team/${awayTeam.id}`}><strong>{awayTeam.city} {awayTeam.name}</strong></Link> <small>at</small> <Link to={`/team/${homeTeam.id}`}><strong>{homeTeam.city} {homeTeam.name}</strong></Link>
+          </Typography>
+          <Row>
+            <Col lg={3}>
+              <Paper className={classes.gameInfo}>
+                <Row>
+                  <Col md>
+                    <Link className="plainLink" to={`/team/${awayTeam.id}`}>
+                      <img className="img-fluid" src={`/img/logos/${awayTeam.logo}`} alt={`${awayTeam.city} ${awayTeam.name} logo`}/>
+                    </Link>
+                  </Col>
+                  <Col md>
+                    <Link className="plainLink" to={`/team/${awayTeam.id}`}>
+                      <img className="img-fluid" src={`/img/logos/${homeTeam.logo}`} alt={`${homeTeam.city} ${homeTeam.name} logo`}/>
+                    </Link>
+                  </Col>
+                </Row>
+                <br/>
+                <Row>
+                  <Col lg={12}>
+                    <div className={classes.section} style={{margin: '0 auto', textAlign:'center'}}>
+                      <Typography variant="headline" className="text-center bold">Date and Time</Typography>
+                      <Typography variant="subheading" className={`${classes.dateTime}`}>
+                        {moment(gameDateTime).format('dddd, MMMM Do, YYYY')}<br/>
+                        {moment(gameTime, 'HH:mm:ss').format('h:mm a')}
+                      </Typography>
+                      <br/>
+                      <Typography variant="headline" className="text-center bold">
+                Game Location
+                      </Typography>
+                      <VenuePopover 
+                        venueName={venueName} 
+                        capacity={venueCapacity} 
+                        type={venueType} 
+                        surface={venueSurface} 
+                        dimensions={venueDimensions}
+                      />
+                      <Typography variant="subheading" className="text-center">
+                        {venueAddress}<br/>
+                        {venueCity}, {venueState} {venueZip}
+                      </Typography>
+                      <br/>
+                      {attendeesCount > 0 && (
+                        <Fragment>
+                          <Typography variant="subheading" className="bold">
+                            {`${attendeesCount} user${attendeesCount > 1 ? 's' : ''} ${moment().diff(gameDateTime, 'hours') > -1 && moment().diff(gameDateTime, 'hours') < 3 ? 'should be at this game right now!' : (moment().diff(gameDateTime, 'hours') >= 3 ? 'went to this game.' : `plan${attendeesCount > 1 ? '': 's'} on going to this game.`)}`}
+                          </Typography>
+                          <br/>
+                        </Fragment>
+                      )}
+                      <AttendButton 
+                        variant="raised"
+                        color="primary"
+                        gameId={gameId} 
+                        gameDate={gameDate} 
+                        gameTime={gameTime}
+                        addAttendance={this.addAttendance} 
+                        deleteAttendance={this.deleteAttendance} 
+                        isAttending={isAttending}
+                        size="medium"
+                        className={classes.attendButton}
+                      />
+                      <br/>
+                      {(moment(gameDate) > moment() && url && (
+                        <Typography variant="subheading" className={classes.tickets}>
+                          <Link to={url} target="_blank">
+                      Buy Tickets
+                          </Link>
+                        </Typography>
+                      ))}
+                    </div>
+                
+                  </Col>
+                </Row>
+              </Paper>
+            </Col>
+            <Col lg={9}>
+              <Row>
+                <Col lg={12} className={classes.mainContent}>
+                  {homeTeamScore !== null && awayTeamScore !== null && (
+                    <Paper className={`${classes.paper} ${classes.scorePaper}`}>
+                      <Typography variant="headline" className="text-center bold" style={{color: '#FFFFFF'}}>Final Score</Typography>
+                      <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}><small>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</small></Typography>
+                    </Paper>
+                  )}
+                  {boxScore.game && (
+                    <Paper className={classes.boxScore}>
+                      <Table>
+                        <TableHead>
+                          <TableRow key="1">
+                            <BoxScoreCell></BoxScoreCell>
+                            <BoxScoreCell></BoxScoreCell>
+                            {boxScore.inningSummary.inning.map(n => {
+                              return <BoxScoreCell key={n['@number']}>{n['@number']}</BoxScoreCell>;
+                            })}
+                            <BoxScoreCell>R</BoxScoreCell>
+                            <BoxScoreCell>H</BoxScoreCell>
+                            <BoxScoreCell>E</BoxScoreCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <TableRow key="2">
+                            <BoxScoreCell style={{paddingRight: 0}}>
+                              <img src={`/img/logos/${awayTeam.logo}`} className={classes.boxScoreLogo}/>
+                            </BoxScoreCell>
+                            <BoxScoreCell style={{paddingLeft : 0}}>
+                              {boxScore.game.awayTeam.Name}
+                            </BoxScoreCell>
+                            {boxScore.inningSummary.inning.map(n => {
+                              return <BoxScoreCell key={n['@number']}>{n['awayScore']}</BoxScoreCell>;
+                            })}
+                            <BoxScoreCell><span className={classes.runs}>{boxScore.awayTeam.awayTeamStats.Runs['#text']}</span></BoxScoreCell>
+                            <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Hits['#text']}</BoxScoreCell>
+                            <BoxScoreCell>{boxScore.awayTeam.awayTeamStats.Errors['#text']}</BoxScoreCell>
+                          </TableRow>
+                          <TableRow key="3">
+                            <BoxScoreCell style={{paddingRight: 0}}>
+                              <img src={`/img/logos/${homeTeam.logo}`} className={classes.boxScoreLogo}/>
+                            </BoxScoreCell>
+                            <BoxScoreCell style={{paddingLeft: 0}}>
+                              {boxScore.game.homeTeam.Name}
+                            </BoxScoreCell>
+                            {boxScore.inningSummary.inning.map(n => {
+                              return <BoxScoreCell key={n['@number']}>{n['homeScore']}</BoxScoreCell>;
+                            })}
+                            <BoxScoreCell><span className={classes.runs}>{boxScore.homeTeam.homeTeamStats.Runs['#text']}</span></BoxScoreCell>
+                            <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Hits['#text']}</BoxScoreCell>
+                            <BoxScoreCell>{boxScore.homeTeam.homeTeamStats.Errors['#text']}</BoxScoreCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </Paper>
+                  )}
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={12}>
+                  <div className={classes.section}>
+                    <Paper>
+                      <PostEditor gameId={gameId} getPosts={this.getPosts}/>
+                    </Paper>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col md={8}>
+                  {posts.length ? ( <Typography className={classes.bold} variant="subheading"><strong>{posts.length}</strong> post{posts.length > 1 ? 's' : ''} for this game.</Typography>)
+                    :
+                    (<Typography variant="subheading" className={classes.bold}>
+                    There are no posts for this game... yet.
+                    </Typography>)}  
+                </Col>
+                <Col md>
+                  <div style={{textAlign:'right'}}>
+                    <Button variant="raised" color="secondary" size="large" onClick={this.getPosts}>
+                      <Refresh className={classes.iconLeft}/> Refresh Posts
+                    </Button>   
+                  </div>             
+                </Col>
+              </Row>
+              <Row>
+                <Col md>
+                  <PostList>
+                    { posts.map(post => (
+                      <Post key={post.id} postData={post} gameDate={gameDate} getPosts={this.getPosts} />
+                    ))}
+                  </PostList>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <LoadingModal open={this.state.modalOpen} />
+        </div>
+      </Fragment>
     );
   }
 }
