@@ -150,7 +150,7 @@ class TeamPage extends React.Component {
                 <Col lg={8} md={7} sm={6}>
                   <Typography variant="subheading" className={classes.bold}>To:</Typography>
                   <DatePicker
-                    disablePast={true}
+                    disablePast={user ? false : true}
                     name="endDate"
                     format="M/D/YYYY"
                     value={endDate}
