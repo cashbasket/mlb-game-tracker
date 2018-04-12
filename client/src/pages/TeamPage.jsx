@@ -11,6 +11,7 @@ import TeamInfo from '../components/TeamInfo';
 import { withStyles } from 'material-ui/styles';
 import { withUser } from '../services/withUser';
 import LoadingModal from '../components/LoadingModal';
+import Paper from 'material-ui/Paper';
 import Navbar from '../components/Navbar';
 
 const styles = theme => ({
@@ -22,6 +23,12 @@ const styles = theme => ({
   },
   bold: {
     fontWeight: 700
+  },
+  errorPaper: {
+    backgroundColor: theme.palette.primary.light,
+    fontSize: 24,
+    color: theme.palette.primary.contrastText,
+    padding: theme.spacing.unit * 2
   }
 });
 
@@ -58,35 +65,47 @@ class TeamPage extends React.Component {
       () => {
         API.getTeamInfo(this.state.teamId)
           .then((res) => {
-            infoObj = { 
-              abbr: res.data.team.abbr,
-              city: res.data.team.city,
-              name: res.data.team.name, 
-              logo: res.data.team.logo,
-              teamVenueName: res.data.team.venue.name,
-              established: res.data.team.established,
-              league: res.data.team.league,
-              division: res.data.team.division,
-              manager: res.data.team.manager 
-            };
-            return API.getTeamSchedule(this.state.teamId, moment(this.state.startDate).format('YYYYMMDD'), moment(this.state.endDate).format('YYYYMMDD'));
+            if (res.data.team) {
+              infoObj = { 
+                abbr: res.data.team.abbr,
+                city: res.data.team.city,
+                name: res.data.team.name, 
+                logo: res.data.team.logo,
+                teamVenueName: res.data.team.venue.name,
+                established: res.data.team.established,
+                league: res.data.team.league,
+                division: res.data.team.division,
+                manager: res.data.team.manager 
+              };
+              return API.getTeamSchedule(this.state.teamId, moment(this.state.startDate).format('YYYYMMDD'), moment(this.state.endDate).format('YYYYMMDD'));
+            } else {
+              this.setState({modalOpen: false});
+              document.getElementById('no-team').classList.remove('hidden');
+              return false;
+            }
           })
           .then((res) => {
-            infoObj.displayedGames = res.data.games;
-            infoObj.modalOpen = false;
-            this.setState(infoObj,
-              () => {
-                document.getElementById('page-content').classList.remove('hidden');
+            if (res.data) {
+              infoObj.displayedGames = res.data.games;
+              infoObj.modalOpen = false;
+              this.setState(infoObj,
+                () => {
+                  document.getElementById('page-content').classList.remove('hidden');
+                });
+              return API.getTeamRecord('current', infoObj.abbr);
+            } else {
+              return false;
+            }
+          })
+          .then((res) => {
+            if (res.data) {
+              this.setState({
+                wins: res.data.stats.Wins['#text'],
+                losses: res.data.stats.Losses['#text'],
+                rank: res.data.rank,
+                gamesBack: res.data.stats.GamesBack['#text'],
               });
-            return API.getTeamRecord('current', infoObj.abbr);
-          })
-          .then((res) => {
-            this.setState({
-              wins: res.data.stats.Wins['#text'],
-              losses: res.data.stats.Losses['#text'],
-              rank: res.data.rank,
-              gamesBack: res.data.stats.GamesBack['#text'],
-            });
+            }
           });
       });
   }
@@ -129,6 +148,13 @@ class TeamPage extends React.Component {
     return (
       <div>
         <Navbar forceDisplay={true} handleTeamChange={this.handleTeamChange}/>
+        <Row id="no-team" className="hidden">
+          <Col md>
+            <Paper className={classes.errorPaper}>
+              Sorry, we can't find the team you're looking for!
+            </Paper>
+          </Col>
+        </Row>
         <Row id="page-content" className="hidden">
           <Col md={3}>
             <TeamInfo data={this.state}/>
