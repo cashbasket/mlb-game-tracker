@@ -116,6 +116,14 @@ const styles = theme => ({
     fontSize: 24,
     color: theme.palette.primary.contrastText,
     padding: theme.spacing.unit * 2
+  },
+  loadingBoxscore: {
+    backgroundColor: theme.palette.secondary.light,
+    fontSize: 18,
+    color: theme.palette.secondary.contrastText,
+    textAlign: 'center',
+    padding: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2
   }
 });
 
@@ -187,6 +195,7 @@ class GamePage extends React.Component {
             boxScore: boxScore
           }, () => {
             if (this.state.homeTeamScore !== null && this.state.awayTeamScore !== null) {
+              document.getElementById('loading-boxscore').classList.remove('hidden');
               this.getBoxScore();
             }
             this.getPosts();
@@ -202,9 +211,10 @@ class GamePage extends React.Component {
   getBoxScore = () => {
     API.getBoxScore(this.state.gameId, this.state.season)
       .then((res) => {
-        console.log(res.data);
         this.setState({
           boxScore: res.data.gameboxscore
+        }, () => {
+          document.getElementById('loading-boxscore').classList.add('hidden');
         });
       });
   }
@@ -336,6 +346,9 @@ class GamePage extends React.Component {
                       <Typography variant="headline" className="text-center" style={{color: '#FFFFFF'}}><small>{awayTeam.name} {awayTeamScore}, {homeTeam.name} {homeTeamScore}</small></Typography>
                     </Paper>
                   )}
+                  <Paper className={`hidden ${classes.loadingBoxscore}`} id="loading-boxscore">
+                    <i className="fas fa-cog fa-spin white"></i> Getting Boxscore...
+                  </Paper>
                   {boxScore.game && (
                     <Paper className={classes.boxScore}>
                       <Table>
