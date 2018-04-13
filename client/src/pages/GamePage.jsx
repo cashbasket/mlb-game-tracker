@@ -273,7 +273,7 @@ class GamePage extends React.Component {
                     </Link>
                   </Col>
                   <Col md>
-                    <Link className="plainLink" to={`/team/${awayTeam.id}`}>
+                    <Link className="plainLink" to={`/team/${homeTeam.id}`}>
                       <img className="img-fluid" src={`/img/logos/${homeTeam.logo}`} alt={`${homeTeam.city} ${homeTeam.name} logo`}/>
                     </Link>
                   </Col>
