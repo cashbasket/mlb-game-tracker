@@ -7,7 +7,6 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TeamPage from './pages/TeamPage';
 import GamePage from './pages/GamePage';
-import DashboardPage from './pages/DashboardPage';
 import ProfilePage from './pages/ProfilePage';
 import AccountPage from './pages/AccountPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -133,7 +132,6 @@ class App extends Component {
                         <PrivateRoute exact path="/game/:gameId" component={GamePage} />
                         <PropsRoute exact path="/login" component={LoginPage} authenticate={this.authenticate} />
                         <PropsRoute exact path="/register" component={RegisterPage} authenticate={this.authenticate} />
-                        <Route exact path="/dashboard" component={DashboardPage} />
                         <PrivateRoute exact path="/user/:username" component={ProfilePage} />
                         <PrivateRoute exact path="/account" component={AccountPage} />
                         <Route exact path="/forgot" component={ForgotPasswordPage} />
