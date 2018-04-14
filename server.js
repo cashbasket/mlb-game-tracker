@@ -20,9 +20,10 @@ app.use(cookieParser());
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
-  store: new RedisStore({ url: process.env.REDIS_URL }),
+  store: new RedisStore({ url: process.env.REDIS_URL, ttl: 24 * 60 * 60 * 7 }), // 1 week (seconds)
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { maxAge: 24 * 60 * 60 * 1000 * 7 } // 1 week (milliseconds)
 }));
 
 require('./config/passport')(app);
