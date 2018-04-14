@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 
 
 // initalize sequelize with session store
-var RedisStore = require('connect-redis')(session);
+const RedisStore = require('connect-redis')(session);
 
 // Requiring our models for syncing
 const db = require('./models');
