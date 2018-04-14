@@ -8,6 +8,7 @@ import LoginForm from '../components/LoginForm';
 import { withUser } from '../services/withUser';
 import { withRouter } from 'react-router-dom';
 import LandingPageBg from '../bg_light.jpg';
+import Dashboard from '../components/Dashboard';
 
 const styles = theme => ({
   root: {
@@ -35,7 +36,6 @@ const styles = theme => ({
     width: 200,
   },
 });
-
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
@@ -45,8 +45,16 @@ class LandingPage extends React.Component {
   }
 
   componentDidMount = () => {
+    this.setBackground();
+  }
+
+  setBackground = () => {
     let elem = document.querySelector('body');
-    elem.style.backgroundImage = `url(${LandingPageBg})`;
+    if (!this.props.user) {
+      elem.style.backgroundImage = `url(${LandingPageBg})`;
+    } else {
+      elem.style.backgroundImage = 'none';
+    }
   }
 
   componentWillUnmount = () => {
@@ -58,30 +66,33 @@ class LandingPage extends React.Component {
     const user = JSON.parse(sessionStorage.getItem('user'));
     const loggedIn = user && user.id === this.props.user.id ? true : false;
     const { classes } = this.props;
-    
-    if (loggedIn) {
-      return (
-        <Redirect to="/dashboard"/>
-      );
-    }
-    
+
+    this.setBackground();
+
     return (
       <Fragment>
-        <Row>
-          <Col md>
-            <Typography variant="display3" className={classes.heading}>Remember the game?</Typography>
-            <Typography variant="subheading" className={classes.subheading}>
+        {this.props.user ? (
+          <Dashboard />
+        ) : (
+          <Fragment>
+            <Row>
+              <Col md>
+                <Typography variant="display3" className={classes.heading}>Remember the game?</Typography>
+                <Typography variant="subheading" className={classes.subheading}>
               We do, and we're sure someone else does, too. <strong>WENT YARD</strong> is a site built for baseball fans, by baseball fans. Track your favorite team, track your own personal game attendance history, and chat with like-minded fans who just might have been there with you!
-            </Typography>
-          </Col>
-        </Row>
-        <Row>
-          <Col md/>
-          <Col md={6}>
-            <LoginForm authenticate={this.props.authenticate}/>
-          </Col>
-          <Col md/>
-        </Row>
+                </Typography>
+              </Col>
+            </Row>
+            <Row>
+              <Col md/>
+              <Col md={6}>
+                <LoginForm authenticate={this.props.authenticate}/>
+              </Col>
+              <Col md/>
+            </Row>
+          </Fragment>
+        )}
+       
       </Fragment>
     );
   }

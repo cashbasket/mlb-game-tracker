@@ -75,11 +75,6 @@ class LoginForm extends React.Component {
     const { loggedIn, redirectToReferrer } = this.state;
     const { classes } = this.props;
     
-    if (loggedIn) {
-      return (
-        <Redirect to="/dashboard"/>
-      );
-    }
     if (redirectToReferrer) {
       return (
         <Redirect to={from}/>
