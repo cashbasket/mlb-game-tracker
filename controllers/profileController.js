@@ -2,6 +2,9 @@ const db = require('../models');
 const moment = require('moment');
 const Op = db.Sequelize.Op;
 
+// database time is in EST and moment time is in UTC, so we must compensate
+const nowEST = moment().subtract({ hours: 4 });
+
 // Defining methods for the teamController
 module.exports = {
   // Return data for single team
@@ -45,7 +48,7 @@ module.exports = {
     db.game.findAll({
       where: { 
         gameDate: {
-          [Op.lt]: moment()
+          [Op.lt]: nowEST
         }
       },
       include: [{
@@ -83,7 +86,7 @@ module.exports = {
     db.game.findAll({
       where: { 
         gameDate: {
-          [Op.gte]: moment()
+          [Op.gte]: nowEST
         }
       },
       include: [{
