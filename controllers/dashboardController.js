@@ -2,6 +2,9 @@ const db = require('../models');
 const moment = require('moment');
 const Op = db.Sequelize.Op;
 
+// database time is in EST and moment time is in UTC, so we must compensate
+const nowEST = moment().subtract({ hours: 4 });
+
 // Defining methods for the dashboardController
 module.exports = {
   gamesAttended: function(req, res) {
@@ -15,7 +18,7 @@ module.exports = {
         required: true,
         where: { 
           gameDate: {
-            [Op.lte]: moment()
+            [Op.lte]: nowEST
           }
         }
       }]
@@ -42,7 +45,7 @@ module.exports = {
     db.game.count({
       where: {
         gameDate: {
-          [Op.lte]: moment()
+          [Op.lte]: nowEST
         }
       },
       include: [{
@@ -74,7 +77,7 @@ module.exports = {
           required: true,
           where: { 
             gameDate: {
-              [Op.lte]: moment()
+              [Op.lte]: nowEST
             },
             winningTeamId: {$col: 'user.teamId'}
           }
@@ -100,7 +103,7 @@ module.exports = {
           required: true,
           where: { 
             gameDate: {
-              [Op.lte]: moment()
+              [Op.lte]: nowEST
             },
             losingTeamId: {$col: 'user.teamId'}
           }
@@ -117,7 +120,7 @@ module.exports = {
     db.game.findOne({
       where: { 
         gameDate: {
-          [Op.lt]: moment()
+          [Op.lt]: nowEST
         }
       },
       include: [{
@@ -160,7 +163,7 @@ module.exports = {
     db.game.findAll({
       where: { 
         gameDate: {
-          [Op.gte]: moment()
+          [Op.gte]: nowEST
         }
       },
       include: [{
