@@ -138,7 +138,7 @@ class Register extends React.Component {
     const { registered } = this.state;
     if(registered) {
       return (
-        <Redirect to="dashboard"/>
+        <Redirect to="/"/>
       );
     }
     return (

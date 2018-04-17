@@ -146,7 +146,7 @@ class Navbar extends React.Component {
                             open={open}
                             onClose={this.handleClose}
                           >
-                            <MenuItem component={Link} to="/dashboard" onClick={this.handleClose}>Dashboard</MenuItem>
+                            <MenuItem component={Link} to="/" onClick={this.handleClose}>Dashboard</MenuItem>
                             <MenuItem component={Link} to={`/user/${user.username}`} onClick={this.handleClose}>My Profile</MenuItem>
                             <MenuItem component={Link} to="/account" onClick={this.handleClose}>Account</MenuItem>
                             <MenuItem onClick={this.handleLogout}>Log Out</MenuItem>
@@ -179,7 +179,7 @@ class Navbar extends React.Component {
                   <List component="nav">
                     {user ? (
                       <div>
-                        <ListItem button component={Link} to="/dashboard"> 
+                        <ListItem button component={Link} to="/"> 
                           <ListItemText primary="Dashboard" />
                         </ListItem>
                         <ListItem button component={Link} to={`/user/${user.username}`}> 
